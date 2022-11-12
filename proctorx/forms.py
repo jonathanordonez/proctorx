@@ -6,14 +6,15 @@ from .models import Student
 
 class StudentForm(UserCreationForm):
 
-    address_model_field = Student._meta.get_field('country')
-    address = address_model_field.formfield()
+    # Other methods to add form fields 
+    # address_model_field = Student._meta.get_field('country')
+    # address = address_model_field.formfield()
+    # test = forms.CharField(label='Your name', max_length=100)
 
-    test = forms.CharField(label='Your name', max_length=100)
     class Meta:
         model = User
         test_field = forms.CharField(max_length=30)
-        fields = ['username', 'email', 'password1', 'password2', 'test', 'address']
+        fields = ['username', 'email', 'password1', 'password2']
 
 
 # class NewForm(forms.Form):
