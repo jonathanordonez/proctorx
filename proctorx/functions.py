@@ -1,4 +1,4 @@
-from models import Student, Session
+from .models import Student, Session
 
 def create_user(first_name, last_name, email_address, country, city, state, time_zone, postal_code, phone_number, street_address):
     Student.objects.create(
@@ -15,3 +15,7 @@ def create_session(student, date_purchased, exam_date, university, exam_name, se
         student = student_key, date_purchased = date_purchased, exam_date = exam_date, university = university, exam_name = exam_name,
         session_status = session_status, cost = cost, payment_status = payment_status,
     )
+
+def obtain_exam_schedules(date, time, length):
+    # Obtain agent's availability for date and time
+    return

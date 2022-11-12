@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Student(models.Model):
     first_name = models.CharField(max_length=30)
@@ -19,20 +20,22 @@ class Session(models.Model):
     ('cancelled', 'cancelled'),
     )
 
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    exam_date = models.DateField()
+    exam_time = models.TimeField()
+    university = models.CharField(max_length=50)   
+    exam_name = models.CharField(max_length=50)
+    exam_length = models.IntegerField(choices=((1,1),(2,2),(3,3)), db_column = 'exam length (hrs)',default=1)
+    session_status = models.CharField(choices=session_status, max_length=20)
+
+class Payments(models.Model):    
     payment_status = (
     ('paid', 'paid'),
     ('pending', 'pending'),
     ('rejected', 'rejected'),  
     )
 
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
     date_purchased = models.DateField()
-    exam_date = models.DateField()
-    university = models.CharField(max_length=50)   
-    exam_name = models.CharField(max_length=50)
-    session_status = models.CharField(choices=session_status, max_length=20)
     cost = models.FloatField()
     payment_status = models.CharField(choices=payment_status, max_length=20)
-
-
-

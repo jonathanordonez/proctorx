@@ -1,14 +1,20 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .forms import StudentForm
+from .functions import obtain_exam_schedules
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .models import Session
+from django.contrib.auth.models import User
 
 
 def homepage(request):
 	return render(request, 'homepage.html')
 
 def register(request):
+	if request.user.is_authenticated:
+		return redirect('/student/session')
+
 	if (request.method == 'GET'):
 		# Show user registrarion form
 		form = StudentForm()
@@ -16,12 +22,16 @@ def register(request):
 		return render(request, 'register.html', context=context)
 
 	elif (request.method == 'POST'):
+		username = request.POST.get('username')
+		password = request.POST.get('password1')
 		# Register user
 		form = StudentForm(request.POST)
 		if (form.is_valid()):
-			print('*** form is valid ***')
 			form.save()
-			print('user created')
+			print(f'received username: {username} and password {password} ')
+			user = authenticate(request, username=username, password=password)
+			login(request, user)
+			return redirect('/student/session')
 		else:
 			print('*** form is not valid ***')
 		
@@ -44,7 +54,6 @@ def sign_in(request):
 		if user is not None:
 			login(request, user)
 			return redirect('/student/session')
-			
 
 		else:
 			messages.info(request, 'Username OR password is incorrect')
@@ -54,7 +63,32 @@ def sign_in(request):
 
 @login_required(login_url='/login')
 def reservation(request):
-	return render(request, 'reservation.html')
+	if request.method == 'GET':
+		return render(request, 'reservation.html')
+
+	elif request.method == 'POST':	
+		# POST make a new reservation
+		student_id = request.user.id
+		student = User.objects.filter(id=student_id)
+		exam_date = request.POST.get('date')
+		exam_time = request.POST.get('time')
+		university = request.POST.get('university')
+		exam_name = request.POST.get('exam')
+		exam_length = request.POST.get('exam_length')
+		Session.objects.create(student = student, exam_date = exam_date, exam_time = exam_time, 
+		exam_length = exam_length, university = university, exam_name = exam_name, session_status = 'scheduled')
+
+
+# student = models.ForeignKey(Student, on_delete=models.CASCADE)
+#     exam_date = models.DateField()
+#     exam_time = models.TimeField()
+#     university = models.CharField(max_length=50)   
+#     exam_name = models.CharField(max_length=50)
+#     session_status
+
+
+		context = {}
+		return render(request, 'reservation.html', context=context)
 
 @login_required(login_url='/login')
 def cart(request):
@@ -70,6 +104,9 @@ def settings(request):
 
 @login_required(login_url='/login')
 def session(request):
+	# GET user's active sessions
+
+
 	return render(request, 'session.html')
 
 @login_required(login_url='/login')
