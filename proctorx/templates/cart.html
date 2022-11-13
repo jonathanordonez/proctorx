@@ -6,4 +6,21 @@
 
 {% block content %}
 Cart
+
+To display all records for the user in the Payment table with the status Pending - include (pull from db) their IDs to pass them to the cart hmtl
+
+{% for record in pending_reservations %}
+
+{{ record }}
+
+{% endfor %}
+
+
+
+
+
+
+
+
+
 {% endblock %}

@@ -4,7 +4,7 @@ from .forms import StudentForm
 from .functions import obtain_exam_schedules
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Session
+from .models import Session, Payment
 from django.contrib.auth.models import User
 
 
@@ -69,15 +69,22 @@ def reservation(request):
 	elif request.method == 'POST':	
 		# POST make a new reservation
 		student_id = request.user.id
-		student = User.objects.filter(id=student_id)
+		student = User.objects.get(id=student_id)
 		exam_date = request.POST.get('date')
 		exam_time = request.POST.get('time')
 		university = request.POST.get('university')
 		exam_name = request.POST.get('exam')
 		exam_length = request.POST.get('exam_length')
-		Session.objects.create(student = student, exam_date = exam_date, exam_time = exam_time, 
+		cost = int(exam_length) * 15
+		session = Session.objects.create(student = student, exam_date = exam_date, exam_time = exam_time, 
 		exam_length = exam_length, university = university, exam_name = exam_name, session_status = 'scheduled')
+		# to-do: create check to ensure the date/time is not in the past
 
+		# creates a Payment record in 'pending' status
+		Payment.objects.create(session = session, date_purchased = None, cost = cost, 
+		payment_status = 'pending')
+
+		return render(request, 'cart.html')
 
 # student = models.ForeignKey(Student, on_delete=models.CASCADE)
 #     exam_date = models.DateField()
@@ -92,11 +99,24 @@ def reservation(request):
 
 @login_required(login_url='/login')
 def cart(request):
+	# Query and dispaly unpaid reservations (aka sessions)
+	unpaid_reservations = Payment.objects.filter()
 	return render(request, 'cart.html')
 
 @login_required(login_url='/login')
 def checkout(request):
+	if request.method == 'POST':
+		payment_id = request.POST.get('payment_id')
+		payment_record = Payment.objects.get(id = payment_id)
+		payment_record.payment_status = 'paid'
+
 	return render(request, 'checkout.html')
+
+@login_required(login_url='/login')
+def delete_from_cart(request):
+	payment_record = int(request.POST.get('payment_ID'))
+	payment_record_to_delete = Payment.objects.get(id = payment_record)
+	payment_record_to_delete.delete()
 
 @login_required(login_url='/login')
 def settings(request):
