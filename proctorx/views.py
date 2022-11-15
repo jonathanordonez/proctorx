@@ -4,7 +4,7 @@ from .forms import StudentForm
 from .functions import obtain_exam_schedules
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Session
+from .models import Session, Student
 from django.contrib.auth.models import User
 
 
@@ -22,14 +22,14 @@ def register(request):
 		return render(request, 'register.html', context=context)
 
 	elif (request.method == 'POST'):
-		username = request.POST.get('username')
+		email = request.POST.get('email')
 		password = request.POST.get('password1')
 		# Register user
 		form = StudentForm(request.POST)
 		if (form.is_valid()):
 			form.save()
-			print(f'received username: {username} and password {password} ')
-			user = authenticate(request, username=username, password=password)
+			# print(f'received username: {username} and password {password} ')
+			user = authenticate(request, email=email, password=password)
 			login(request, user)
 			return redirect('/student/session')
 		else:
@@ -45,12 +45,14 @@ def sign_in(request):
 		return redirect('student/session')
 
 	if (request.method == 'POST'):
-		username = request.POST.get('username')
-		password =request.POST.get('password')
-		user = authenticate(request, username=username, password=password)
+		email = request.POST.get('email')
+		password = request.POST.get('password')
+
+		user = authenticate(request, email=email, password=password)
 
 		if user is not None:
 			login(request, user)
+			# print('****gets here')
 			return redirect('/student/session')
 
 		else:
@@ -67,7 +69,7 @@ def reservation(request):
 	elif request.method == 'POST':
 		# POST make a new reservation
 		student_id = request.user.id
-		student = User.objects.get(id=student_id)
+		student = Student.objects.get(id=student_id)
 		exam_date = request.POST.get('date')
 		exam_time = request.POST.get('time')
 		university = request.POST.get('university')

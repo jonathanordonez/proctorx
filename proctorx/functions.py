@@ -12,6 +12,8 @@ def obtain_exam_schedules(date_input, time_input, length):
     hour = int(time_split[0])
     minute = int(time_split[1])
 
+    # to-do: ensure hour doesn't go beyond 23
+
     if(minute > 30):
         # round up first suggestion to the next hour
         suggestions.append(datetime.datetime(year, month, day, hour + 1, 0, 0))

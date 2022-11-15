@@ -12,9 +12,9 @@ class StudentForm(UserCreationForm):
     # test = forms.CharField(label='Your name', max_length=100)
 
     class Meta:
-        model = User
-        test_field = forms.CharField(max_length=30)
-        fields = ['username', 'email', 'password1', 'password2']
+        model = Student
+        # test_field = forms.CharField(max_length=30)
+        fields = ['username', 'email', 'password1', 'password2', 'country', 'first_name', 'last_name', 'user_name']
 
 
 # class NewForm(forms.Form):
