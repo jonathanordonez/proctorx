@@ -14,14 +14,7 @@ class StudentForm(UserCreationForm):
     class Meta:
         model = Student
         # test_field = forms.CharField(max_length=30)
-        fields = ['username', 'email', 'password1', 'password2', 'country', 'first_name', 'last_name', 'user_name']
+        fields = ['first_name', 'last_name','email', 'password1', 'password2']
 
 
-# class NewForm(forms.Form):
-#     your_name = forms.CharField(label='Your name', max_length=100)
-#     your_name2 = forms.CharField(label='Your name2', max_length=100)
 
-# class InheritedStudent(ModelForm):
-#     class Meta:
-#         model = Student
-#         fields = ['first_name', 'last_name']

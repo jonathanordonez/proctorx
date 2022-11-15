@@ -9,6 +9,8 @@ from django.contrib.auth.models import User
 
 
 def homepage(request):
+	if request.user.is_authenticated:
+		return redirect('/student/session')
 	return render(request, 'homepage.html')
 
 def register(request):
@@ -29,9 +31,10 @@ def register(request):
 		if (form.is_valid()):
 			form.save()
 			# print(f'received username: {username} and password {password} ')
-			user = authenticate(request, email=email, password=password)
-			login(request, user)
-			return redirect('/student/session')
+				# to do: mail confirmation 
+			# user = authenticate(request, email=email, password=password)
+			# login(request, user)
+			# return redirect('/student/session')
 		else:
 			print('*** form is not valid ***')
 		
