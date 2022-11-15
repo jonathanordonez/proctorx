@@ -4,7 +4,7 @@ from .forms import StudentForm
 from .functions import obtain_exam_schedules
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Session, Payment
+from .models import Session
 from django.contrib.auth.models import User
 
 
@@ -37,8 +37,6 @@ def register(request):
 		
 		return render(request, 'register.html')
 
-
-
 def help(request):
 	return render(request, 'help.html')
 
@@ -66,7 +64,7 @@ def reservation(request):
 	if request.method == 'GET':
 		return render(request, 'reservation.html')
 
-	elif request.method == 'POST':	
+	elif request.method == 'POST':
 		# POST make a new reservation
 		student_id = request.user.id
 		student = User.objects.get(id=student_id)
@@ -76,15 +74,19 @@ def reservation(request):
 		exam_name = request.POST.get('exam')
 		exam_length = request.POST.get('exam_length')
 		cost = int(exam_length) * 15
-		session = Session.objects.create(student = student, exam_date = exam_date, exam_time = exam_time, 
-		exam_length = exam_length, university = university, exam_name = exam_name, session_status = 'scheduled')
-		# to-do: create check to ensure the date/time is not in the past
 
-		# creates a Payment record in 'pending' status
-		Payment.objects.create(session = session, date_purchased = None, cost = cost, 
-		payment_status = 'pending')
+		if(request.POST.get('Lookup reservation schedules') == 'Submit'):
+			context = {'available_schedules' : obtain_exam_schedules(exam_date, exam_time, exam_length)}
+			print(context['available_schedules'])
+			return render(request, 'reservation.html', context)
 
-		return render(request, 'cart.html')
+
+		# session = Session.objects.create(student = student, exam_date = exam_date, exam_time = exam_time, 
+		# 	exam_length = exam_length, university = university, exam_name = exam_name, session_status = 'scheduled',
+		# 	date_purchased = None, cost = cost, payment_status = 'pending')
+		# # to-do: create check to ensure the date/time is not in the past
+
+		# return redirect('/student/cart')
 
 # student = models.ForeignKey(Student, on_delete=models.CASCADE)
 #     exam_date = models.DateField()
@@ -94,29 +96,42 @@ def reservation(request):
 #     session_status
 
 
-		context = {}
-		return render(request, 'reservation.html', context=context)
+
 
 @login_required(login_url='/login')
 def cart(request):
 	# Query and dispaly unpaid reservations (aka sessions)
-	unpaid_reservations = Payment.objects.filter()
-	return render(request, 'cart.html')
+	unpaid_reservations = Session.objects.filter(student_id = request.user.id).filter(payment_status = 'pending')
+	context = {'unpaid_reservations':unpaid_reservations} 
+	return render(request, 'cart.html', context)
 
 @login_required(login_url='/login')
 def checkout(request):
-	if request.method == 'POST':
-		payment_id = request.POST.get('payment_id')
-		payment_record = Payment.objects.get(id = payment_id)
-		payment_record.payment_status = 'paid'
+	# if request.method == 'POST':
+	# 	payment_id = request.POST.get('payment_id')
+	# 	payment_record = Payment.objects.get(id = payment_id)
+	# 	payment_record.payment_status = 'paid'
 
-	return render(request, 'checkout.html')
+	pending_sessions = Session.objects.filter(student_id = request.user.id).filter(payment_status = 'pending')
+	session_total = 0
+	for session in pending_sessions:
+		session_total += session.cost
+	context = {'total':session_total}
+
+
+	return render(request, 'checkout.html', context)
 
 @login_required(login_url='/login')
-def delete_from_cart(request):
-	payment_record = int(request.POST.get('payment_ID'))
-	payment_record_to_delete = Payment.objects.get(id = payment_record)
-	payment_record_to_delete.delete()
+def delete_from_cart(request, order_id):
+	session_id = order_id
+	# session_record = int(request.POST.get('session_id'))
+	session = Session.objects.get(id = session_id)
+	if(session.student_id == request.user.id):
+		session.session_status = 'cancelled'
+		session.payment_status = 'cancelled'
+		session.save()
+	
+	return redirect('/student/cart')
 
 @login_required(login_url='/login')
 def settings(request):
@@ -124,10 +139,11 @@ def settings(request):
 
 @login_required(login_url='/login')
 def session(request):
-	# GET user's active sessions
+	# Query and dispaly current active reservations (aka paid sessions)
+	current_reservations = Session.objects.filter(student_id = request.user.id).filter(payment_status = 'paid')
+	context = {'current_reservations':current_reservations} 
 
-
-	return render(request, 'session.html')
+	return render(request, 'session.html', context)
 
 @login_required(login_url='/login')
 def sign_out(request):

@@ -7,36 +7,39 @@
 {% block content %}
 <h1>Reservation</h1>
 
-<form method="POST" action="">
-    {% csrf_token %}
-    <label for="university">University</label>
-    <select type="text" name="university">
-        <option value="UOBV">University of the Opal Berry Village</option>
-        <option value="RHU">Rose Hills University</option>
-        <option value="ELU">Estate of Lemzilville University</option>
-    </select>
-    <label for="date">Date</label>
-    <input type="date" name="date">
-    <label for="time">Time</label>
-    <input type="time" name="time">
-    <select type="text" name="exam">
-        <option value="COMP201">Web Programming I</option>
-        <option value="COMP361">Systems Analysis and Design</option>
-    </select>
-    <select type="text" name="exam_length">
-        <option value="1">1 hour</option>
-        <option value="2">2 hours</option>
-        <option value="3">3 hours</option>
-    </select>
-    <input type="submit" value="Submit">
-</form>
+{% if available_schedules %} 
+    {% for schedule in available_schedules %}
+        <li>{{schedule}} <a href="">Select</a></li> 
+        <!-- Add JS to make post request here -->
+    {% endfor %}
+    <a href="/student/reservation">Back</a>
 
 
-
-
-
-
-
+{% else %}
+    <form method="POST" action="">
+        {% csrf_token %}
+        <label for="university">University</label>
+        <select type="text" name="university">
+            <option value="UOBV">University of the Opal Berry Village</option>
+            <option value="RHU">Rose Hills University</option>
+            <option value="ELU">Estate of Lemzilville University</option>
+        </select>
+        <label for="date">Date</label>
+        <input type="date" name="date">
+        <label for="time">Time</label>
+        <input type="time" name="time">
+        <select type="text" name="exam">
+            <option value="COMP201">Web Programming I</option>
+            <option value="COMP361">Systems Analysis and Design</option>
+        </select>
+        <select type="text" name="exam_length">
+            <option value="1">1 hour</option>
+            <option value="2">2 hours</option>
+            <option value="3">3 hours</option>
+        </select>
+        <input type="submit" value="Submit" name="Lookup reservation schedules">
+    </form>
+{% endif %}
 
 
 

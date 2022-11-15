@@ -5,15 +5,19 @@
 {% endblock %}
 
 {% block content %}
-Cart
+<h1>Cart</h1>
 
 To display all records for the user in the Payment table with the status Pending - include (pull from db) their IDs to pass them to the cart hmtl
 
-{% for record in pending_reservations %}
+{% for record in unpaid_reservations %}
 
-{{ record }}
+<ul>
+    <li>{{ record.exam_name }}  {{record.id}} <a href="/student/cart/{{record.id}}">Delete</a></li>
+</ul>
 
 {% endfor %}
+
+<a href="/student/checkout">Proceed to payment</a>
 
 
 

@@ -21,6 +21,12 @@ class Session(models.Model):
     ('cancelled', 'cancelled'),
     )
 
+    payment_status = (
+    ('paid', 'paid'),
+    ('pending', 'pending'),
+    ('rejected', 'rejected'),  
+    )
+
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     exam_date = models.DateField(default=datetime.date.today())
     exam_time = models.TimeField(default=datetime.time(12,0,0))
@@ -28,15 +34,7 @@ class Session(models.Model):
     exam_name = models.CharField(max_length=50)
     exam_length = models.IntegerField(choices=((1,1),(2,2),(3,3)), db_column = 'exam length (hrs)', default=1)
     session_status = models.CharField(choices=session_status, max_length=20)
-
-class Payment(models.Model):    
-    payment_status = (
-    ('paid', 'paid'),
-    ('pending', 'pending'),
-    ('rejected', 'rejected'),  
-    )
-
-    session = models.ForeignKey(Session, on_delete=models.CASCADE)
     date_purchased = models.DateField(null=True, blank=True)
     cost = models.DecimalField(decimal_places=2, max_digits= 9)
     payment_status = models.CharField(choices=payment_status, max_length=20)
+

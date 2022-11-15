@@ -1,21 +1,38 @@
-from .models import Student, Session
+from .models import Session
+import datetime
 
-def create_user(first_name, last_name, email_address, country, city, state, time_zone, postal_code, phone_number, street_address):
-    Student.objects.create(
-        first_name = first_name, last_name = last_name, email_address = email_address, country = country, city = city, state = state,
-        time_zone = time_zone, postal_code = postal_code, phone_number = phone_number, street_address = street_address,
-    )
+def obtain_exam_schedules(date_input, time_input, length):
+    suggestions=[]
+    # Create date object
+    date_split = date_input.split("-")
+    year = int(date_split[0])
+    month = int(date_split[1])
+    day = int(date_split[2])
+    time_split = time_input.split(":")
+    hour = int(time_split[0])
+    minute = int(time_split[1])
 
-def create_session(student, date_purchased, exam_date, university, exam_name, session_status, cost, payment_status):
-    # Find student 
-    student_key = Student.objects.filter()
+    if(minute > 30):
+        # round up first suggestion to the next hour
+        suggestions.append(datetime.datetime(year, month, day, hour + 1, 0, 0))
+        suggestions.append(datetime.datetime(year, month, day, hour, 30, 0))
+        suggestions.append(datetime.datetime(year, month, day, hour - 1, 30, 0))
+        suggestions.append(datetime.datetime(year, month, day, hour - 1, 0, 0))
+     
 
-    # Create student record
-    Session.objects.create(
-        student = student_key, date_purchased = date_purchased, exam_date = exam_date, university = university, exam_name = exam_name,
-        session_status = session_status, cost = cost, payment_status = payment_status,
-    )
+    elif(minute < 30):
+        #round up first suggestion to the current hour
+        suggestions.append(datetime.datetime(year, month, day, hour, 0, 0))
+        suggestions.append(datetime.datetime(year, month, day, hour, 30, 0))
+        suggestions.append(datetime.datetime(year, month, day, hour + 1, 0))
+        suggestions.append(datetime.datetime(year, month, day, hour - 1, 30, 0))
 
-def obtain_exam_schedules(date, time, length):
-    # Obtain agent's availability for date and time
-    return
+    else:
+        # keep the 30 minutes
+        suggestions.append(datetime.datetime(year, month, day, hour, minute, 0))
+        suggestions.append(datetime.datetime(year, month, day, hour + 1, 0, 0))
+        suggestions.append(datetime.datetime(year, month, day, hour - 1, 30, 0))
+        suggestions.append(datetime.datetime(year, month, day, hour - 1, 0, 0))
+
+
+    return suggestions

@@ -8,9 +8,15 @@
 
 Sessions
 
+<h1>My active sessions</h1>
 
+{% for record in current_reservations %}
 
+<ul>
+    <li>{{ record.exam_name }}  Status: {{record.session_status}} Date: {{record.exam_date}} Time: {{record.exam_time}}  </li>
+</ul>
 
+{% endfor %}
 
 
 {% endblock %}

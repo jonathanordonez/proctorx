@@ -5,11 +5,15 @@
 {% endblock %}
 
 {% block content %}
-Checkout
+<h1>Checkout</h1>
+
+
+
 
 <form method="POST" action="">
+    <p1>Credit card information here</p1>
     <input type="hidden" value="2" name="payment_id">
-    <input type="submit" value="Submit">
-
+    <input type="submit" value="Pay">
+    <p>Total to pay {{ total }}</p>
 </form>
 {% endblock %}

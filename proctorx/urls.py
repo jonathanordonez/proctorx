@@ -11,7 +11,7 @@ path('student/session', views.session),
 path('student/settings', views.settings),
 path('student/cart', views.cart),
 path('student/checkout', views.checkout),
-path('student/checkout/delete_from_cart', views.delete_from_cart),
+path('student/cart/<order_id>', views.delete_from_cart),
 path('logout', views.sign_out),
 ]
 
