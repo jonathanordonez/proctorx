@@ -11,13 +11,13 @@ class CustomAccountManager(BaseUserManager):
         other_fields.setdefault('is_active', True)
         return self.create_user(email, username, first_name, password, **other_fields)
 
-    def create_user(self, email, username, first_name, password, **other_fields):
+    def create_user(self, email, first_name, password, **other_fields):
         
         if not email:
             raise ValueError('Please provide an email')
         
         email = self.normalize_email(email)
-        user = self.model(email = email, username = username, first_name = first_name, **other_fields)
+        user = self.model(email = email, first_name = first_name, **other_fields)
         user.set_password(password)
         user.save()
         return user
@@ -27,13 +27,13 @@ class Student(AbstractUser, PermissionsMixin):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     email = models.CharField(max_length=50, unique=True)
-    country = models.CharField(max_length=30)
-    city = models.CharField(max_length=30)
-    state = models.CharField(max_length=30)
-    time_zone = models.CharField(max_length=30)
-    postal_code = models.CharField(max_length=10)
-    phone_number = models.IntegerField(blank=True, null=True)
-    street_address = models.CharField(max_length=50)
+    country = models.CharField(max_length=30, blank=True, null=True)
+    city = models.CharField(max_length=30, blank=True, null=True)
+    state = models.CharField(max_length=30, blank=True, null=True)
+    time_zone = models.CharField(max_length=30, blank=True, null=True)
+    postal_code = models.CharField(max_length=10, blank=True, null=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    street_address = models.CharField(max_length=50, blank=True, null=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
 

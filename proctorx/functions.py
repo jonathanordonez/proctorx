@@ -1,5 +1,8 @@
 from .models import Session
 import datetime
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 def obtain_exam_schedules(date_input, time_input, length):
     suggestions=[]
@@ -38,3 +41,21 @@ def obtain_exam_schedules(date_input, time_input, length):
 
 
     return suggestions
+
+def send_email(email_id, email_message):
+    message = Mail(
+    from_email = 'proctorsx@gmail.com',
+    to_emails = 'proctorsx@gmail.com',
+    subject = 'Testing Sendgrid from Proctor',
+    plain_text_content = 'this is the plain text contenttt',
+    html_content = '<h1>HEllo Proctor<h1>'
+              )
+    try: 
+        sg = SendGridAPIClient(os.environ['SENDGRID_API_KEY'])
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(e.message)
+    

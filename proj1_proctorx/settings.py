@@ -126,4 +126,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'proctorx.Student'
 
-# AUTHENTICATION_BACKENDS = ['proctorx.models.Student']
+# sendgrid key= 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

@@ -6,4 +6,19 @@
 
 {% block content %}
 <h1>Settings</h1>
+
+<form method="POST" href="">
+    {% csrf_token %}
+    {{form}}
+
+    <input type="submit" value="Submit" name="Settings">
+</form>
+
+<form method="POST" href="">
+    {% csrf_token %}
+    {{form_password}}
+
+    <input type="submit" value="Change Password" name="Password">
+</form>
+
 {% endblock %}

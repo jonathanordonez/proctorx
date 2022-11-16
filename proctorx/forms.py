@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, Textarea, TextInput
 from .models import Student
 
 class StudentForm(UserCreationForm):
@@ -18,3 +18,13 @@ class StudentForm(UserCreationForm):
 
 
 
+class StudentSettings(ModelForm):
+    street_address1 = TextInput( attrs={
+        'maxlength':30,
+        'required':False,
+        'help_text':'Use puns liberally',}
+    )
+
+    class Meta:
+        model = Student
+        fields = ['first_name', 'last_name', 'phone_number', 'street_address', 'city', 'state', 'country', 'postal_code']

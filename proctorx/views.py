@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from .forms import StudentForm
+from .forms import StudentForm, StudentSettings
 from .functions import obtain_exam_schedules
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Session, Student
 from django.contrib.auth.models import User
-
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth import views as auth_views
+from django.urls import reverse_lazy
 
 def homepage(request):
 	if request.user.is_authenticated:
@@ -32,9 +34,9 @@ def register(request):
 			form.save()
 			# print(f'received username: {username} and password {password} ')
 				# to do: mail confirmation 
-			# user = authenticate(request, email=email, password=password)
-			# login(request, user)
-			# return redirect('/student/session')
+			user = authenticate(request, email=email, password=password)
+			login(request, user)
+			return redirect('/student/session')
 		else:
 			print('*** form is not valid ***')
 		
@@ -84,21 +86,9 @@ def reservation(request):
 			context = {'available_schedules' : obtain_exam_schedules(exam_date, exam_time, exam_length)}
 			print(context['available_schedules'])
 			return render(request, 'reservation.html', context)
-
-
-		# session = Session.objects.create(student = student, exam_date = exam_date, exam_time = exam_time, 
-		# 	exam_length = exam_length, university = university, exam_name = exam_name, session_status = 'scheduled',
-		# 	date_purchased = None, cost = cost, payment_status = 'pending')
 		# # to-do: create check to ensure the date/time is not in the past
 
-		# return redirect('/student/cart')
 
-# student = models.ForeignKey(Student, on_delete=models.CASCADE)
-#     exam_date = models.DateField()
-#     exam_time = models.TimeField()
-#     university = models.CharField(max_length=50)   
-#     exam_name = models.CharField(max_length=50)
-#     session_status
 
 
 
@@ -140,7 +130,44 @@ def delete_from_cart(request, order_id):
 
 @login_required(login_url='/login')
 def settings(request):
-	return render(request, 'settings.html')
+	student_record = Student.objects.get(id = request.user.id)
+
+	settings_data = {
+			'first_name':student_record.first_name, 'last_name':student_record.last_name,
+			'street_address':student_record.street_address, 'postal_code':student_record.postal_code, 'country': student_record.country,
+			'city':student_record.city, 'state':student_record.state, 'phone_number':student_record.phone_number,
+			}
+
+	if request.method == 'POST' and request.POST.get('Settings') == 'Submit':
+		# check if the form has changed with
+		student_record = Student.objects.get(id = request.user.id)
+		form = StudentSettings(request.POST, initial = settings_data)
+		if form.has_changed:
+			print(f'fields that changed {form.changed_data}')
+			for field in form.changed_data:
+				print(f'field is: {field}')
+				print(type(field))
+				print(request.POST.get(field))
+				setattr(student_record, field, str(request.POST.get(field))) 
+				student_record.save()
+			print('new user information saved')
+		
+		new_settings_data = {
+			'first_name':student_record.first_name, 'last_name':student_record.last_name,
+			'street_address':student_record.street_address, 'postal_code':student_record.postal_code, 'country': student_record.country,
+			'city':student_record.city, 'state':student_record.state, 'phone_number':student_record.phone_number,
+			}
+
+		new_form = StudentSettings(initial = new_settings_data)
+		context = {'form':new_form}
+		return render(request, 'settings.html', context)
+
+	else:
+		form = StudentSettings(initial = settings_data)
+		context = {'form':form}
+		
+		return render(request, 'settings.html', context)
+
 
 @login_required(login_url='/login')
 def session(request):
@@ -152,5 +179,16 @@ def session(request):
 
 @login_required(login_url='/login')
 def sign_out(request):
+
 	logout(request)
 	return redirect('/login')
+
+# Returns the reset_password.html
+class PasswordReset(auth_views.PasswordResetView):
+    template_name = 'reset_password.html'
+    success_url = reverse_lazy('login')
+
+class PasswordResetConfirm(SuccessMessageMixin, auth_views.PasswordResetConfirmView):
+    template_name = 'set_password.html'
+    success_url = reverse_lazy('login')
+    success_message = 'Your password has been changed.'
