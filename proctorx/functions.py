@@ -42,7 +42,7 @@ def obtain_exam_schedules(date_input, time_input, length):
 
     return suggestions
 
-def send_email(email_id, email_message):
+def send_email(email_id, email_message, **kwargs):
     message = Mail(
     from_email = 'proctorsx@gmail.com',
     to_emails = 'proctorsx@gmail.com',
@@ -59,3 +59,21 @@ def send_email(email_id, email_message):
     except Exception as e:
         print(e.message)
     
+def send_activation_link(email_id, student_base_64, student_token):
+    message = Mail(
+    from_email = 'proctorsx@gmail.com',
+    to_emails = email_id,
+    subject = 'Activate your account',
+    plain_text_content = 'this is the plain text contenttt',
+    html_content = '<h1>Hello Proctor<h1>'
+                    '<p>Use the following <a href=http://127.0.0.1:8000/activate_account/"'+ str(student_base_64) + '/' + str(student_token) + '">link</a> to activate your account<p>'
+                    '<p>Use the following url if the link fails: http://127.0.0.1:8000/activate_account/' + str(student_base_64) + '/' + str(student_token)
+              )
+    try: 
+        sg = SendGridAPIClient(os.environ['SENDGRID_API_KEY'])
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(e.message)

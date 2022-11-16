@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .forms import StudentForm, StudentSettings
-from .functions import obtain_exam_schedules
+from .functions import obtain_exam_schedules, send_email, send_activation_link
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Session, Student
@@ -9,6 +9,12 @@ from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
+from .tokens import account_activation_token
+from django.utils.http import urlsafe_base64_decode
+# from django.utils.encoding import force_text
+from django.views import View
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
 
 def homepage(request):
 	if request.user.is_authenticated:
@@ -182,11 +188,40 @@ def sign_out(request):
 	return redirect('/login')
 
 # Returns the reset_password.html
-class PasswordReset(auth_views.PasswordResetView):
-    template_name = 'reset_password.html'
-    success_url = reverse_lazy('login')
+def reset_password(request):
+	if request.method == 'POST':
+		student_id_base64 = urlsafe_base64_encode(force_bytes(request.user.pk))
+		student_token = account_activation_token.make_token(request.user)
+		student_email = request.user.email
+		send_activation_link(student_email, student_id_base64, student_token)
 
-class PasswordResetConfirm(SuccessMessageMixin, auth_views.PasswordResetConfirmView):
-    template_name = 'set_password.html'
-    success_url = reverse_lazy('login')
-    success_message = 'Your password has been changed.'
+		# to-do: message to let the customer know the email has been sent and to check his inbox
+		#        redirect to login in 15 seconds and show timer
+		
+		print(account_activation_token.make_token(request.user))
+		# token format: bezk3g-848fb295b17162cdbb935b7e88d2f5af
+		#               bezk4x-00fc13c4ace52b8973691552a8656f6a
+		return render(request, 'reset_password.html')
+
+	return render(request, 'reset_password.html')
+
+def changed_password(request, uidb64, token):
+	print(f'gets here {uidb64} {token}')
+	return render(request, 'password_changed.html')
+
+# class ActivateAccountView(View):
+#     def get(self, request, uidb64, token):
+#         try:
+#             uid = force_text(urlsafe_base64_decode(uidb64))
+#             user = Student.objects.get(pk=uid)
+#         except (TypeError, ValueError, OverflowError, Student.DoesNotExist):
+#             user = None
+
+#         if user is not None and account_activation_token.check_token(user, token):
+#             user.is_active = True
+#             user.save()
+#             login(request, user)
+#             return redirect('student/session')
+#         else:
+#             # invalid link
+#             return render(request, 'registration/invalid.html')
