@@ -32,10 +32,8 @@ def register(request):
 		form = StudentForm(request.POST)
 		if (form.is_valid()):
 			form.save()
-			# print(f'received username: {username} and password {password} ')
-				# to do: mail confirmation 
-			user = authenticate(request, email=email, password=password)
-			login(request, user)
+				# to do: mail confirmation message
+
 			return redirect('/student/session')
 		else:
 			print('*** form is not valid ***')

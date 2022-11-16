@@ -5,11 +5,11 @@ import datetime
 
 class CustomAccountManager(BaseUserManager):
 
-    def create_superuser(self, email, username, first_name, password, **other_fields):
+    def create_superuser(self, email, first_name, password, **other_fields):
         other_fields.setdefault('is_staff', True)
         other_fields.setdefault('is_superuser', True)
         other_fields.setdefault('is_active', True)
-        return self.create_user(email, username, first_name, password, **other_fields)
+        return self.create_user(email, first_name, password, **other_fields)
 
     def create_user(self, email, first_name, password, **other_fields):
         
@@ -36,6 +36,7 @@ class Student(AbstractUser, PermissionsMixin):
     street_address = models.CharField(max_length=50, blank=True, null=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
+    username = None
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name']
