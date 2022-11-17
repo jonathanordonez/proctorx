@@ -13,9 +13,14 @@ path('student/cart', views.cart),
 path('student/checkout', views.checkout),
 path('student/cart/<order_id>', views.delete_from_cart),
 path('logout', views.sign_out),
-path('reset_password', views.reset_password, name='reset_password'),
-# path('reset/<uidb64>/<token>/', views.PasswordResetConfirm.as_view(), name='password_reset_confirm'),
-re_path(r'^activate_account/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,40})$',
-                views.changed_password, name='changed_password'),
+path('forgot_password', views.forgot_password, name='forgot_password'),
+path('change_password', views.change_password, name='change_password'),
+
+# re_path(r'^change_password/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,40})$',
+#                 views.change_password, name='change_password')
+
+
+# re_path(r'^activate_account/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,40})$',
+#                 views.changed_password_confirmation, name='changed_password_confirmation'),
 ]
 

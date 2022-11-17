@@ -15,6 +15,9 @@ from django.utils.http import urlsafe_base64_decode
 from django.views import View
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
+from django.utils.encoding import force_str
+from django.contrib.auth.forms import PasswordChangeForm
+
 
 def homepage(request):
 	if request.user.is_authenticated:
@@ -187,25 +190,44 @@ def sign_out(request):
 	logout(request)
 	return redirect('/login')
 
-# Returns the reset_password.html
-def reset_password(request):
+# ******* THIS *************
+
+# Returns the forgot_password.html
+def forgot_password(request):
 	if request.method == 'POST':
 		student_id_base64 = urlsafe_base64_encode(force_bytes(request.user.pk))
 		student_token = account_activation_token.make_token(request.user)
+		# token format: bezk3g-848fb295b17162cdbb935b7e88d2f5af
 		student_email = request.user.email
 		send_activation_link(student_email, student_id_base64, student_token)
 
 		# to-do: message to let the customer know the email has been sent and to check his inbox
 		#        redirect to login in 15 seconds and show timer
 		
-		print(account_activation_token.make_token(request.user))
-		# token format: bezk3g-848fb295b17162cdbb935b7e88d2f5af
-		#               bezk4x-00fc13c4ace52b8973691552a8656f6a
-		return render(request, 'reset_password.html')
+		return render(request, 'forgot_password.html')
 
-	return render(request, 'reset_password.html')
+	return render(request, 'forgot_password.html')
 
-def changed_password(request, uidb64, token):
+
+# ******* THIS *************
+
+def change_password(request):
+	form = PasswordChangeForm(user=request.user)
+	context = {'form':form}
+	return render(request, 'change_password.html', context=context)
+
+
+
+
+
+
+
+
+def changed_password_confirmation(request, uidb64, token):
+	student_uid = force_str(urlsafe_base64_decode(uidb64))
+	student_record = Student.objects.get(id=student_uid)
+	# if student_record is not None and account_activation_token.check_token(student_record, token):
+		# login(request, user)
 	print(f'gets here {uidb64} {token}')
 	return render(request, 'password_changed.html')
 
