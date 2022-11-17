@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
-from .forms import StudentForm, StudentSettings
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from .forms import StudentForm, StudentSettings, ChangeEmailForm
 from .functions import obtain_exam_schedules, send_email, send_activation_link
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -16,11 +16,11 @@ from django.views import View
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.utils.encoding import force_str
-from django.contrib.auth.forms import PasswordChangeForm
-
+from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 
 def homepage(request):
 	if request.user.is_authenticated:
+		print(f'user is {request.user} with type {type(request.user)}')
 		return redirect('/student/session')
 	return render(request, 'homepage.html')
 
@@ -92,13 +92,8 @@ def reservation(request):
 		if(request.POST.get('Lookup reservation schedules') == 'Submit'):
 			context = {'available_schedules' : obtain_exam_schedules(exam_date, exam_time, exam_length)}
 			print(context['available_schedules'])
+					# # to-do: create check to ensure the date/time is not in the past
 			return render(request, 'reservation.html', context)
-		# # to-do: create check to ensure the date/time is not in the past
-
-
-
-
-
 
 @login_required(login_url='/login')
 def cart(request):
@@ -190,46 +185,87 @@ def sign_out(request):
 	logout(request)
 	return redirect('/login')
 
-# ******* THIS *************
-
 # Returns the forgot_password.html
-def forgot_password(request):
-	if request.method == 'POST':
-		student_id_base64 = urlsafe_base64_encode(force_bytes(request.user.pk))
-		student_token = account_activation_token.make_token(request.user)
-		# token format: bezk3g-848fb295b17162cdbb935b7e88d2f5af
-		student_email = request.user.email
-		send_activation_link(student_email, student_id_base64, student_token)
+def change_password(request):
+	if request.user.is_authenticated and request.method == 'GET':
+		# load change password form
+		form = PasswordChangeForm(user=request.user)
+		context = {'form':form}
+		return render(request, 'change_password.html', context=context)
+
+	elif request.user.is_authenticated and request.method == 'POST':
+		form = PasswordChangeForm(user=request.user, data=request.POST)
+		if form.is_valid():
+			form.save()
+			update_session_auth_hash(request, form.user)
+			# to-do: show message indicating password was changed successfully
+			return redirect('/student/session')
+		else:
+			print('your form is not valid')
+			# to-do: show message indicating form wasn't valid
+			return redirect('/change_password')
+
+	elif request.user.is_authenticated == False and request.method == 'GET':
+		context = {'message': 'Enter your email address below to reset your password:',
+					'form': ChangeEmailForm()}
+		return render(request, 'change_password.html', context=context)
+
+	elif request.user.is_authenticated == False and request.method == 'POST':
+		student_record = Student.objects.filter(email=request.POST.get('email'))
+		if len(student_record) > 0:
+			student_record = student_record[0]
+			student_id_base64 = urlsafe_base64_encode(force_bytes(student_record.id))
+			student_token = account_activation_token.make_token(student_record)
+			send_activation_link(student_record.email, student_id_base64, student_token)
+		else:
+			print(f'student with email {request.POST.get("email")} not found')
+
+		context = {'message': 'You will receive a password reset link if your email exists in our db'}
 
 		# to-do: message to let the customer know the email has been sent and to check his inbox
 		#        redirect to login in 15 seconds and show timer
 		
-		return render(request, 'forgot_password.html')
+		return render(request, 'change_password.html', context=context)
 
-	return render(request, 'forgot_password.html')
-
-
-# ******* THIS *************
-
-def change_password(request):
-	form = PasswordChangeForm(user=request.user)
-	context = {'form':form}
-	return render(request, 'change_password.html', context=context)
+	return render(request, 'change_password.html')
 
 
 
+def set_password2(request):
+	pass
+
+	
+	
 
 
-
-
-
-def changed_password_confirmation(request, uidb64, token):
+def set_password(request, uidb64, token):
 	student_uid = force_str(urlsafe_base64_decode(uidb64))
 	student_record = Student.objects.get(id=student_uid)
+	print(f'student record is {student_record} with type {type(student_record)}')
+	form = SetPasswordForm(user=student_record)
+	context = {'form':form}
+
+	if request.method == 'POST':
+		form = PasswordChangeForm(user=student_record, data=request.POST)
+		if form.is_valid():
+			print('here')
+			form.save()
+			update_session_auth_hash(request, form.user)
+			# to-do: show message indicating password was changed successfully
+			return redirect('/student/session')
+		else:
+			print('form not valid')
+
+
+	return render(request, 'set_password.html', context=context)
+
 	# if student_record is not None and account_activation_token.check_token(student_record, token):
 		# login(request, user)
 	print(f'gets here {uidb64} {token}')
 	return render(request, 'password_changed.html')
+
+
+
 
 # class ActivateAccountView(View):
 #     def get(self, request, uidb64, token):

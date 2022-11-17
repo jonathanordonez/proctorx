@@ -14,11 +14,6 @@
     <input type="submit" value="Submit" name="Settings">
 </form>
 
-<form method="POST" href="">
-    {% csrf_token %}
-    {{form_password}}
-
-    <input type="submit" value="Change Password" name="Password">
-</form>
+<a href="/change_password">Change Password</a>
 
 {% endblock %}

@@ -19,6 +19,10 @@ class StudentSettings(ModelForm):
         model = Student
         fields = ['first_name', 'last_name', 'phone_number', 'street_address', 'city', 'state', 'country', 'postal_code']
 
+class ChangeEmailForm(ModelForm):
+    class Meta:
+        model = Student
+        fields = ['email']
 
 # class ChangePassword(PasswordChangeForm):
 #     class Meta:
