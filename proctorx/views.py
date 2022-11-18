@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from .forms import StudentForm, StudentSettings, ChangeEmailForm
-from .functions import obtain_exam_schedules, send_email, send_activation_link
+from .functions import obtain_exam_schedules, f_change_password
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Session, Student
@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
-from .tokens import account_activation_token
+from .tokens import account_activation_token, password_reset_token
 from django.utils.http import urlsafe_base64_decode
 # from django.utils.encoding import force_text
 from django.views import View
@@ -215,8 +215,8 @@ def change_password(request):
 		if len(student_record) > 0:
 			student_record = student_record[0]
 			student_id_base64 = urlsafe_base64_encode(force_bytes(student_record.id))
-			student_token = account_activation_token.make_token(student_record)
-			send_activation_link(student_record.email, student_id_base64, student_token)
+			student_token = password_reset_token.make_token(student_record)
+			f_change_password(student_record.email, student_id_base64, student_token)
 		else:
 			print(f'student with email {request.POST.get("email")} not found')
 
@@ -235,36 +235,41 @@ def set_password2(request):
 	pass
 
 	
-	
-
 
 def set_password(request, uidb64, token):
 	student_uid = force_str(urlsafe_base64_decode(uidb64))
 	student_record = Student.objects.get(id=student_uid)
-	print(f'student record is {student_record} with type {type(student_record)}')
-	form = SetPasswordForm(user=student_record)
-	context = {'form':form}
+	
+	if request.method == 'GET':
+		if password_reset_token.check_token(student_record, token):
+			form = SetPasswordForm(user=student_record)
+			context = {'form':form}
+			return render(request, 'set_password.html', context=context)
+	
 
-	if request.method == 'POST':
-		form = PasswordChangeForm(user=student_record, data=request.POST)
+	elif request.method == 'POST':
+		form = SetPasswordForm(user=student_record, data=request.POST)
 		if form.is_valid():
-			print('here')
 			form.save()
-			update_session_auth_hash(request, form.user)
+			# update_session_auth_hash(request, form.user)
+			# password_reset_token.make_token(student_record) # creating a new token to override the last one
+			# to-do check method update_session_auth_hash to ensure token expires
 			# to-do: show message indicating password was changed successfully
 			return redirect('/student/session')
 		else:
 			print('form not valid')
 
 
-	return render(request, 'set_password.html', context=context)
+	return render(request, 'set_password.html')
 
-	# if student_record is not None and account_activation_token.check_token(student_record, token):
+	# if student_record is not None and password_reset_token.check_token(student_record, token):
 		# login(request, user)
 	print(f'gets here {uidb64} {token}')
 	return render(request, 'password_changed.html')
 
-
+def activate_account(request, uidb64, token):
+	student_uid = force_str(urlsafe_base64_decode(uidb64))
+	student_record = Student.objects.get(id=student_uid)
 
 
 # class ActivateAccountView(View):
@@ -275,7 +280,7 @@ def set_password(request, uidb64, token):
 #         except (TypeError, ValueError, OverflowError, Student.DoesNotExist):
 #             user = None
 
-#         if user is not None and account_activation_token.check_token(user, token):
+#         if user is not None and password_reset_token.check_token(user, token):
 #             user.is_active = True
 #             user.save()
 #             login(request, user)
