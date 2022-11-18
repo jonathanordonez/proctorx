@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from .forms import StudentForm, StudentSettings, ChangeEmailForm
-from .functions import obtain_exam_schedules, f_change_password
+from .functions import obtain_exam_schedules, email_password_reset_link, email_activation_token
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Session, Student
@@ -36,14 +36,19 @@ def register(request):
 
 	elif (request.method == 'POST'):
 		email = request.POST.get('email')
-		password = request.POST.get('password1')
 		# Register user
 		form = StudentForm(request.POST)
 		if (form.is_valid()):
 			form.save()
+
+			student_record = Student.objects.get(email=email)
+			student_id_base64 = urlsafe_base64_encode(force_bytes(student_record.id))
+			activation_token = account_activation_token.make_token(student_record)
+			email_activation_token(email, student_id_base64, activation_token)
+
 				# to do: mail confirmation message
 
-			return redirect('/student/session')
+			return redirect('/login')
 		else:
 			print('*** form is not valid ***')
 		
@@ -71,7 +76,6 @@ def sign_in(request):
 			messages.info(request, 'Username OR password is incorrect')
 
 	return render(request, 'login.html')
-
 
 @login_required(login_url='/login')
 def reservation(request):
@@ -170,7 +174,6 @@ def settings(request):
 		
 		return render(request, 'settings.html', context)
 
-
 @login_required(login_url='/login')
 def session(request):
 	# Query and dispaly current active reservations (aka paid sessions)
@@ -216,7 +219,7 @@ def change_password(request):
 			student_record = student_record[0]
 			student_id_base64 = urlsafe_base64_encode(force_bytes(student_record.id))
 			student_token = password_reset_token.make_token(student_record)
-			f_change_password(student_record.email, student_id_base64, student_token)
+			email_password_reset_link(student_record.email, student_id_base64, student_token)
 		else:
 			print(f'student with email {request.POST.get("email")} not found')
 
@@ -228,13 +231,6 @@ def change_password(request):
 		return render(request, 'change_password.html', context=context)
 
 	return render(request, 'change_password.html')
-
-
-
-def set_password2(request):
-	pass
-
-	
 
 def set_password(request, uidb64, token):
 	student_uid = force_str(urlsafe_base64_decode(uidb64))
@@ -251,9 +247,6 @@ def set_password(request, uidb64, token):
 		form = SetPasswordForm(user=student_record, data=request.POST)
 		if form.is_valid():
 			form.save()
-			# update_session_auth_hash(request, form.user)
-			# password_reset_token.make_token(student_record) # creating a new token to override the last one
-			# to-do check method update_session_auth_hash to ensure token expires
 			# to-do: show message indicating password was changed successfully
 			return redirect('/student/session')
 		else:
@@ -268,23 +261,15 @@ def set_password(request, uidb64, token):
 	return render(request, 'password_changed.html')
 
 def activate_account(request, uidb64, token):
-	student_uid = force_str(urlsafe_base64_decode(uidb64))
-	student_record = Student.objects.get(id=student_uid)
+	student_id = force_str(urlsafe_base64_decode(uidb64))
+	student_record = Student.objects.filter(id=student_id)
 
+	if len(student_record) > 0:
+		student_record[0].is_active = True
+		student_record[0].save()
 
-# class ActivateAccountView(View):
-#     def get(self, request, uidb64, token):
-#         try:
-#             uid = force_text(urlsafe_base64_decode(uidb64))
-#             user = Student.objects.get(pk=uid)
-#         except (TypeError, ValueError, OverflowError, Student.DoesNotExist):
-#             user = None
+	else:
+		print(f'student id received {student_id} does not exist')
 
-#         if user is not None and password_reset_token.check_token(user, token):
-#             user.is_active = True
-#             user.save()
-#             login(request, user)
-#             return redirect('student/session')
-#         else:
-#             # invalid link
-#             return render(request, 'registration/invalid.html')
+	# to-do: show successful/unsuccessful message
+	return redirect('login')
