@@ -1,18 +1,44 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href={% static '/css/styles.css' %}>
     {% block title %}{% endblock %}
 </head>
+
 <body>
-    <nav>this is a nav</nav>
-    <a href="/help">Help</a>
-    <a href="/login">Sign In</a>
-    <a href="/register">Register</a>
-    <a href="/change_password">Forgot password</a>
-    {% block content %}
+    <header>
+        <div class="logo">
+            <img class="brand-img" alt="ProctorX Logo" src={% static '/img/proctorX.svg' %}>
+        </div>
+        <div class="header-links">
+            <a href="/login">Take an Exam</a>
+            <a href="/login">User Login</a>
+            <a href="/register">Sign Up</a>
+            <!-- <a href="/help">Help</a> -->
+            <!-- <a href="/change_password">Forgot password</a> -->
+        </div>
+
+
+
+    </header>
+
+    <main>
+        <p>This is my content</p>
+
+        {% block content %}
     
-    {% endblock %}
+        {% endblock %}
+    </main>
+
+
+    <footer>
+        <p>This is my footer</p>
+
+    </footer>
+
+
 
 </body>
 </html>

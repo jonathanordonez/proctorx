@@ -2,3 +2,4 @@ venv_proctorx/
 .idea/
 manage.py
 *.pyc
+other/

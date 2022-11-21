@@ -1,3 +1,108 @@
-nav {
-    background: red;
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    display: grid;
+    grid-template-rows: 80px auto 80px;
+    min-height: 100%;
+    letter-spacing: 1px;
+    font-family: sans pro,Roboto,Arial,sans-serif;
+    line-height: 1.5;
+}
+
+header {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    border-bottom: 1px solid #f9f9f9;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(249, 249, 249);
+}
+
+.logo {
+    justify-self: start;
+    align-self: center;
+    width: auto;
+    height: 60px;
+    padding-left: 20px;
+}
+
+.brand-img {
+    width: auto;
+    height: 60px;
+}
+
+.header-links {
+    justify-self: end;
+    align-self: center;
+    padding-right: 20px;
+    color: #333;
+}
+
+.header-links a {
+    padding: 10px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:visited {
+    color: inherit;
+  }
+
+main {
+    min-height: 100%;
+
+}
+
+footer {
+
+}
+
+
+@media (max-width: 600px) {
+    
+    header {
+
+    }
+    
+    main {
+
+    }
+    
+    footer {
+
+    }
+}
+
+@media (min-width: 601px) and (max-width: 768px) {
+  
+    header {
+
+    }
+    
+    main {
+
+    }
+    
+    footer {
+
+    }
+}
+
+@media (min-width: 769px) {
+    
+    header {
+
+    }
+    
+    main {
+
+    }
+    
+    footer {
+    }
 }
