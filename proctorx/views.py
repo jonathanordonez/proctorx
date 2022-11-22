@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from .forms import StudentForm, StudentSettings, ChangeEmailForm
+from .forms import StudentForm, StudentSettings, ChangeEmailForm, SetStudentPassword
 from .functions import obtain_exam_schedules, email_password_reset_link, email_activation_token
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -16,7 +16,7 @@ from django.views import View
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.utils.encoding import force_str
-from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
+from django.contrib.auth.forms import PasswordChangeForm
 
 def homepage(request):
 	if request.user.is_authenticated:
@@ -238,13 +238,13 @@ def set_password(request, uidb64, token):
 	
 	if request.method == 'GET':
 		if password_reset_token.check_token(student_record, token):
-			form = SetPasswordForm(user=student_record)
+			form = SetStudentPassword(user=student_record)
 			context = {'form':form}
 			return render(request, 'set_password.html', context=context)
 	
 
 	elif request.method == 'POST':
-		form = SetPasswordForm(user=student_record, data=request.POST)
+		form = SetStudentPassword(user=student_record, data=request.POST)
 		if form.is_valid():
 			form.save()
 			# to-do: show message indicating password was changed successfully

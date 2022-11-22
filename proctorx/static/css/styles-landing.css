@@ -3,23 +3,17 @@ html {
 }
 
 body {
-    /* margin-top: 50px !important; */
     background-color: #f8f9fa;
     margin: 0;
-    min-height: 100%;
+    /* min-height: 100%; */
 }
 
 main {
-    /* align-items: center; */
-    width: 100%;
-    /* min-height: 100%; */
-    height: 200%;
-    max-width: 640px;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
-
+    min-width: 640px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
 }
 
 .logo {
@@ -50,10 +44,14 @@ form input[type="submit"] {
 }
 
 .form-footer a {
-    display: block;
-    text-decoration: underline !important;
+    display: inline-block;
+    text-decoration: none !important;
     color: #0d6efd !important;
     margin-bottom: 10px;
+}
+
+.form-footer a:hover {
+    cursor: pointer;
 }
 
 .form-footer div {
@@ -77,4 +75,28 @@ hr {
     margin-bottom: 15px !important;
     color: var(--bs-secondary);
 
+}
+
+@media (max-width: 600px) {
+
+    main {
+        min-width: 440px;
+    }
+
+}
+
+@media (min-width: 600px) and (max-width: 768px) {
+   
+    main {
+        min-width: 560px;
+    }
+
+}
+
+@media (min-width: 768px) {
+    
+    main {
+
+    }
+    
 }

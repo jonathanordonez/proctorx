@@ -1,19 +1,28 @@
 {% extends 'public_template.html' %}
+{% load static %}
 
 {% block title %}
 <title>Register</title>
 {% endblock %}
 
 {% block content %}
-Register
 
-<form method="POST" action="">
-    {% csrf_token %}
-    {% for field in form %}
-    <p>{{ field.label }} {{ field }}</p>    
-    {% endfor %}
-    <input type="submit" value="Register">
-</form>
+    <div class="form-container">
+        <h1>Register</h1>
+        <form method="POST" action="">
+            {% csrf_token %}
+            {% for field in form %}
+            <label class="form-label fs-5" for="{{ field.label }}">{{ field.label }}</label>
+            {{ field }}
+            {% endfor %}
+            <input class="form-control fs-5" type="submit" value="Register">
+        </form>
+        <hr>
+        <div class="form-footer">
+            <div><a class="fs-5" href="/login">Back to Sign In</a></div>
+            <div><a class="fs-5" href="/change_password">Forgot Password?</a></div>
+            
+        </div>
+    </div>
 
-bla
 {% endblock %}
