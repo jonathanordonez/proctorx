@@ -13,21 +13,25 @@
         <div class="logo">
             <img class="brand-img" alt="ProctorX Logo" src={% static '/img/proctorX-white.svg' %}>    
         </div>
+
         <div class="user-settings fs-5">
             {{ request.user }}
         </div>
-        
-        
-
+        </div>
     </header>
 
-    <div class="student-options-panel">
-        <div class="student-links">        
-            <a href="/logout">Logout</a>
+    <div class="student-options-panel scale-down fs-5">
+        <div class="student-links">  
+            <a href="session">My Sessions</a>
+            <a href="session">My Orders</a>
+            <a href="reservation">Reserve a new session</a>      
+            <!-- <a href="/logout">Logout</a> -->
+            
+            <!-- <a href="settings">Settings</a> -->
+        </div>
+        <div class="student-cart-balance">
             <a href="cart">Cart</a>
-            <a href="reservation">Reserve a new session</a>
-            <a href="session">My Active Sessions</a>
-            <a href="settings">Settings</a>
+            <a href="cart">Balance</a>
         </div>
     </div>
 

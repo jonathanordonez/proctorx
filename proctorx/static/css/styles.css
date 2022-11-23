@@ -26,6 +26,41 @@ header {
     height: 40px;
 }
 
+.student-options-panel {
+    height: 80px;
+    background-color: white;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    border-bottom: 1px solid #dee2e6 !important;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(222, 226, 230);
+}
+
+.student-links {
+    align-self: center;
+
+}
+
+.student-links a {
+    padding-right: 20px;
+}
+
+.student-options-panel a {
+    text-decoration: none !important;
+    color: black;
+    align-self: center;
+}
+
+.student-cart-balance {
+    justify-self: right;
+    align-self: center;
+}
+
+.student-cart-balance a {
+    padding-left: 20px;
+}
+
 .user-settings {
     color: white;
     justify-self: end;
