@@ -9,7 +9,7 @@
 
 {% if available_schedules %} 
     {% for schedule in available_schedules %}
-        <li>{{schedule}} <a href="">Select</a></li> 
+        <li class="reservation-option">{{schedule}} <a href="">Select</a></li> 
         <!-- Add JS to make post request here -->
     {% endfor %}
     <a href="/student/reservation">Back</a>
