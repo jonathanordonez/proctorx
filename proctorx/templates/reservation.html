@@ -52,16 +52,19 @@
     <div class="reservation-results">
         {% if available_schedules %}
         {% for schedule in available_schedules %}
-        <li class="reservation-option">{{schedule}} <a href="">Select</a></li>
+        <div class="reservation-option fs-5">
+            <p>{{schedule}}</p> 
+            <p>{{exam}}</p>
+            <a href="">Select</a>
+        </div>
         <!-- Add JS to make post request here -->
         {% endfor %}
-        <a href="/student/reservation">Back</a>
     </div>
 
     {% endif %}
+
+
 </div>
-
-
 
 
 

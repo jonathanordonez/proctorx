@@ -177,8 +177,68 @@ footer {
 .registration-form-submit:hover {
     background-color: #343a40;
     border-color: #343a40;
-    
 }
+
+.reservation-results { 
+    /* background-color: aliceblue; */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    height: 80%;
+    margin-left: 20px;
+    margin-right: 20px;   
+}
+
+.reservation-option {
+    /* justify-self: center;     */
+    /* align-self: center; */
+    margin: auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 80%;
+    border: 1px solid #dee2e6;
+    text-align: center;
+    border-radius: 0.25rem;
+    /* border-bottom: 1px solid #dee2e6 !important;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(222, 226, 230); */
+}
+
+/* Session page */
+
+.session-container {
+    display: grid;
+    /* height: 100%; */
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
+    background-color: white;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    
+    /* grid-template-rows: 20% 20% 20% 20% 20%; */
+}
+
+.session-attribute {
+    border-bottom: 1px solid #dee2e6 !important;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(222, 226, 230);
+    text-align: center;
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
+    margin-bottom: 0px !important;
+}
+
+.session-attribute {
+    /* margin-top: auto !important;
+    margin-bottom: auto !important; */
+/* 
+    margin-top: auto;
+    margin-bottom: auto; */
+
+}
+
 
 @media (max-width: 600px) {
     

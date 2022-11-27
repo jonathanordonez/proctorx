@@ -2,19 +2,43 @@
 
 {% block title %}
 <title>My Sessions</title>
+
 {% endblock %}
+
 
 {% block content %}
 
+<div class="session-container">
+    <p class="session-attribute fs-5">Exam</p>
+    <p class="session-attribute fs-5">Date</p>
+    <p class="session-attribute fs-5">Length</p>
+    <p class="session-attribute fs-5">Status</p>
+    <p class="session-attribute fs-6">COMP 200</p>
+    <p class="session-attribute fs-6">Jan 1, 2022</p>
+    <p class="session-attribute fs-6">2 hours</p>
+    <p class="session-attribute fs-6">Scheduled</p>
+    <p class="session-attribute fs-6">COMP 200</p>
+    <p class="session-attribute fs-6">Jan 1, 2022</p>
+    <p class="session-attribute fs-6">2 hours</p>
+    <p class="session-attribute fs-6">Scheduled</p>
+    <!-- <div class="session-attributes fs-5">
 
+    </div> -->
 
-<h2>My active sessions</h2>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <!-- <div>Test</div> -->
+
+</div>
 
 {% for record in current_reservations %}
 
-<ul>
-    <li>{{ record.exam_name }}  Status: {{record.session_status}} Date: {{record.exam_date}} Time: {{record.exam_time}}  </li>
-</ul>
+<!-- <ul>
+    <li>{{ record.exam_name }} Status: {{record.session_status}} Date: {{record.exam_date}} Time: {{record.exam_time}}
+    </li>
+</ul> -->
 
 {% endfor %}
 

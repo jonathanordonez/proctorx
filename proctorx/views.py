@@ -90,11 +90,11 @@ def reservation(request):
 		exam_time = request.POST.get('time')
 		university = request.POST.get('university')
 		exam_name = request.POST.get('exam')
-		exam_length = request.POST.get('exam_length')
+		exam_length = request.POST.get('exam-length')
 		cost = int(exam_length) * 15
 
 		if(request.POST.get('Lookup reservation schedules') == 'Submit'):
-			context = {'available_schedules' : obtain_exam_schedules(exam_date, exam_time, exam_length)}
+			context = {'available_schedules' : obtain_exam_schedules(exam_date, exam_time, exam_length), 'exam': exam_name, 'cost': cost}
 			print(context['available_schedules'])
 					# # to-do: create check to ensure the date/time is not in the past
 			return render(request, 'reservation.html', context)
