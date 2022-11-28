@@ -19,6 +19,7 @@ header {
     border-bottom-style: solid;
     border-bottom-color: rgb(222, 226, 230);
 }
+
 .header-wrapper {
     background-color: #343a40 !important;
     display: grid;
@@ -44,7 +45,7 @@ header {
     background-color: white;
     display: grid;
     grid-template-columns: 2fr 1fr;
-    
+
 }
 
 .student-links {
@@ -73,20 +74,64 @@ header {
     padding-left: 20px;
 }
 
+.student-cart-count {
+    background-color: #dee2e6;
+    border-radius: 10rem;
+    padding-right: 0.6em;
+    padding-left: 0.6em;
+    text-align: center;
+    display: inline-block;
+    line-height: 1;
+    padding: 0.25em 0.4em;
+    font-size: 80%;
+    font-weight: 600;
+}
+
 .user-settings {
     color: white;
     justify-self: end;
     align-self: center;
-    padding-right: 20px;
+    margin-right: 20px;
 }
 
 .user-settings::after {
-    
+    display: inline-block;
+    margin-left: 0.050em;
+    vertical-align: 0.255em;
+    content: "";
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
 }
 
+.user-settings:hover {
+    cursor: pointer;
+}
+
+.user-settings-drop-down-menu {
+    display: none;
+    margin-right: 20px;
+    grid-column: 2/3;
+    width: 30%;
+    justify-self: end;
+    z-index: 1;
+    min-width: 10rem;
+    padding: 0.5rem 0;
+    font-size: 1rem;
+    color: #212529;
+    /* text-align: left; */
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 0.25rem;
+}
+
+
 .main-wrapper {
-    background-color: #f8f9fa;  
-    height: calc(100% - 480px); 
+    background-color: #f8f9fa;
+    height: calc(100% - 465px);
     margin-top: 40px;
     margin-bottom: 40px;
 }
@@ -107,6 +152,7 @@ main {
 }
 
 footer {
+    padding-top: 20px;
     height: 220px;
     background-color: white;
     display: grid;
@@ -114,23 +160,46 @@ footer {
     padding-left: 20px;
 }
 
-.footer-options {
-    /* margin-top: 40px; */
-    /* padding-left: 20px */
+.footer-options h4 {
+    font-weight: 500;
 }
 
-.footer-sub-options div {
-    /* margin-top: 40px; */
-    padding-top: 10px
+.footer-sub-options a {
+    display: block;
+    padding-bottom: 10px;
+    text-decoration: none;
+
+}
+
+.footer-sub-options a:hover {
+    cursor: pointer;
+
+}
+
+.footer-options p {
+    margin: 0px;
+}
+
+.footer-signature {
+    margin-top: 10px;
+}
+
+.footer-icons {
+    margin-top: 10px;
+}
+
+.fa-twitter,
+.fa-facebook:hover {
+    cursor: pointer;
 }
 
 /* Reservation page */
 
-.reservation-container {
+.reservation-container, .cart-container  {
     display: grid;
     grid-template-columns: 1.3fr 2fr;
     height: 100%;
-    border: 1px solid rgba(0,0,0,.125);
+    border: 1px solid rgba(0, 0, 0, .125);
     border-radius: 0.25rem;
     background-color: white;
 }
@@ -138,7 +207,7 @@ footer {
 .reservation-form {
     padding-top: 20px;
     align-items: center;
-    display:grid;
+    display: grid;
     grid-template-columns: 100%;
     grid-template-rows: 16% 16% 16% 16% 16% 18%;
     width: 100%;
@@ -179,14 +248,14 @@ footer {
     border-color: #343a40;
 }
 
-.reservation-results { 
+.reservation-results {
     /* background-color: aliceblue; */
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(2, 1fr);
     height: 80%;
     margin-left: 20px;
-    margin-right: 20px;   
+    margin-right: 20px;
 }
 
 .reservation-option {
@@ -210,12 +279,12 @@ footer {
 .session-container {
     display: grid;
     /* height: 100%; */
-    border: 1px solid rgba(0,0,0,.125);
+    border: 1px solid rgba(0, 0, 0, .125);
     border-radius: 0.25rem;
     background-color: white;
     display: grid;
     grid-template-columns: 25% 25% 25% 25%;
-    
+
     /* grid-template-rows: 20% 20% 20% 20% 20%; */
 }
 
@@ -230,56 +299,33 @@ footer {
     margin-bottom: 0px !important;
 }
 
-.session-attribute {
-    /* margin-top: auto !important;
-    margin-bottom: auto !important; */
-/* 
-    margin-top: auto;
-    margin-bottom: auto; */
+/* Cart  */
 
-}
 
 
 @media (max-width: 600px) {
-    
-    header {
 
-    }
-    
-    main {
+    header {}
 
-    }
-    
-    footer {
+    main {}
 
-    }
+    footer {}
 }
 
 @media (min-width: 601px) and (max-width: 768px) {
-  
-    header {
 
-    }
-    
-    main {
+    header {}
 
-    }
-    
-    footer {
+    main {}
 
-    }
+    footer {}
 }
 
 @media (min-width: 769px) {
-    
-    header {
 
-    }
-    
-    main {
+    header {}
 
-    }
-    
-    footer {
-    }
+    main {}
+
+    footer {}
 }

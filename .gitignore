@@ -3,3 +3,4 @@ venv_proctorx/
 manage.py
 *.pyc
 other/
+proctorx/static/fontawesome_free

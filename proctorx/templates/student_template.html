@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="{% static 'fontawesome_free/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href={% static '/css/styles.css' %}>
     <script></script>
     {% block title %}{% endblock %}
@@ -23,6 +24,19 @@
             <div class="user-settings fs-5">
                 {{ request.user }}
             </div>
+            <div class="user-settings-drop-down-menu">
+                <a class="dropdown-item" href="/account/edit">
+                    Account Settings
+                </a> <a class="dropdown-item" href="/password/edit">
+                    Change Password
+                </a> <a class="dropdown-item" href="/students/preference/notifications">Notification Settings</a>
+
+
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" rel="nofollow" data-method="delete" href="/logout">
+                    Logout
+                </a>
+            </div>
         </div>
     </header>
 
@@ -35,18 +49,18 @@
             </div>
             <div class="student-cart-balance">
                 <a href="cart">Cart</a>
-                <a href="cart">Balance</a>
+                <span class="student-cart-count">0</span>
             </div>
         </div>
     </div>
 
     <div class="main-wrapper">
         <main class="scale-down">
-            
+
             {% block content %}
 
             {% endblock %}
-        
+
 
         </main>
     </div>
@@ -55,34 +69,40 @@
 
         <footer class="scale-down">
             <div class="footer-options">
-                <h3>ProctorX</h3>
+                <h4>ProctorX</h4>
                 <div class="footer-sub-options fs-5">
-                    <div>
-                        <a href="/logout">Logout</a>
-                    </div>
-                    <div>Link 1</div>
-                    <div>Link 1</div>
+                    <a class="fs-6">About</a>
+                    <a class="fs-6">Privacy Policy</a>
+                    <a class="fs-6">Terms of Service</a>
                 </div>
 
             </div>
             <div class="footer-options">
-                <h3>My Account</h3>
+                <h4>My Account</h4>
                 <div class="footer-sub-options fs-5">
-                    <div>Link 1</div>
-                    <div>Link 1</div>
-                    <div>Link 1</div>
+                    <a class="fs-6">Account Settings</a>
+                    <a class="fs-6">Password Settings</a>
+                    <a class="fs-6" href="/logout">Logout</a>
                 </div>
             </div>
             <div class="footer-options">
-                <h3>Support</h3>
+                <h4>Support</h4>
                 <div class="footer-sub-options fs-5">
-                    <div>Link 1</div>
-                    <div>Link 1</div>
-                    <div>Link 1</div>
+                    <a class="fs-6">Support</a>
+                    <a class="fs-6">URL Redirection Service</a>
+                    <a class="fs-6">Test Your Equipment</a>
+                    <a class="fs-6">Resource Center</a>
                 </div>
             </div>
             <div class="footer-options">
-                <h3>Logo</h3>
+                <div class="footer-icons">
+                    <a><span class="fab fa-twitter fa-xl"></span></a>
+                    <a><span class="fab fa-facebook fa-xl"></span></a>
+                </div>
+                <div class="footer-signature">
+                    <p>ProctorX, Inc. All rights reserved.</p>
+                    <p>© Copyright 2022</p>
+                </div>
             </div>
 
         </footer>
