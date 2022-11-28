@@ -9,6 +9,7 @@
 //     }
 // }
 
+
 window.onload = addEventListeners
 
 function addEventListeners() {
@@ -28,7 +29,35 @@ function addEventListeners() {
             dropDownMenu.style.display = 'none';
         }
     })
-    window.addEventListener('click', function findClick(e) {
-        console.log(e.target)
-    })
+
+
+    // Highlight sub menu option: My sessions, My Orders, Reserve a Session
+    let session = document.querySelector('.session');
+    let myOrders = document.querySelector('.my-orders');
+    let reserve = document.querySelector('.reserve');
+    let cart = document.querySelector('.student-cart-balance');
+
+    if (document.location.pathname == '/student/reservation') {
+        reserve.classList.add("student-link-selected");
+    }
+
+    else if (document.location.pathname == '/student/session') {
+        session.classList.add("student-link-selected");
+    }
+
+    else if (document.location.pathname == '/student/order') {
+        myOrders.classList.add("student-link-selected");
+    }
+
+    else if (document.location.pathname == '/student/cart') {
+        cart.classList.add("student-link-selected");
+        cart.firstElementChild.style.color = 'white';
+        console.log('cart!')
+    }
+
+    
+
+
+
+
 }

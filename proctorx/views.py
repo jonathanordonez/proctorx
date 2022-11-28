@@ -100,6 +100,12 @@ def reservation(request):
 			return render(request, 'reservation.html', context)
 
 @login_required(login_url='/login')
+def order(request):
+	context = {}
+	return render(request, 'order.html', context=context)
+
+
+@login_required(login_url='/login')
 def cart(request):
 	# Query and dispaly unpaid reservations (aka sessions)
 	unpaid_reservations = Session.objects.filter(student_id = request.user.id).filter(payment_status = 'pending')
