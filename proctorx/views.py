@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.http import HttpResponse
 from .forms import StudentForm, StudentSettings, ChangeEmailForm, SetStudentPassword
-from .functions import obtain_exam_schedules, email_password_reset_link, email_activation_token
+from .functions import obtain_exam_schedules, email_password_reset_link, email_activation_token, list_to_dict
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Session, Student
@@ -17,6 +18,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.utils.encoding import force_str
 from django.contrib.auth.forms import PasswordChangeForm
+import urllib.parse
 
 
 def homepage(request):
@@ -89,38 +91,26 @@ def reservation(request):
     if request.method == 'GET':
         return render(request, 'reservation.html')
 
-    elif request.method == 'POST' and request.POST.get('Lookup reservation schedules') == 'Search Available Schedules':
-        # POST make a new reservation
-        student_id = request.user.id
-        student = Student.objects.get(id=student_id)
-        exam_date = request.POST.get('date')
-        exam_time = request.POST.get('time')
-        university = request.POST.get('university')
-        exam_name = request.POST.get('exam')
-        exam_length = request.POST.get('exam-length')
-        cost = int(exam_length) * 15
-        context = {'available_schedules': obtain_exam_schedules(
-            exam_date, exam_time, exam_length), 'exam': exam_name, 'cost': cost}
-        print(context['available_schedules'])
-        # # to-do: create check to ensure the date/time is not in the past
+    elif request.method == 'POST':
+        print(f'request body is: {request.body}')
+        body = urllib.parse.unquote(
+            request.body.decode('utf-8').replace('+', ' '))
+        body_dict = list_to_dict(body.split('&'))
+        available_schedules = obtain_exam_schedules(
+            body_dict['date'], body_dict['time'])
+        context = {'university': body_dict['university'], 'date': body_dict['date'],
+                   'time': body_dict['time'], 'program': body_dict['program'], 'length': body_dict['exam-length'], 'available_schedules': available_schedules}
+
         return render(request, 'reservation.html', context)
-		
-    # elif (request.POST.get('sendToCart') == 'Select'):
-    elif request.method == 'POST' and request.POST.get('sendToCart') == 'Select':
-        print('a post arrived here')
-    else:
-        
-        print(request.body)
-        return 0
 
 
-@login_required(login_url='/login')
+@ login_required(login_url='/login')
 def order(request):
     context = {}
     return render(request, 'order.html', context=context)
 
 
-@login_required(login_url='/login')
+@ login_required(login_url='/login')
 def cart(request):
     # Query and dispaly unpaid reservations (aka sessions)
     unpaid_reservations = Session.objects.filter(
@@ -129,7 +119,7 @@ def cart(request):
     return render(request, 'cart.html', context)
 
 
-@login_required(login_url='/login')
+@ login_required(login_url='/login')
 def checkout(request):
     # if request.method == 'POST':
     # 	payment_id = request.POST.get('payment_id')
@@ -146,7 +136,7 @@ def checkout(request):
     return render(request, 'checkout.html', context)
 
 
-@login_required(login_url='/login')
+@ login_required(login_url='/login')
 def delete_from_cart(request, order_id):
     session_id = order_id
     # session_record = int(request.POST.get('session_id'))
@@ -159,7 +149,7 @@ def delete_from_cart(request, order_id):
     return redirect('/student/cart')
 
 
-@login_required(login_url='/login')
+@ login_required(login_url='/login')
 def settings(request):
     student_record = Student.objects.get(id=request.user.id)
 
@@ -200,7 +190,7 @@ def settings(request):
         return render(request, 'settings.html', context)
 
 
-@login_required(login_url='/login')
+@ login_required(login_url='/login')
 def session(request):
     # Query and dispaly current active reservations (aka paid sessions)
     current_reservations = Session.objects.filter(
@@ -210,7 +200,7 @@ def session(request):
     return render(request, 'session.html', context)
 
 
-@login_required(login_url='/login')
+@ login_required(login_url='/login')
 def sign_out(request):
 
     logout(request)

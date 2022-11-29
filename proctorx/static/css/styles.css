@@ -257,6 +257,23 @@ footer {
     border-color: #343a40;
 }
 
+.registration-form-edit {
+    width: 100%;
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+    border-radius: 0.25rem;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: black;
+    transition: 0.2s
+}
+
+button:hover {
+    color: white;
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
 .reservation-results {
     /* background-color: aliceblue; */
     display: grid;
@@ -268,8 +285,7 @@ footer {
 }
 
 .reservation-option {
-    /* justify-self: center;     */
-    /* align-self: center; */
+    background-color: #f8f9fa;
     margin: auto;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -277,10 +293,6 @@ footer {
     border: 1px solid #dee2e6;
     text-align: center;
     border-radius: 0.25rem;
-    /* border-bottom: 1px solid #dee2e6 !important;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: rgb(222, 226, 230); */
 }
 
 /* Session page */

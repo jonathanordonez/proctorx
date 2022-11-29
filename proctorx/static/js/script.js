@@ -45,7 +45,7 @@ function addEventListeners() {
         cart.firstElementChild.style.color = 'white';
     }
 
-    
+
 
 
 
@@ -80,16 +80,48 @@ function sendToCart() {
         headers: new Headers({
             'Content-Type': 'application/json',
             'X-CSRFToken': csrfToken
-            }),
+        }),
         // credentials: 'include',
         body: JSON.stringify({
             dateTime: dateTime,
             examCode: examCode,
             length: length,
             university: university,
-            })
+        })
     })
     console.log('function sendToCart ran')
-    // to-do: create a get request to obtain the available schedules form the server
+}
+
+// to-do: create a get request to obtain the available schedules form the server
+function availableSchedules() {
+    let optionSelected = window.event.target.parentElement;
+    let form = optionSelected.parentElement.parentElement.parentElement;
+    let university = form.querySelector('.from-option-university');
+    let date = form.querySelector('.from-option-date');
+    let time = form.querySelector('.from-option-time');
+    let program = form.querySelector('.from-option-program');
+    let length = form.querySelector('.from-option-length');
+
+    let body = {
+        university: university,
+        date: date,
+        time: time,
+        program: program,
+        length: length,
+    }
+
+    let csrfToken = getCookie('csrftoken')
+
+    // fetch('reservation', {
+    //     method: 'POST',
+    //     headers: new Headers({
+    //         'Content-Type': 'application/json',
+    //         'X-CSRFToken': csrfToken
+    //     }),
+    //     body: JSON.stringify(body),
+    // })
+
+    console.log('function schedules ran')
+
 }
 

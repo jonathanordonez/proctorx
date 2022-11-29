@@ -4,7 +4,7 @@ import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
-def obtain_exam_schedules(date_input, time_input, length):
+def obtain_exam_schedules(date_input, time_input):
     suggestions=[]
     # Create date object
     date_split = date_input.split("-")
@@ -24,7 +24,6 @@ def obtain_exam_schedules(date_input, time_input, length):
         suggestions.append(datetime.datetime(year, month, day, hour - 1, 30, 0))
         suggestions.append(datetime.datetime(year, month, day, hour - 1, 0, 0))
      
-
     elif(minute < 30):
         #round up first suggestion to the current hour
         suggestions.append(datetime.datetime(year, month, day, hour, 0, 0))
@@ -96,3 +95,12 @@ def email_activation_token(email_id, student_base_64, student_token):
         print(response.headers)
     except Exception as e:
         print(e.message)
+
+def list_to_dict(list):
+    keys = []
+    values = []
+    for element in list:
+        keys.append(element.split('=')[0])
+        values.append(element.split('=')[1])
+    zip_obj = zip(keys, values)
+    return dict(zip_obj)
