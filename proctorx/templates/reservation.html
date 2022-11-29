@@ -42,7 +42,7 @@
         </div>
         <div class="registration-form-submit-container">
             <div class="registration-form-submit-container-2">
-                <input class="registration-form-submit fs-5" type="submit" value="Submit"
+                <input class="registration-form-submit fs-5" type="submit" value="Search Available Schedules"
                     name="Lookup reservation schedules">
             </div>
         </div>
@@ -53,9 +53,10 @@
         {% if available_schedules %}
         {% for schedule in available_schedules %}
         <div class="reservation-option fs-5">
-            <p>{{schedule}}</p> 
-            <p>{{exam}}</p>
-            <a href="">Select</a>
+            <p class="reservation-option-datetime">{{schedule}}</p> 
+            <p class="reservation-option-exam">{{exam}}</p>
+            <!-- <a href="">Select</a> -->
+            <button name="sendToCart" value="Select" onclick="sendToCart()">Select</button>
         </div>
         <!-- Add JS to make post request here -->
         {% endfor %}

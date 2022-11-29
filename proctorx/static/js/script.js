@@ -1,13 +1,4 @@
-// window.onload = function linkReservationSelectOptions() {
-//     if (document.location.pathname == '/student/reservation') {
-//         reservationOptions = document.querySelectorAll(".reservation-option")
-//         // option = 
-//         // for in reservationOptions {
-//         //     console.log(option)
-//         // }
-//         // console.log(reservationOptions)
-//     }
-// }
+const URL = 'http://localhost:8000'
 
 
 window.onload = addEventListeners
@@ -52,7 +43,6 @@ function addEventListeners() {
     else if (document.location.pathname == '/student/cart') {
         cart.classList.add("student-link-selected");
         cart.firstElementChild.style.color = 'white';
-        console.log('cart!')
     }
 
     
@@ -61,3 +51,45 @@ function addEventListeners() {
 
 
 }
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function sendToCart() {
+    let optionSelected = window.event.target.parentElement;
+    let dateTime = optionSelected.querySelector('.reservation-option-datetime').textContent;
+    let examCode = optionSelected.querySelector('.reservation-option-exam').textContent;
+    let length = document.querySelector('select[name="exam-length"]').value
+    let university = document.querySelector('select[name="university"]').value
+    let csrfToken = getCookie('csrftoken')
+    fetch('reservation', {
+        method: 'POST',
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+            }),
+        // credentials: 'include',
+        body: JSON.stringify({
+            dateTime: dateTime,
+            examCode: examCode,
+            length: length,
+            university: university,
+            })
+    })
+    console.log('function sendToCart ran')
+    // to-do: create a get request to obtain the available schedules form the server
+}
+
