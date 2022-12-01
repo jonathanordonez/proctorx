@@ -7,19 +7,75 @@
 {% block content %}
 
 <div class="cart-container">
-<h1>Cart</h1>
 
-To display all records for the user in the Payment table with the status Pending - include (pull from db) their IDs to pass them to the cart hmtl
+    <div class="cart-container-left">
+        <div class="cart-container-left-sessions">
 
-{% for record in unpaid_reservations %}
+            <div class="cart-container-session-heading fs-4">Session name</div>
+            <div class="cart-container-session-heading fs-4">Length</div>
+            <div class="cart-container-session-heading fs-4">Fee</div>
+            <div class="cart-container-session-heading"></div>
 
+            <div class="cart-container-session">Session name</div>
+            <div class="cart-container-session">1 hr</div>
+            <div class="cart-container-session">$50</div>
+            <div class="cart-container-session">Delete</div>
+
+            <div class="cart-container-session">Session name</div>
+            <div class="cart-container-session">1 hr</div>
+            <div class="cart-container-session">$50</div>
+            <div class="cart-container-session">Delete</div>
+
+            <div class="cart-container-session">Session name</div>
+            <div class="cart-container-session">1 hr</div>
+            <div class="cart-container-session">$50</div>
+            <div class="cart-container-session">Delete</div>
+
+            <div class="cart-container-session">Session name</div>
+            <div class="cart-container-session">1 hr</div>
+            <div class="cart-container-session">$50</div>
+            <div class="cart-container-session">Delete</div>
+<!-- 
+            <div class="cart-container-session-total"></div>
+            <div class="cart-container-session-total">Sub total</div>
+            <div class="cart-container-session-amount">$250</div>
+            <div class="cart-container-session-total"></div>
+
+            <div class="cart-container-session-total"></div>
+            <div class="cart-container-session-total">Total</div>
+            <div class="cart-container-session-amount">$350</div>
+            <div class="cart-container-session-total"></div> -->
+
+        </div>
+
+        <div>test</div>
+        <!-- <p>test2</p> -->
+        <!-- <p>test2</p> -->
+    </div>
+
+    <div class="cart-container-right">
+        <div class="cc-title fs-4">Credit card details</div>
+        <form class="cart-form">
+            <input class="cc-name form-control" type="text" placeholder="name on card">
+            <input class="cc-number form-control" type="number" placeholder="card number">
+            <input class="cc-month form-control" type="number" placeholder="month">
+            <input class="cc-year form-control" type="number" placeholder="year">
+            <input class="cc-cvv form-control" type="number" placeholder="cvv">
+            <input class="cc-submit btn btn-primary" type="submit" name="submit">
+
+
+
+        </form>
+
+    </div>
+
+    <!-- {% for record in unpaid_reservations %}
 <ul>
     <li>{{ record.exam_name }}  {{record.id}} <a href="/student/cart/{{record.id}}">Delete</a></li>
 </ul>
+{% endfor %} -->
 
-{% endfor %}
 
-<a href="/student/checkout">Proceed to payment</a>
 
 </div>
 

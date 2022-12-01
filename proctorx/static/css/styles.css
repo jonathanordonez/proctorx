@@ -322,6 +322,70 @@ button:hover {
 
 /* Cart  */
 
+.cart-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.cart-container-left {
+    display: grid;
+    /* grid-template-rows: fit-content(80%) */
+}
+
+.cart-container-left-sessions {
+    display: grid;
+    grid-template-columns: 45% 20% 16% 18%;
+    grid-template-rows: fit-content(100%);
+    padding: 30px;
+}
+
+.cart-container-session, .cart-container-session-heading {
+    align-self: center;
+}
+
+.cart-container-session {
+border-bottom: 1px solid #dee2e6 !important;
+border-bottom-width: 1px;
+border-bottom-style: solid;
+border-bottom-color: rgb(222, 226, 230);
+min-height: 40px;
+align-self: end;
+}
+
+.cart-container-session-total {
+    justify-self: center;
+}
+
+cart-container-session-amount {
+    text-align: right;
+}
+
+.cart-container-right {
+    border-left: 1px solid #dee2e6 !important;
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-left-color: rgb(222, 226, 230);
+    padding: 30px;
+}
+
+.cart-form input {
+    margin-top: 30px;
+}
+
+.cc-title {
+    text-align: center;
+    margin: 10px;
+}
+
+.cc-name, .cc-number, .cc-submit {
+    width: 100%;
+}
+
+
+.cc-month, .cc-year, .cc-cvv {
+    width: 30%;
+    display: inline-block !important;
+}
 
 
 @media (max-width: 600px) {
