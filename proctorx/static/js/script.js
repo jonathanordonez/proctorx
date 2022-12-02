@@ -1,9 +1,11 @@
-const URL = 'http://localhost:8000'
+window.onload = function loadEventListeners() {
+    if (document.location.pathname == '/student/reservation') {
+        reservationListeners();
+    }
+    globalEventListeners()
+}
 
-
-window.onload = addEventListeners
-
-function addEventListeners() {
+function globalEventListeners() {
     // Drop-down menu listener
     let userSettings = document.querySelector('.user-settings')
     let dropDownMenu = document.querySelector('.user-settings-drop-down-menu')
@@ -52,6 +54,42 @@ function addEventListeners() {
 
 }
 
+function reservationListeners() {
+    handleReservationForm();
+
+    function handleReservationForm(){
+        reservationForm = document.querySelector('.reservation-form');
+        reservationForm.addEventListener('submit', handleSubmit);
+
+        function handleSubmit(event) {
+            console.log(event);
+            console.log('handleSubmit took place')
+            event.preventDefault();
+            const data = new FormData(event.target);
+            const jsonValues = Object.fromEntries(data.entries());
+            jsonValues.postOption = 'search schedules'
+            console.log(jsonValues)
+            postData('reservation', jsonValues);
+            event.returnValue = true;
+        }
+    }
+}
+
+function postData(url, values) {
+    csrfToken = getCookie('csrftoken');
+    fetch(url, {
+        method: 'POST',
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        }),
+        body: JSON.stringify(values)
+    })
+    console.log('fetch ran');
+}
+
+
+
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -71,9 +109,9 @@ function getCookie(name) {
 function sendToCart() {
     let optionSelected = window.event.target.parentElement;
     let dateTime = optionSelected.querySelector('.reservation-option-datetime').textContent;
-    let examCode = optionSelected.querySelector('.reservation-option-exam').textContent;
-    let length = document.querySelector('select[name="exam-length"]').value
-    let university = document.querySelector('select[name="university"]').value
+    let programClass = document.querySelector('.form-option-program').value;
+    let length = document.querySelector('select[name="exam-length"]').value;
+    let university = document.querySelector('select[name="university"]').value;
     let csrfToken = getCookie('csrftoken')
     fetch('reservation', {
         method: 'POST',
@@ -83,8 +121,9 @@ function sendToCart() {
         }),
         // credentials: 'include',
         body: JSON.stringify({
+            postOption: 'Reservation Option Selected',
             dateTime: dateTime,
-            examCode: examCode,
+            programClass: programClass,
             length: length,
             university: university,
         })
@@ -102,13 +141,14 @@ function availableSchedules() {
     let program = form.querySelector('.from-option-program');
     let length = form.querySelector('.from-option-length');
 
-    let body = {
-        university: university,
-        date: date,
-        time: time,
-        program: program,
-        length: length,
-    }
+    // let body = {
+    //     postType : 'searchSchedules',
+    //     university: university,
+    //     date: date,
+    //     time: time,
+    //     program: program,
+    //     length: length,
+    // }
 
     let csrfToken = getCookie('csrftoken')
 
@@ -122,6 +162,4 @@ function availableSchedules() {
     // })
 
     console.log('function schedules ran')
-
 }
-

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.http import HttpResponse
 from .forms import StudentForm, StudentSettings, ChangeEmailForm, SetStudentPassword
-from .functions import obtain_exam_schedules, email_password_reset_link, email_activation_token, list_to_dict
+from .functions import obtain_exam_schedules, email_password_reset_link, email_activation_token, query_params_to_dict
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Session, Student
@@ -19,6 +19,7 @@ from django.utils.encoding import force_bytes
 from django.utils.encoding import force_str
 from django.contrib.auth.forms import PasswordChangeForm
 import urllib.parse
+import json
 
 
 def homepage(request):
@@ -93,15 +94,30 @@ def reservation(request):
 
     elif request.method == 'POST':
         print(f'request body is: {request.body}')
-        body = urllib.parse.unquote(
-            request.body.decode('utf-8').replace('+', ' '))
-        body_dict = list_to_dict(body.split('&'))
-        available_schedules = obtain_exam_schedules(
-            body_dict['date'], body_dict['time'])
-        context = {'university': body_dict['university'], 'date': body_dict['date'],
-                   'time': body_dict['time'], 'program': body_dict['program'], 'length': body_dict['exam-length'], 'available_schedules': available_schedules}
+        # body = request.body.decode('utf-8')
+        # print(f'this is the decode body {body}')
+        # print(type(body))
+        # if type(body) != 'dict':
+        #     print('it is not a dict') 
+        body = urllib.parse.unquote(request.body.decode('utf-8').replace('+',' '))
+        print(body)
+        body = json.loads(body)
+        option = body['postOption']
+        print(option)
 
-        return render(request, 'reservation.html', context)
+        if option == 'search schedules':
+            available_schedules = obtain_exam_schedules(
+                body['date'], body['time'])
+            context = {'university': body['university'], 'date': body['date'],
+                    'time': body['time'], 'program': body['program'], 'length': body['exam-length'], 'available_schedules': available_schedules}
+            print('its here')
+            print(context)
+            return render(request, 'cart.html', context)
+            # return redirect('/student/cart')
+
+        # elif option == 'Reservation Option Selected':
+        #     print('it came here')
+
 
 
 @ login_required(login_url='/login')

@@ -96,7 +96,8 @@ def email_activation_token(email_id, student_base_64, student_token):
     except Exception as e:
         print(e.message)
 
-def list_to_dict(list):
+def query_params_to_dict(values):
+    list = values.split('&')
     keys = []
     values = []
     for element in list:

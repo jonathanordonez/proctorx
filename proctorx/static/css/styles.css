@@ -349,7 +349,7 @@ border-bottom-width: 1px;
 border-bottom-style: solid;
 border-bottom-color: rgb(222, 226, 230);
 min-height: 40px;
-align-self: end;
+/* align-self: end; */
 }
 
 .cart-container-session-total {
@@ -358,6 +358,7 @@ align-self: end;
 
 cart-container-session-amount {
     text-align: right;
+    /* align-self: center; */
 }
 
 .cart-container-right {
@@ -387,6 +388,9 @@ cart-container-session-amount {
     display: inline-block !important;
 }
 
+.delete-session-from-cart {
+    min-height: auto !important;
+}
 
 @media (max-width: 600px) {
 
