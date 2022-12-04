@@ -70,9 +70,10 @@
             <div class="registration-form-submit-container-2">
                 {% if university is None %}
                 <input class="registration-form-submit fs-5" type="submit" value="Search Available Schedules"
-                    name="postOption" onclick="availableSchedules()">
+                    name="postOption">
                 {% else %}
-                <button type="button" class="registration-form-edit fs-5" onclick="window.location = window.location.href">Edit
+                <button type="button" class="registration-form-edit fs-5"
+                    onclick="window.location = window.location.href">Edit
                     Reservation Details</button>
                 {% endif %}
             </div>
@@ -85,16 +86,16 @@
         <div class="reservation-option fs-5">
             <p class="reservation-option-datetime">{{schedule}}</p>
             <p class="reservation-option-length">{{length}}</p>
-       
+
             <button name="sendToCart" value="Select" onclick="sendToCart()">Select</button>
         </div>
         {% endfor %}
-
-
+        {% endif %}
+        
     </div>
 
 
-    {% endif %}
+
 
 
 </div>

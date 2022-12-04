@@ -18,6 +18,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.utils.encoding import force_str
 from django.contrib.auth.forms import PasswordChangeForm
+from django.http import JsonResponse
+
 import urllib.parse
 import json
 
@@ -93,30 +95,24 @@ def reservation(request):
         return render(request, 'reservation.html')
 
     elif request.method == 'POST':
-        print(f'request body is: {request.body}')
-        # body = request.body.decode('utf-8')
-        # print(f'this is the decode body {body}')
-        # print(type(body))
-        # if type(body) != 'dict':
-        #     print('it is not a dict') 
-        body = urllib.parse.unquote(request.body.decode('utf-8').replace('+',' '))
-        print(body)
+        body = request.body.decode('utf-8')
         body = json.loads(body)
         option = body['postOption']
-        print(option)
-
         if option == 'search schedules':
+            print(body)
+            print(type(body))
             available_schedules = obtain_exam_schedules(
                 body['date'], body['time'])
-            context = {'university': body['university'], 'date': body['date'],
+            response = {'university': body['university'], 'date': body['date'],
                     'time': body['time'], 'program': body['program'], 'length': body['exam-length'], 'available_schedules': available_schedules}
-            print('its here')
-            print(context)
-            return render(request, 'cart.html', context)
-            # return redirect('/student/cart')
+        elif option == 'Reservation Option Selected':
+            pass
+        return JsonResponse({'available_schedules':available_schedules})
+        # return JsonResponse({'response':response})
 
-        # elif option == 'Reservation Option Selected':
-        #     print('it came here')
+
+        
+
 
 
 
