@@ -88,38 +88,30 @@
                     response.json()
                         .then(function addElements(res){
                             console.log(res.available_schedules)
-                            res.available_schedules.forEach(schedule=>createSchedule(schedule))
+                            res.available_schedules.forEach(schedule=>createSchedule(schedule, jsonValues))
                         });
                 })
-                // .then(function displayData(data) {
-                //     console.log(`Success: the tata received is ${data} with typeof: ${typeof(data)}`);
-                // });
-                    // .then((response) => response.json())
-                    // .then((data) => {
-                    //     console.log('Success:', data);
-                    // })
-                    // .catch((error) => {
-                    //     console.error('Error:', error);
-                    // });
             }
         }
     }
 
-    function createSchedule(schedule, length){
+    function createSchedule(schedule, jsonValues){
         let reservationOption = document.createElement('div');
         reservationOption.classList.add('reservation-option');
         reservationOption.classList.add('fs-5');
         let reservationDateTime = document.createElement('p');
+        reservationDateTime.classList.add('reservation-option-datetime');
         reservationDateTime.textContent = schedule;
-        let scheduleLength = document.createElement('p');
-        scheduleLength.textContent = document.querySelector('.form-option-length').value;
+        let reservationLength = document.createElement('p');
+        reservationLength.textContent = document.querySelector('.form-option-length').value;
+        reservationLength.classList.add('reservation-option-length');
         let sendToCartButton = document.createElement('button');
         sendToCartButton.textContent = 'Select';
-        sendToCartButton.setAttribute('onclick','sendToCart()')
-
+        sendToCartButton.addEventListener('click', function(){sendToCart(jsonValues)});
+        
         let reservationGrid = document.querySelector('.reservation-results');    
         reservationOption.appendChild(reservationDateTime);
-        reservationOption.appendChild(scheduleLength);
+        reservationOption.appendChild(reservationLength);
         reservationOption.appendChild(sendToCartButton);
 
         reservationGrid.appendChild(reservationOption);
@@ -134,6 +126,9 @@
     }
 
     function postData(url, values) {
+        console.log(`these are the values`);
+        console.log(values);
+        values2 = {a:5};
         csrfToken = getCookie('csrftoken');
         postRequest = fetch(url, {
             method: 'POST',
@@ -141,7 +136,7 @@
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken
             }),
-            body: JSON.stringify(values)
+            body: JSON.stringify(values2)
         })
         console.log('fetch ran');
         return postRequest;
@@ -163,28 +158,13 @@
         return cookieValue;
     }
 
-    function sendToCart() {
+    function sendToCart(jsonValues) {
         let optionSelected = window.event.target.parentElement;
         let dateTime = optionSelected.querySelector('.reservation-option-datetime').textContent;
-        let programClass = document.querySelector('.form-option-program').value;
-        let length = document.querySelector('select[name="exam-length"]').value;
-        let university = document.querySelector('select[name="university"]').value;
-        let csrfToken = getCookie('csrftoken')
-        fetch('reservation', {
-            method: 'POST',
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken
-            }),
-            // credentials: 'include',
-            body: JSON.stringify({
-                postOption: 'Reservation Option Selected',
-                dateTime: dateTime,
-                programClass: programClass,
-                length: length,
-                university: university,
-            })
-        })
+        jsonValues.postOption = 'add to cart'
+        jsonValues.dateSelected = dateTime;
+        console.log(jsonValues);
+        postData('reservation',jsonValues);
         console.log('function sendToCart ran')
     }
 

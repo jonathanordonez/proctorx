@@ -95,6 +95,7 @@ def reservation(request):
         return render(request, 'reservation.html')
 
     elif request.method == 'POST':
+        print(request.body)
         body = request.body.decode('utf-8')
         body = json.loads(body)
         option = body['postOption']
