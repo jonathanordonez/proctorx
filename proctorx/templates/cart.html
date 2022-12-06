@@ -1,4 +1,5 @@
 {% extends 'student_template.html' %}
+{% load static %}
 
 {% block title %}
 <title>Cart</title>
@@ -11,57 +12,48 @@
     <div class="cart-container-left">
         <div class="cart-container-left-sessions">
 
+            {% if unpaid_reservations %}
             <div class="cart-container-session-heading fs-4">Sessions</div>
-
             {% for session in unpaid_reservations%}
-            <div sessionid={{session.id}} class="new-session-subcontainer">
-                <div class="cart-container-session">{{ session.exam_name }}</div>
-                <div class="cart-container-session">{{ session.exam_length }} hour(s)</div>
-                <div class="cart-container-session">${{ session.cost }}</div>
-                <div class="cart-container-session btn btn-danger delete-from-cart">Delete</div>
+            <div sessionid={{session.id}} class="cart-session">
+                <div class="cart-session-element">{{ session.exam_name }}</div>
+                <div class="cart-session-element">{{ session.exam_length }} hour(s)</div>
+                <div class="cart-session-element cart-session-cost">${{ session.cost }}</div>
+                <div class="cart-session-element btn btn-danger delete-from-cart">Delete</div>
             </div>
             {% endfor %}
-
-            <!-- <div class="cart-container-session">Session name</div>
-            <div class="cart-container-session">1 hr</div>
-            <div class="cart-container-session">$50</div>
-            <div class="cart-container-session btn btn-danger">Delete</div>
-
-            <div class="cart-container-session">Session name</div>
-            <div class="cart-container-session">1 hr</div>
-            <div class="cart-container-session">$50</div>
-            <div class="cart-container-session btn btn-danger">Delete</div>
-
-            <div class="cart-container-session">Session name</div>
-            <div class="cart-container-session">1 hr</div>
-            <div class="cart-container-session">$50</div>
-            <div class="cart-container-session btn btn-danger">Delete</div> -->
-
-            <!-- <div class="cart-container-session-total"></div>
-            <div class="cart-container-session-total">Sub total</div>
-            <div class="cart-container-session-amount">$250</div>
-            <div class="cart-container-session-total"></div> -->
-
-            <div class="cart-container-session-total"></div>
-            <div class="cart-container-session-total">Total</div>
-            <div class="cart-container-session-amount">{{ total_cost }}</div>
-            <div class="cart-container-session-total"></div>
+            <div class="cart-session-total-container">
+                <div class="cart-session-total"></div>
+                <div class="cart-session-total fs-5">Total</div>
+                <div class="cart-session-amount fs-5">${{ total_cost }}</div>
+                <div class="cart-session-total"></div>
+            </div>
+            {% else %}
+            <div class="cart-container-session-heading fs-4">Your cart is empty</div>
+            <img class="cart-empty" src={% static '/img/cart-empty.svg' %}>
+            {% endif %}
 
         </div>
 
     </div>
 
     <div class="cart-container-right">
+        {% if unpaid_reservations %}
         <div class="cc-title fs-4">Credit card details</div>
         <form class="cart-form">
             <input class="cc-name form-control" type="text" placeholder="name on card">
             <input class="cc-number form-control" type="number" placeholder="card number">
-            <input class="cc-month form-control" type="number" placeholder="month">
-            <input class="cc-year form-control" type="number" placeholder="year">
-            <input class="cc-cvv form-control" type="number" placeholder="cvv">
+            <div class="cc-month-year-cvv">
+                <input class="cc-month form-control" type="number" placeholder="month">
+                <input class="cc-year form-control" type="number" placeholder="year">
+                <input class="cc-cvv form-control" type="number" placeholder="cvv">
+            </div>
             <input class="cc-submit btn btn-primary" type="submit" name="submit">
-
-
+            {% else %}
+            <div class="cart-empy-make-reservation">
+                <a class="fs-4" href="reservation">Make a new reservation</a>
+            </div>
+            {% endif %}
 
         </form>
 

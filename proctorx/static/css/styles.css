@@ -92,7 +92,6 @@ header {
     display: inline-block;
     line-height: 1;
     padding: 0.25em 0.4em;
-    font-size: 80%;
     font-weight: 600;
 }
 
@@ -340,31 +339,27 @@ button:hover {
     padding: 30px;
 }
 
-.new-session-subcontainer {
+.cart-session {
+    display: grid;
+    grid-template-columns: 45% 20% 16% 18%;
+    border-bottom: 1px solid #dee2e6 !important;
+    max-height: 80px;
+}
+
+.cart-session-total-container {
     display: grid;
     grid-template-columns: 45% 20% 16% 18%;
 }
 
-.cart-container-session, .cart-container-session-heading {
+.cart-session-element, .cart-container-session-heading {
+    margin: 10px;
     align-self: center;
+    text-align: center;
 }
 
-.cart-container-session {
-border-bottom: 1px solid #dee2e6 !important;
-border-bottom-width: 1px;
-border-bottom-style: solid;
-border-bottom-color: rgb(222, 226, 230);
-min-height: 40px;
-/* align-self: end; */
-}
-
-.cart-container-session-total {
-    justify-self: center;
-}
-
-cart-container-session-amount {
-    text-align: right;
-    /* align-self: center; */
+.cart-session-amount, .cart-session-total {
+    margin: 10px;
+    text-align: center;
 }
 
 .cart-container-right {
@@ -379,15 +374,39 @@ cart-container-session-amount {
     margin-top: 30px;
 }
 
+.cart-empty {
+    margin: auto;
+    padding: 20px;
+}
+
+.cart-empy-make-reservation {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+}
+
+.cart-empy-make-reservation a {
+    text-decoration: none;
+}
+
+/* .cart-empy-make-reservation a:hover {
+    color: white;
+    background-color: #343a40;
+} */
+
 .cc-title {
     text-align: center;
     margin: 10px;
 }
 
+.cc-month-year-cvv {
+    display: flex;
+    justify-content: space-between;
+}
 .cc-name, .cc-number, .cc-submit {
     width: 100%;
 }
-
 
 .cc-month, .cc-year, .cc-cvv {
     width: 30%;

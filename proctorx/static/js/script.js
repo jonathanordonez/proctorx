@@ -116,6 +116,8 @@
             let deleteSession = postData('cart', sessionObj);
             deleteSession.then(function deleteSessionElement() {
                 session.remove();
+                document.querySelector('.student-cart-count').textContent = document.querySelectorAll('.cart-session').length; // update cart quantity 
+                updateCart();
             },
                 function handleError() {
                     displayMessage('error', 'Unable to delete session from cart. Please try again later or contact Support.')
@@ -123,6 +125,46 @@
             )
         }
 
+    }
+
+    function updateCart() {
+        let sessionNo = document.querySelectorAll('.cart-session-cost');
+        let updatedAmount = 0;
+        if (sessionNo.length > 0) {
+            sessionNo.forEach(function getTotalCartAmount(session) {
+                updatedAmount += parseFloat(session.textContent.replace('$', ''))
+            })
+            document.querySelector('.cart-session-amount').textContent = `$${updatedAmount.toFixed(2)}`;
+        }
+        else {
+            // remove session total element,
+            let sessionTotal = document.querySelector('.cart-session-total-container');
+            if (sessionTotal) {
+                sessionTotal.remove();
+            }
+
+            // update heading
+            document.querySelector('.cart-container-session-heading').textContent = 'Your cart is empty';
+
+            // show empty cart svg
+            let emptyCartImg = document.createElement('img');
+            emptyCartImg.setAttribute('src', '/proctorx/static/img/cart-empty.svg');
+            emptyCartImg.classList.add('cart-empty');
+            document.querySelector('.cart-container-left-sessions').appendChild(emptyCartImg);
+
+            // remove cc form and heading, and add link to make a new reservation
+            document.querySelector('.cc-title').remove();
+            document.querySelector('.cart-form').remove();
+            let makeNewReservationContainer = document.createElement('div');
+            makeNewReservationContainer.classList.add('cart-empy-make-reservation');
+            let makeNewReservation = document.createElement('a');
+            makeNewReservation.setAttribute('href', 'reservation');
+            makeNewReservation.classList.add('fs-4');
+            makeNewReservation.textContent = 'Make a new reservation';
+            document.querySelector('.cart-container-right').appendChild(makeNewReservation);
+            makeNewReservationContainer.appendChild(makeNewReservation);
+            document.querySelector('.cart-container-right').appendChild(makeNewReservationContainer);
+        }
     }
 
     function createSchedule(schedule, jsonValues) {
