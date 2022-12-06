@@ -105,3 +105,7 @@ def query_params_to_dict(values):
         values.append(element.split('=')[1])
     zip_obj = zip(keys, values)
     return dict(zip_obj)
+
+def get_cart_items_number(user):
+    result = len(Session.objects.filter(student_id = user.id).filter(session_status = 'Cart'))
+    return result

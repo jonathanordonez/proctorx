@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.http import HttpResponse
 from .forms import StudentForm, StudentSettings, ChangeEmailForm, SetStudentPassword
-from .functions import obtain_exam_schedules, email_password_reset_link, email_activation_token, query_params_to_dict
+from .functions import obtain_exam_schedules, email_password_reset_link, email_activation_token, get_cart_items_number
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Session, Student
@@ -92,8 +92,11 @@ def sign_in(request):
 
 @login_required(login_url='/login')
 def reservation(request):
+    print(f'cart items number is {get_cart_items_number(request.user)}')
     if request.method == 'GET':
-        return render(request, 'reservation.html')
+        context = {'cart_items_number': get_cart_items_number(request.user)}
+        return render(request, 'reservation.html', context=context)
+
 
     elif request.method == 'POST':
         print(request.body)
@@ -119,13 +122,13 @@ def reservation(request):
             # print(exam_date_time)
             # print(body[])
             Session.objects.create(student_id = request.user.id, exam_date_time=exam_date_time, university=body['university'], exam_name=body['program'],
-                                   exam_length=exam_length, session_status='Cart', date_purchased=None, cost=exam_length * 35, payment_status='')
+                                   exam_length=exam_length, session_status='Cart', date_purchased=None, cost=exam_length * 35, payment_status='pending')
             return JsonResponse({'response':'added to cart'})
 
 
 @ login_required(login_url='/login')
 def order(request):
-    context = {}
+    context = {'cart_items_number': get_cart_items_number(request.user)}
     return render(request, 'order.html', context=context)
 
 
@@ -133,8 +136,12 @@ def order(request):
 def cart(request):
     # Query and dispaly unpaid reservations (aka sessions)
     unpaid_reservations = Session.objects.filter(
-        student_id=request.user.id).filter(payment_status='pending')
-    context = {'unpaid_reservations': unpaid_reservations}
+        student_id=request.user.id).filter(session_status='Cart')
+    cart_items_number = get_cart_items_number(request.user)
+    total_cost = 0
+    for session in unpaid_reservations:
+        total_cost += session.cost 
+    context = {'unpaid_reservations': unpaid_reservations, 'cart_items_number': cart_items_number, 'total_cost': total_cost}
     return render(request, 'cart.html', context)
 
 
@@ -214,7 +221,8 @@ def session(request):
     # Query and dispaly current active reservations (aka paid sessions)
     current_reservations = Session.objects.filter(
         student_id=request.user.id).filter(payment_status='paid')
-    context = {'current_reservations': current_reservations}
+    cart_items_number = get_cart_items_number(request.user)
+    context = {'current_reservations': current_reservations, 'cart_items_number': cart_items_number}
 
     return render(request, 'session.html', context)
 

@@ -11,12 +11,18 @@
     <div class="cart-container-left">
         <div class="cart-container-left-sessions">
 
-            <div class="cart-container-session-heading fs-4">Session name</div>
-            <div class="cart-container-session-heading fs-4">Length</div>
-            <div class="cart-container-session-heading fs-4">Fee</div>
-            <div class="cart-container-session-heading"></div>
+            <div class="cart-container-session-heading fs-4">Sessions</div>
 
-            <div class="cart-container-session">Session name</div>
+            {% for session in unpaid_reservations%}
+            <div sessionid={{session.id}} class="new-session-subcontainer">
+                <div class="cart-container-session">{{ session.exam_name }}</div>
+                <div class="cart-container-session">{{ session.exam_length }} hour(s)</div>
+                <div class="cart-container-session">${{ session.cost }}</div>
+                <div class="cart-container-session btn btn-danger">Delete</div>
+            </div>
+            {% endfor %}
+
+            <!-- <div class="cart-container-session">Session name</div>
             <div class="cart-container-session">1 hr</div>
             <div class="cart-container-session">$50</div>
             <div class="cart-container-session btn btn-danger">Delete</div>
@@ -29,13 +35,8 @@
             <div class="cart-container-session">Session name</div>
             <div class="cart-container-session">1 hr</div>
             <div class="cart-container-session">$50</div>
-            <div class="cart-container-session btn btn-danger">Delete</div>
+            <div class="cart-container-session btn btn-danger">Delete</div> -->
 
-            <div class="cart-container-session">Session name</div>
-            <div class="cart-container-session">1 hr</div>
-            <div class="cart-container-session">$50</div>
-            <div class="cart-container-session btn btn-danger">Delete</div>
-            
             <!-- <div class="cart-container-session-total"></div>
             <div class="cart-container-session-total">Sub total</div>
             <div class="cart-container-session-amount">$250</div>
@@ -43,7 +44,7 @@
 
             <div class="cart-container-session-total"></div>
             <div class="cart-container-session-total">Total</div>
-            <div class="cart-container-session-amount">$350</div>
+            <div class="cart-container-session-amount">{{ total_cost }}</div>
             <div class="cart-container-session-total"></div>
 
         </div>

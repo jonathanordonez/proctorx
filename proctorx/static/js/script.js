@@ -162,16 +162,17 @@
         let writeReservation = postData('reservation',jsonValues);
         writeReservation.then(
             function printSuccess(){
-                displayMessage('success', 'Reservation added to cart');
+                // displayMessage('success', 'Reservation added to cart');
                 console.log('function sendToCart ran');
+                window.location.href = 'cart';
             },
             function printFailure(){
-                displayMessage('success', 'Unable to add reservation to cart. Please try later or contact Support');
+                // displayMessage('success', 'Unable to add reservation to cart. Please try later or contact Support');
             })
     }
 
     function displayMessage(type, message) {
-        
+
     }
 
     function disableForm(form) {

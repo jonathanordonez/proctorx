@@ -335,9 +335,14 @@ button:hover {
 
 .cart-container-left-sessions {
     display: grid;
-    grid-template-columns: 45% 20% 16% 18%;
+    /* grid-template-columns: 45% 20% 16% 18%; */
     grid-template-rows: fit-content(100%);
     padding: 30px;
+}
+
+.new-session-subcontainer {
+    display: grid;
+    grid-template-columns: 45% 20% 16% 18%;
 }
 
 .cart-container-session, .cart-container-session-heading {
