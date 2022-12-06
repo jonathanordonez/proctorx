@@ -2,7 +2,9 @@
     window.onload = function loadEventListeners() {
         if (document.location.pathname == '/student/reservation') {
             reservationListeners();
-
+        }
+        else if (document.location.pathname == '/student/cart') {
+            cartListeners();
         }
         globalEventListeners()
     }
@@ -66,36 +68,64 @@
             function handleSubmit(event) {
                 ev = event;
                 event.preventDefault();
-                            
+
                 // Replaces the current submit form button for an Edit button
                 document.querySelector('.registration-form-submit').remove();
                 let button = document.createElement('button');
-                button.setAttribute('onclick','window.location=window.location.href');
+                button.setAttribute('onclick', 'window.location=window.location.href');
                 button.classList.add('registration-form-edit');
                 button.classList.add('fs-5');
                 button.textContent = 'Edit Reservation Details';
-                document.querySelector('.registration-form-submit-container-2').appendChild(button); 
+                document.querySelector('.registration-form-submit-container-2').appendChild(button);
                 //
 
                 const data = new FormData(event.target);
                 const jsonValues = Object.fromEntries(data.entries());
                 jsonValues.postOption = 'search schedules'
-                event.target.querySelectorAll('select, input').forEach(e=>e.setAttribute('disabled', '')) // disables the form elements
+                event.target.querySelectorAll('select, input').forEach(e => e.setAttribute('disabled', '')) // disables the form elements
                 console.log(jsonValues)
                 let availableSchedules = postData('reservation', jsonValues);
-                availableSchedules.then(function displayPromiseStatus(response){
+                availableSchedules.then(function displayPromiseStatus(response) {
                     console.log(response.status);
                     response.json()
-                        .then(function addElements(res){
+                        .then(function addElements(res) {
                             console.log(res.available_schedules)
-                            res.available_schedules.forEach(schedule=>createSchedule(schedule, jsonValues))
+                            res.available_schedules.forEach(schedule => createSchedule(schedule, jsonValues))
                         });
                 })
             }
         }
     }
 
-    function createSchedule(schedule, jsonValues){
+    function cartListeners() {
+        handleDeleteFromCart();
+
+        function handleDeleteFromCart() {
+            let deleteButtons = document.querySelectorAll('.delete-from-cart');
+            if (deleteButtons.length > 0) {
+                deleteButtons.forEach(function addDeleteFunc(button) {
+                    button.addEventListener('click', deleteFromCart);
+                })
+            }
+        }
+
+        function deleteFromCart() {
+            let session = window.event.target.parentElement;
+            let sessionId = session.getAttribute('sessionid');
+            let sessionObj = { 'sessionId': sessionId, 'postOption': 'deleteFromCart' };
+            let deleteSession = postData('cart', sessionObj);
+            deleteSession.then(function deleteSessionElement() {
+                session.remove();
+            },
+                function handleError() {
+                    displayMessage('error', 'Unable to delete session from cart. Please try again later or contact Support.')
+                }
+            )
+        }
+
+    }
+
+    function createSchedule(schedule, jsonValues) {
         let reservationOption = document.createElement('div');
         reservationOption.classList.add('reservation-option');
         reservationOption.classList.add('fs-5');
@@ -107,15 +137,15 @@
         reservationLength.classList.add('reservation-option-length');
         let sendToCartButton = document.createElement('button');
         sendToCartButton.textContent = 'Select';
-        sendToCartButton.addEventListener('click', function(){sendToCart(jsonValues)});
-        
-        let reservationGrid = document.querySelector('.reservation-results');    
+        sendToCartButton.addEventListener('click', function () { sendToCart(jsonValues) });
+
+        let reservationGrid = document.querySelector('.reservation-results');
         reservationOption.appendChild(reservationDateTime);
         reservationOption.appendChild(reservationLength);
         reservationOption.appendChild(sendToCartButton);
 
         reservationGrid.appendChild(reservationOption);
-        
+
     }
 
     function postData(url, values) {
@@ -159,35 +189,35 @@
         jsonValues.dateSelected = dateTime;
         console.log('new jsonvalues are');
         console.log(jsonValues);
-        let writeReservation = postData('reservation',jsonValues);
+        let writeReservation = postData('reservation', jsonValues);
         writeReservation.then(
-            function printSuccess(){
+            function printSuccess() {
                 // displayMessage('success', 'Reservation added to cart');
                 console.log('function sendToCart ran');
                 window.location.href = 'cart';
             },
-            function printFailure(){
+            function printFailure() {
                 // displayMessage('success', 'Unable to add reservation to cart. Please try later or contact Support');
             })
     }
 
     function displayMessage(type, message) {
-
+        console.log(`This is a ${type} message: ${message}`);
     }
 
     function disableForm(form) {
         arrayForm = Array.from(form)
         if (arrayForm.length > 0) {
-            for(e in arrayForm) {
-                if(e.hasChildNodes()) {
-                    for(child in e) {
+            for (e in arrayForm) {
+                if (e.hasChildNodes()) {
+                    for (child in e) {
 
                     }
                 }
             }
         }
 
-        }
+    }
 
     function displaySchedules() {
 

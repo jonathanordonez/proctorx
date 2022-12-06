@@ -134,15 +134,31 @@ def order(request):
 
 @ login_required(login_url='/login')
 def cart(request):
-    # Query and dispaly unpaid reservations (aka sessions)
-    unpaid_reservations = Session.objects.filter(
-        student_id=request.user.id).filter(session_status='Cart')
-    cart_items_number = get_cart_items_number(request.user)
-    total_cost = 0
-    for session in unpaid_reservations:
-        total_cost += session.cost 
-    context = {'unpaid_reservations': unpaid_reservations, 'cart_items_number': cart_items_number, 'total_cost': total_cost}
-    return render(request, 'cart.html', context)
+    if request.method=='GET':
+        # Query and dispaly unpaid reservations (aka sessions)
+        unpaid_reservations = Session.objects.filter(
+            student_id=request.user.id).filter(session_status='Cart')
+        cart_items_number = get_cart_items_number(request.user)
+        total_cost = 0
+        for session in unpaid_reservations:
+            total_cost += session.cost 
+        context = {'unpaid_reservations': unpaid_reservations, 'cart_items_number': cart_items_number, 'total_cost': total_cost}
+        return render(request, 'cart.html', context)
+
+    elif request.method == 'POST':
+        print(request.body)
+        body = request.body.decode('utf-8')
+        body = json.loads(body)
+        option = body['postOption']
+        print(option)
+        session_record = Session.objects.get(id = body['sessionId'])
+        if request.user.id == session_record.student_id: # ensures the request to delete the session is performed by the owner
+            session_record.session_status = 'Deleted'
+            session_record.save()
+            return JsonResponse({'session ID deleted':body['sessionId']})
+        else:
+            return JsonResponse({'error':'unable to delete session from cart'})
+        
 
 
 @ login_required(login_url='/login')
