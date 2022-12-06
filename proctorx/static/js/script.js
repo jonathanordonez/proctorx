@@ -116,19 +116,11 @@
 
         reservationGrid.appendChild(reservationOption);
         
-
-        // <div class="reservation-option fs-5">
-        //     <p class="reservation-option-datetime">{{schedule}}</p>
-        //     <p class="reservation-option-length">{{length}}</p>
-
-        //     <button name="sendToCart" value="Select" onclick="sendToCart()">Select</button>
-        // </div>
     }
 
     function postData(url, values) {
         console.log(`these are the values`);
         console.log(values);
-        values2 = {a:5};
         csrfToken = getCookie('csrftoken');
         postRequest = fetch(url, {
             method: 'POST',
@@ -136,8 +128,10 @@
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken
             }),
-            body: JSON.stringify(values2)
+            body: JSON.stringify(values)
         })
+        console.log(`the values sent are`);
+        console.log(values);
         console.log('fetch ran');
         return postRequest;
     }
@@ -163,9 +157,21 @@
         let dateTime = optionSelected.querySelector('.reservation-option-datetime').textContent;
         jsonValues.postOption = 'add to cart'
         jsonValues.dateSelected = dateTime;
+        console.log('new jsonvalues are');
         console.log(jsonValues);
-        postData('reservation',jsonValues);
-        console.log('function sendToCart ran')
+        let writeReservation = postData('reservation',jsonValues);
+        writeReservation.then(
+            function printSuccess(){
+                displayMessage('success', 'Reservation added to cart');
+                console.log('function sendToCart ran');
+            },
+            function printFailure(){
+                displayMessage('success', 'Unable to add reservation to cart. Please try later or contact Support');
+            })
+    }
+
+    function displayMessage(type, message) {
+        
     }
 
     function disableForm(form) {

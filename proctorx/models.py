@@ -62,8 +62,7 @@ class Session(models.Model):
     )
 
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    exam_date = models.DateField(default=datetime.date.today())
-    exam_time = models.TimeField(default=datetime.time(12,0,0))
+    exam_date_time = models.DateTimeField(default=datetime.datetime.now())
     university = models.CharField(max_length=50)   
     exam_name = models.CharField(max_length=50)
     exam_length = models.IntegerField(choices=((1,1),(2,2),(3,3)), db_column = 'exam length (hrs)', default=1)

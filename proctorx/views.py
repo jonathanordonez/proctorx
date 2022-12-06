@@ -19,6 +19,7 @@ from django.utils.encoding import force_bytes
 from django.utils.encoding import force_str
 from django.contrib.auth.forms import PasswordChangeForm
 from django.http import JsonResponse
+import datetime
 
 import urllib.parse
 import json
@@ -105,16 +106,21 @@ def reservation(request):
             available_schedules = obtain_exam_schedules(
                 body['date'], body['time'])
             response = {'university': body['university'], 'date': body['date'],
-                    'time': body['time'], 'program': body['program'], 'length': body['exam-length'], 'available_schedules': available_schedules}
-        elif option == 'Reservation Option Selected':
-            pass
-        return JsonResponse({'available_schedules':available_schedules})
-        # return JsonResponse({'response':response})
-
-
-        
-
-
+                        'time': body['time'], 'program': body['program'], 'length': body['exam-length'], 'available_schedules': available_schedules}
+            return JsonResponse({'available_schedules': available_schedules})
+        elif option == 'add to cart':
+            exam_date = body['dateSelected'].split('T')[0].split('-')
+            exam_time = body['dateSelected'].split('T')[1][1:].split(':')
+            exam_date_time = datetime.datetime(int(exam_date[0]), int(
+                exam_date[1]), int(exam_date[2]), int(exam_time[0]), int(exam_time[1]))
+            exam_length = int(body['exam-length'].split(' ')[0])
+            # print(exam_date)
+            # print(exam_time)
+            # print(exam_date_time)
+            # print(body[])
+            Session.objects.create(student_id = request.user.id, exam_date_time=exam_date_time, university=body['university'], exam_name=body['program'],
+                                   exam_length=exam_length, session_status='Cart', date_purchased=None, cost=exam_length * 35, payment_status='')
+            return JsonResponse({'response':'added to cart'})
 
 
 @ login_required(login_url='/login')
