@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.http import HttpResponse
 from .forms import StudentForm, StudentSettings, ChangeEmailForm, SetStudentPassword
-from .functions import obtain_exam_schedules, email_password_reset_link, email_activation_token, get_cart_items_number
+from .functions import obtain_exam_schedules, email_password_reset_link, email_activation_token, get_cart_items_number, make_payment
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Session, Student
@@ -97,7 +97,6 @@ def reservation(request):
         context = {'cart_items_number': get_cart_items_number(request.user)}
         return render(request, 'reservation.html', context=context)
 
-
     elif request.method == 'POST':
         print(request.body)
         body = request.body.decode('utf-8')
@@ -121,9 +120,9 @@ def reservation(request):
             # print(exam_time)
             # print(exam_date_time)
             # print(body[])
-            Session.objects.create(student_id = request.user.id, exam_date_time=exam_date_time, university=body['university'], exam_name=body['program'],
+            Session.objects.create(student_id=request.user.id, exam_date_time=exam_date_time, university=body['university'], exam_name=body['program'],
                                    exam_length=exam_length, session_status='Cart', date_purchased=None, cost=exam_length * 35, payment_status='pending')
-            return JsonResponse({'response':'added to cart'})
+            return JsonResponse({'status':'success', 'message': 'Added to cart'})
 
 
 @ login_required(login_url='/login')
@@ -134,15 +133,16 @@ def order(request):
 
 @ login_required(login_url='/login')
 def cart(request):
-    if request.method=='GET':
+    if request.method == 'GET':
         # Query and dispaly unpaid reservations (aka sessions)
         unpaid_reservations = Session.objects.filter(
             student_id=request.user.id).filter(session_status='Cart')
         cart_items_number = get_cart_items_number(request.user)
         total_cost = 0
         for session in unpaid_reservations:
-            total_cost += session.cost 
-        context = {'unpaid_reservations': unpaid_reservations, 'cart_items_number': cart_items_number, 'total_cost': total_cost}
+            total_cost += session.cost
+        context = {'unpaid_reservations': unpaid_reservations,
+                   'cart_items_number': cart_items_number, 'total_cost': total_cost}
         return render(request, 'cart.html', context)
 
     elif request.method == 'POST':
@@ -151,14 +151,46 @@ def cart(request):
         body = json.loads(body)
         option = body['postOption']
         print(option)
-        session_record = Session.objects.get(id = body['sessionId'])
-        if request.user.id == session_record.student_id: # ensures the request to delete the session is performed by the owner
-            session_record.session_status = 'Deleted'
-            session_record.save()
-            return JsonResponse({'session ID deleted':body['sessionId']})
-        else:
-            return JsonResponse({'error':'unable to delete session from cart'})
-        
+
+        # Used when customer deletes a session from their cart
+        if option == 'deleteFromCart':
+            session_record = Session.objects.get(id=body['sessionId'])
+            # ensures the request to delete the session is performed by the owner
+            if request.user.id == session_record.student_id:
+                session_record.session_status = 'Deleted'
+                session_record.save()
+                return JsonResponse({'status': 'success', 'message': 'Session deleted'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Unable to delete session from cart'})
+
+        # Used when customer pays for the session(s) in their cart
+        elif option == 'cc-payment':
+            # Checks that the sessions submitted belong to the user paying for them
+            proceed_with_payment = True
+            sessions = []
+            for session in body['sessions']:
+                session_record = Session.objects.get(id=session)
+                if session_record.student_id != request.user.id or session_record.session_status != 'Cart' or session_record.payment_status != 'pending':
+                    proceed_with_payment = False
+                else:
+                    sessions.append(session_record)
+                    
+
+            if (proceed_with_payment):
+                payment_amount = 0
+                for session in sessions:
+                    payment_amount += session.cost
+                if (payment_amount > 0) and make_payment(payment_amount):
+                    # Updates the sessions if the payment is successful
+                    for session in sessions:
+                        session.payment_status = 'Paid'
+                        session.session_status = 'Scheduled'
+                        session.save()
+                    return JsonResponse({'status':'success', 'message':'Payment Successful'})
+                else:
+                    return JsonResponse({'status':'error', 'message':'Payment unsuccessful. Please try again or contact Support.'})
+            else:
+                return JsonResponse({'status':'error', 'message':'Payment not processed. Please try again or contact Support.'})
 
 
 @ login_required(login_url='/login')
@@ -239,10 +271,11 @@ def session(request):
         student_id=request.user.id).filter(session_status='Scheduled')
     cart_items_number = get_cart_items_number(request.user)
     if len(current_reservations) > 0:
-        context = {'current_reservations': current_reservations, 'cart_items_number': cart_items_number}
+        context = {'current_reservations': current_reservations,
+                   'cart_items_number': cart_items_number}
     else:
         context = {'cart_items_number': cart_items_number}
-    
+
     return render(request, 'session.html', context)
 
 

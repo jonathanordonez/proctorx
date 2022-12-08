@@ -139,7 +139,7 @@ header {
 
 .main-wrapper {
     background-color: #f8f9fa;
-    height: calc(100% - 465px);
+    height: calc(100vh - 465px);
     margin-top: 40px;
     margin-bottom: 40px;
 }
@@ -148,7 +148,7 @@ main {
     background-color: #f8f9fa;
     padding-right: 20px;
     padding-left: 20px;
-    height: 100%;
+    min-height: calc(100vh - 465px);
 }
 
 .footer-wrapper {
@@ -203,13 +203,9 @@ footer {
 
 /* Reservation page */
 
-.reservation-container, .cart-container {
+.reservation-container {
     display: grid;
     grid-template-columns: 1.3fr 2fr;
-    height: 100%;
-    border: 1px solid rgba(0, 0, 0, .125);
-    border-radius: 0.25rem;
-    background-color: white;
 }
 
 .reservation-form {
@@ -297,8 +293,8 @@ button:hover {
 
 /* Session page */
 
-.session-container {
-    height: 100%;
+.session-container, .order-container, .reservation-container, .cart-container {
+    height: calc(100vh - 465px);
     border: 1px solid rgba(0, 0, 0, .125);
     border-radius: 0.25rem;
     background-color: white;
@@ -333,13 +329,16 @@ button:hover {
 /* Cart  */
 
 .cart-container {
-    display: grid;
-    grid-template-columns: 50% 50%;
+    /* display: inline; */
 }
 
 .cart-container-left {
-    display: grid;
+    width: 50%;
+    display: inline;
+    float: left;
     /* grid-template-rows: fit-content(80%) */
+    min-height: 100%;
+    padding: 30px;
 }
 
 .cart-container-left-sessions {
@@ -373,11 +372,14 @@ button:hover {
 }
 
 .cart-container-right {
+    display: inline-block;
+    width: 49%;
     border-left: 1px solid #dee2e6 !important;
     border-left-width: 1px;
     border-left-style: solid;
     border-left-color: rgb(222, 226, 230);
     padding: 30px;
+    min-height: 100%;
 }
 
 .cart-form {
@@ -466,10 +468,6 @@ label[for="month"], label[for="year"] {
 .order-container {
     padding-left: 40px;
     padding-right: 40px;
-    height: 100%;
-    border: 1px solid rgba(0, 0, 0, .125);
-    border-radius: 0.25rem;
-    background-color: white;
 }
 
 .order {

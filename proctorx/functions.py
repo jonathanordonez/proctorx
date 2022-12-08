@@ -109,3 +109,9 @@ def query_params_to_dict(values):
 def get_cart_items_number(user):
     result = len(Session.objects.filter(student_id = user.id).filter(session_status = 'Cart'))
     return result
+
+
+def make_payment(amount):
+    # To include payment logic 
+    print(f'payment made for {amount}')
+    return True

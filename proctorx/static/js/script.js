@@ -62,11 +62,10 @@
         handleReservationForm();
 
         function handleReservationForm() {
-            reservationForm = document.querySelector('.reservation-form');
+            let reservationForm = document.querySelector('.reservation-form');
             reservationForm.addEventListener('submit', handleSubmit);
 
             function handleSubmit(event) {
-                ev = event;
                 event.preventDefault();
 
                 // Replaces the current submit form button for an Edit button
@@ -99,6 +98,7 @@
 
     function cartListeners() {
         handleDeleteFromCart();
+        handlePaymentForm();
 
         function handleDeleteFromCart() {
             let deleteButtons = document.querySelectorAll('.delete-from-cart');
@@ -125,7 +125,48 @@
             )
         }
 
+        function handlePaymentForm() {
+            let cartForm = document.querySelector('.cart-form');
+            cartForm.addEventListener('submit', handleSubmit)
+
+            function handleSubmit(event) {
+                event.preventDefault();
+                const data = new FormData(event.target);
+                const sessionPaymentJson = Object.fromEntries(data.entries());
+                sessionPaymentJson.postOption = 'cc-payment';
+
+                // Obtain sessions currently in cart and add them to the payload
+                let sessions = [];
+                document.querySelectorAll('.cart-container-left-sessions .cart-session').forEach(function obtainSessionId(element){
+                    sessions.push(element.getAttribute('sessionid'));
+                })
+                sessionPaymentJson.sessions = sessions;
+
+                let submitPayment = postData('cart', sessionPaymentJson);
+                submitPayment.then(function toJson(response){
+                    let result = response.json(response);
+                    result.then(function readJsonResponse(result) {
+                        if (result.status == 'success') {
+                            // to-do show successful message
+                            window.location.href = 'session';
+                        }
+                        else {
+                            // show unsuccessful message (payment failed)
+                        }
+                    }, function unableToReadJsonResponse() {
+                        // show error message (unable to read json response)
+                    })
+                }, function postDataFailed(){
+                    // show error message (unable to proceed with payment)
+                })
+                
+                
+                
+
+            }
+        }
     }
+
 
     function updateCart() {
         let sessionNo = document.querySelectorAll('.cart-session-cost');
