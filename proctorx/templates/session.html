@@ -9,29 +9,30 @@
 {% block content %}
 
 <div class="session-container">
-    <p class="session-attribute fs-5">Exam</p>
-    <p class="session-attribute fs-5">Date</p>
-    <p class="session-attribute fs-5">Length</p>
-    <p class="session-attribute fs-5">Status</p>
-    <p class="session-attribute fs-6">COMP 200</p>
-    <p class="session-attribute fs-6">Jan 1, 2022</p>
-    <p class="session-attribute fs-6">2 hours</p>
-    <p class="session-attribute fs-6">Scheduled</p>
-    <p class="session-attribute fs-6">COMP 200</p>
-    <p class="session-attribute fs-6">Jan 1, 2022</p>
-    <p class="session-attribute fs-6">2 hours</p>
-    <p class="session-attribute fs-6">Scheduled</p>
-    <!-- <div class="session-attributes fs-5">
+    <div class="session-headings">
+        <h5 class=>Exam</h5>
+        <h5>Date</h5>
+        <h5>Length</h5>
+        <h5>Status</h5>
+    </div>
 
-    </div> -->
-
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <!-- <div>Test</div> -->
-
+    {% if current_reservations %}
+    {% for session in current_reservations %}
+    <ul class="session-content">
+        <li class="session-attribute fs-6">{{session.exam_name}}</li>
+        <li class="session-attribute fs-6">{{session.exam_date_time}}</li>
+        <li class="session-attribute fs-6">{{session.exam_length}} hour(s)</li>
+        <li class="session-attribute fs-6">{{session.session_status}}</li>
+    </ul>
+    {% endfor %}
+    {% else %}
+    <div class="empy-sessions">
+        <p>You currently don't have any scheduled sessions</p>
+        <a class="fs-4" href="reservation">Reserve a new session</a>
+    </div>
+    {% endif %}
 </div>
+
 
 {% for record in current_reservations %}
 

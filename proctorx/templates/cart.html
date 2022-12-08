@@ -41,13 +41,22 @@
         {% if unpaid_reservations %}
         <div class="cc-title fs-4">Credit card details</div>
         <form class="cart-form">
-            <input class="cc-name form-control" type="text" placeholder="name on card">
-            <input class="cc-number form-control" type="number" placeholder="card number">
-            <div class="cc-month-year-cvv">
-                <input class="cc-month form-control" type="number" placeholder="month">
-                <input class="cc-year form-control" type="number" placeholder="year">
-                <input class="cc-cvv form-control" type="number" placeholder="cvv">
-            </div>
+            <label class="fs-5 cc-name-label" for="card-holder-name">Name on card</label>
+            <label class="fs-5" for="cvv" cvv">CVV</label>
+            <input class="form-control" type="text" placeholder="name on card" value="John Smith" name="card-holder-name">
+            <input class="cc-cvv form-control" type="number" name="cvv" placeholder="cvv" value="123">
+            <label class="fs-5 cc-card-number-label" for="card-number">Card number</label>
+            <label class="fs-5" for="month">Month</label>
+            <label class="fs-5" for="year">Year</label>
+            <input class="cc-number form-control" placeholder="card number" value="4539 7889 2500 4444" name="card-number">
+            <!-- <div class="cc-month-year-cvv"> -->
+                
+                <input class="cc-month form-control" type="number" placeholder="month" name="month" value="01">
+                
+                <input class="cc-year form-control" type="number" placeholder="year" name="year" value="2025">
+                
+                
+            <!-- </div> -->
             <input class="cc-submit btn btn-primary" type="submit" name="submit">
             {% else %}
             <div class="cart-empy-make-reservation">

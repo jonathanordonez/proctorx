@@ -236,10 +236,13 @@ def settings(request):
 def session(request):
     # Query and dispaly current active reservations (aka paid sessions)
     current_reservations = Session.objects.filter(
-        student_id=request.user.id).filter(payment_status='paid')
+        student_id=request.user.id).filter(session_status='Scheduled')
     cart_items_number = get_cart_items_number(request.user)
-    context = {'current_reservations': current_reservations, 'cart_items_number': cart_items_number}
-
+    if len(current_reservations) > 0:
+        context = {'current_reservations': current_reservations, 'cart_items_number': cart_items_number}
+    else:
+        context = {'cart_items_number': cart_items_number}
+    
     return render(request, 'session.html', context)
 
 
