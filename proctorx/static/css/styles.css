@@ -329,14 +329,11 @@ button:hover {
 /* Cart  */
 
 .cart-container {
-    /* display: inline; */
+    display: grid; 
+    grid-template-columns: 1fr 1fr;
 }
 
 .cart-container-left {
-    width: 50%;
-    display: inline;
-    float: left;
-    /* grid-template-rows: fit-content(80%) */
     min-height: 100%;
     padding: 30px;
 }
@@ -345,7 +342,6 @@ button:hover {
     display: grid;
     /* grid-template-columns: 45% 20% 16% 18%; */
     grid-template-rows: fit-content(100%);
-    padding: 30px;
 }
 
 .cart-session {
@@ -372,8 +368,6 @@ button:hover {
 }
 
 .cart-container-right {
-    display: inline-block;
-    width: 49%;
     border-left: 1px solid #dee2e6 !important;
     border-left-width: 1px;
     border-left-style: solid;
