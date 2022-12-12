@@ -26,11 +26,13 @@
                 {{ request.user }}
             </div>
             <div class="user-settings-drop-down-menu">
-                <a class="dropdown-item" href="/account/edit">
+                <a class="dropdown-item" href="/student/settings">
                     Account Settings
-                </a> <a class="dropdown-item" href="/change_password">
-                    Change Password
-                </a> <a class="dropdown-item" href="/students/preference/notifications">Notification Settings</a>
+                </a> 
+                <a class="dropdown-item" href="/student/settings#change-password">
+                    Change Password</a> 
+                    
+                    <!-- <a class="dropdown-item" href="/students/preference/notifications">Notification Settings</a> -->
 
 
                 <div class="dropdown-divider"></div>
@@ -80,8 +82,8 @@
             <div class="footer-options">
                 <h4>My Account</h4>
                 <div class="footer-sub-options fs-5">
-                    <a class="fs-6">Account Settings</a>
-                    <a class="fs-6">Password Settings</a>
+                    <a class="fs-6" href="/student/settings">Account Settings</a>
+                    <a class="fs-6" href="/student/settings#change-password">Change Password</a>
                     <a class="fs-6" href="/logout">Logout</a>
                 </div>
             </div>

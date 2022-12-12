@@ -5,15 +5,49 @@
 {% endblock %}
 
 {% block content %}
-<h1>Settings</h1>
 
-<form method="POST" href="">
-    {% csrf_token %}
-    {{form}}
 
-    <input type="submit" value="Submit" name="Settings">
-</form>
+<div class="settings-container">
+    <h4>User Settings</h4>
+    <form method="POST" href="" class="settings-form">
+        {% csrf_token %}
 
-<a href="/change_password">Change Password</a>
+        <label class="fs-5">First name</label>
+        {{form.first_name}}
+        <label class="fs-5">Last name</label>
+        {{form.last_name}}
+        <label class="fs-5">Phone number</label>
+        {{form.phone_number}}
+        <label class="fs-5">Street address</label>
+        {{form.street_address}}
+        <label class="fs-5">City</label>
+        {{form.city}}
+        <label class="fs-5">State</label>
+        {{form.state}}
+        <label class="fs-5">Country</label>
+        {{form.country}}
+        <label class="fs-5">Postal code</label>
+        {{form.postal_code}}
+
+        <input type="submit" value="Submit" name="Settings" class="form-control fs-5">
+    </form>
+
+    <h4 id="change-password">Change Password</h4>
+    <form class="change-password-form" method="POST">
+        {% csrf_token %}
+        <label class="fs-5">Old password</label>
+        {{ form_password.old_password }}
+        <label class="fs-5">New password</label>
+        {{ form_password.new_password1 }}
+        <label class="fs-5">New password (again)</label>
+        {{ form_password.new_password2 }}
+
+        <input type="submit" value="Change password" name="Change password" class="form-control fs-5">
+    </form>
+</div>
+
+
+
+
 
 {% endblock %}

@@ -119,7 +119,7 @@ header {
 
 .user-settings-drop-down-menu {
     display: none;
-    margin-right: 20px;
+    margin-right: 15px;
     grid-column: 2/3;
     width: 30%;
     justify-self: end;
@@ -139,7 +139,7 @@ header {
 
 .main-wrapper {
     background-color: #f8f9fa;
-    height: calc(100vh - 465px);
+    min-height: calc(100vh - 465px);
     margin-top: 40px;
     margin-bottom: 40px;
 }
@@ -209,7 +209,7 @@ footer {
 }
 
 .reservation-form {
-    padding-top: 20px;
+    padding: 20px;
     align-items: center;
     display: grid;
     grid-template-columns: 100%;
@@ -293,8 +293,16 @@ button:hover {
 
 /* Session page */
 
-.session-container, .order-container, .reservation-container, .cart-container {
-    height: calc(100vh - 465px);
+.session-container, .order-container {
+    /* min-height: calc(100vh - 465px); */
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: 0.25rem;
+    background-color: white;
+}
+
+
+ .reservation-container, .cart-container, .settings-container {
+    min-height: calc(100vh - 465px);
     border: 1px solid rgba(0, 0, 0, .125);
     border-radius: 0.25rem;
     background-color: white;
@@ -419,7 +427,9 @@ label[for="month"], label[for="year"] {
 }
 
 .cart-empty {
-    margin: auto;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
     padding: 20px;
 }
 
@@ -460,12 +470,15 @@ label[for="month"], label[for="year"] {
 /* Order */
 
 .order-container {
-    padding-left: 40px;
-    padding-right: 40px;
+    margin-left: 40px;
+    margin-right: 40px;
 }
 
 .order {
-    margin-top: 40px;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #dee2e6 !important;
+
 }
 
 .order-heading {
@@ -482,28 +495,54 @@ label[for="month"], label[for="year"] {
     display: inline;
 }
 
-/* .order-number {
-    justify-self: start;
-}
-
-.order-total-cost {
-    justify-self: start;
-} */
-
 .order-details {
     padding-left: 0px;
     display: grid;
     color: #646464;
-    grid-template-columns: 50% 25% 25%;
+    grid-template-columns: 40% 35% 25%;
     margin-bottom: 0px;
     justify-items: center;
 }
 
-.order-exam-name::before {
-    content: "- ";
+.order-exam-name {
+    justify-self: left !important;
+    margin-left: 100px;
 }
 
+.order-exam-length {
+    justify-self: left;
+    margin-left: 20px;
+}
 
+/* Settings */
+
+.settings-form, .change-password-form {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    padding: 20px;
+}
+
+.settings-form input, .change-password-form input {
+    margin-left: 20px;
+    margin-bottom: 20px;
+    grid-column: 2/3;
+    width: 80%;
+}
+
+.settings-form label, .change-password-form label {
+    text-align: end;
+    grid-column: 1/2;
+}
+
+.settings-container h4 {
+    font-weight: 400;
+    margin-left: 80px;
+    padding-top: 40px;
+}
+
+.settings-form input[type='submit'], .change-password-form input[type='submit'] {
+    background-color: #42cd87;
+}
 
 @media (max-width: 600px) {
 

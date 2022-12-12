@@ -12,8 +12,9 @@
     <div class="cart-container-left">
         {% if unpaid_reservations %}
         <div class="cart-container-session-heading fs-4">Sessions</div>
+        {% for session in unpaid_reservations%}
         <div class="cart-container-left-sessions">
-            {% for session in unpaid_reservations%}
+            
             <div sessionid={{session.id}} class="cart-session">
                 <div class="cart-session-element">{{ session.exam_name }}</div>
                 <div class="cart-session-element">{{ session.exam_length }} hour(s)</div>
@@ -30,7 +31,10 @@
         </div>
         {% else %}
         <div class="cart-container-session-heading fs-4">Your cart is empty</div>
-        <img class="cart-empty" src={% static '/img/cart-empty.svg' %}>
+        <div class="cart-container-left-sessions">
+            <img class="cart-empty" src={% static '/img/cart-empty.svg' %}>
+        </div>
+        
         {% endif %}
 
     </div>

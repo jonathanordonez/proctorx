@@ -47,6 +47,10 @@ class Student(AbstractUser, PermissionsMixin):
         return self.first_name
 
 
+class Order(models.Model):
+    date_placed = models.DateTimeField(default=datetime.datetime.now())
+    total = models.DecimalField(decimal_places=2, max_digits= 9)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
 
 class Session(models.Model):
     session_status = (
@@ -70,4 +74,5 @@ class Session(models.Model):
     date_purchased = models.DateField(null=True, blank=True)
     cost = models.DecimalField(decimal_places=2, max_digits= 9)
     payment_status = models.CharField(choices=payment_status, max_length=20)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
 

@@ -10,6 +10,7 @@
     }
 
     function globalEventListeners() {
+        console.log('h');
         // Drop-down menu listener
         let userSettings = document.querySelector('.user-settings')
         let dropDownMenu = document.querySelector('.user-settings-drop-down-menu')
@@ -127,8 +128,11 @@
 
         function handlePaymentForm() {
             let cartForm = document.querySelector('.cart-form');
-            cartForm.addEventListener('submit', handleSubmit)
 
+            if(cartForm) {
+                cartForm.addEventListener('submit', handleSubmit);
+            }
+            
             function handleSubmit(event) {
                 event.preventDefault();
                 const data = new FormData(event.target);

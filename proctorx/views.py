@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.http import HttpResponse
-from .forms import StudentForm, StudentSettings, ChangeEmailForm, SetStudentPassword
+from .forms import StudentForm, StudentSettings, ChangeEmailForm, SetStudentPassword, ChangeStudentPassword
 from .functions import obtain_exam_schedules, email_password_reset_link, email_activation_token, get_cart_items_number, make_payment
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Session, Student
+from .models import Session, Student, Order
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import views as auth_views
@@ -127,7 +127,47 @@ def reservation(request):
 
 @ login_required(login_url='/login')
 def order(request):
-    context = {'cart_items_number': get_cart_items_number(request.user)}
+    orders_list = []
+    orders = Order.objects.filter(student_id=request.user.id)
+    if len(orders) > 0:
+        for order in orders:
+            obj_sub = {}
+            sessions = Session.objects.filter(order_id=order.id)
+            obj_sub['order_id'] = order.id
+            obj_sub['date'] = order.date_placed.date()
+            obj_sub['total'] = order.total
+            obj_sub['sessions'] = sessions
+            orders_list.append(obj_sub)
+            
+        context = context = {
+            'cart_items_number': get_cart_items_number(request.user),
+            'orders': orders_list,
+        }
+        print(orders_list)
+
+        # obj = {
+        #     'order_id': 1,
+        #     'sessions':[]
+        # }
+
+        
+        # obj = [
+        # {
+        #     'order_id': 1,
+        #     'sessions':[]
+        # },
+        # {
+        #     'order_id': 2,
+        #     'sessions':[]
+        # },
+        # ]
+
+
+        
+
+    else: 
+        context = {'cart_items_number': get_cart_items_number(request.user)}
+
     return render(request, 'order.html', context=context)
 
 
@@ -175,16 +215,17 @@ def cart(request):
                 else:
                     sessions.append(session_record)
                     
-
             if (proceed_with_payment):
                 payment_amount = 0
                 for session in sessions:
                     payment_amount += session.cost
                 if (payment_amount > 0) and make_payment(payment_amount):
+                    order = Order.objects.create(total=payment_amount, student_id = request.user.id)
                     # Updates the sessions if the payment is successful
                     for session in sessions:
                         session.payment_status = 'Paid'
                         session.session_status = 'Scheduled'
+                        session.order = order
                         session.save()
                     return JsonResponse({'status':'success', 'message':'Payment Successful'})
                 else:
@@ -226,15 +267,19 @@ def delete_from_cart(request, order_id):
 @ login_required(login_url='/login')
 def settings(request):
     student_record = Student.objects.get(id=request.user.id)
-
     settings_data = {
         'first_name': student_record.first_name, 'last_name': student_record.last_name,
         'street_address': student_record.street_address, 'postal_code': student_record.postal_code, 'country': student_record.country,
         'city': student_record.city, 'state': student_record.state, 'phone_number': student_record.phone_number,
     }
+    if request.method == 'GET':
+        form = StudentSettings(initial=settings_data)
+        form_password = ChangeStudentPassword(user=request.user)
+        context = {'cart_items_number': get_cart_items_number(request.user), 'form': form, 'form_password': form_password}
+        return render(request, 'settings.html', context=context)
 
-    if request.method == 'POST' and request.POST.get('Settings') == 'Submit':
-        # check if the form has changed with
+    elif request.method == 'POST' and request.POST.get('Settings') == 'Submit':
+        # check if the form has changed 
         student_record = Student.objects.get(id=request.user.id)
         form = StudentSettings(request.POST, initial=settings_data)
         if form.has_changed:
@@ -256,6 +301,18 @@ def settings(request):
         new_form = StudentSettings(initial=new_settings_data)
         context = {'form': new_form}
         return render(request, 'settings.html', context)
+
+    elif request.method == 'POST' and request.POST.get('Change password') == 'Change password':
+        form = ChangeStudentPassword(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            # to-do: show message indicating password was changed successfully
+            return JsonResponse({'status': 'success', 'message': 'Password changed successfully'})
+        else:
+            print('your form is not valid')
+            # to-do: show message indicating form wasn't valid
+            return JsonResponse({'status': 'failure', 'message': 'Failed to change password'})
 
     else:
         form = StudentSettings(initial=settings_data)
@@ -286,7 +343,6 @@ def sign_out(request):
     return redirect('/login')
 
 # Returns the forgot_password.html
-
 
 def change_password(request):
     if request.user.is_authenticated and request.method == 'GET':

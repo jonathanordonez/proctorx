@@ -7,7 +7,30 @@
 {% block content %}
 
 <div class="order-container">
+    {% for order in orders %}
     <div class="order">
+        <ul class="order-heading">
+            <li class="order-number fs-4">Order ID: {{ order.order_id }} </li>
+            <li class="order-date fs-4">Order date: {{ order.date }}</li>
+            <li class="order-total-cost fs-4">Total: ${{ order.total }}</li>
+        </ul>
+
+        {% for session in order.sessions %}
+        <ul class="order-details">
+            <li class="order-exam-name">{{ session.exam_name }}, <br> {{ session.university }}  </li>
+            <li class="order-exam-length"><br>{{ session.exam_date_time }} - {{ session.exam_length }} hour(s)</li>
+            <li class="order-exam-cost"><br>${{ session.cost }}</li>
+        </ul>
+
+        {% endfor %}
+
+    </div>
+    {% endfor %}
+
+    <!-- <div class="order">
+
+
+
         <ul class="order-heading">
             <li class="order-number fs-4">Order #12334456</li>
             <li class="order-date fs-4">Date: 12/05/2022</li>
@@ -40,7 +63,7 @@
             <li class="order-exam-length">2 hours</li>
             <li class="order-exam-cost">$75</li>
         </ul>
-    </div>
+    </div> -->
 
 </div>
 

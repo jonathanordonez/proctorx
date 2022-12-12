@@ -1,0 +1,2 @@
+try catch js with apis - to check and test behaviour:
+does it give me advantage when an api fails? for example after a fetch?
