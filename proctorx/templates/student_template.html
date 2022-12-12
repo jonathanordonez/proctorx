@@ -22,17 +22,27 @@
                 <img class="brand-img" alt="ProctorX Logo" src={% static '/img/proctorX-white.svg' %}>
             </div>
 
+            {% if request.session.message %}
+            <div hidden class="session-message" type="success">{{request.session.message}}</div>
+            <!-- <div class="message-container message-success">
+                <div class="message-text fs-5">{{message.text}}</div>
+
+                <button class="message-close">x</button>
+            </div> -->
+
+            {% endif %}
+
             <div class="user-settings fs-5">
                 {{ request.user }}
             </div>
             <div class="user-settings-drop-down-menu">
                 <a class="dropdown-item" href="/student/settings">
                     Account Settings
-                </a> 
+                </a>
                 <a class="dropdown-item" href="/student/settings#change-password">
-                    Change Password</a> 
-                    
-                    <!-- <a class="dropdown-item" href="/students/preference/notifications">Notification Settings</a> -->
+                    Change Password</a>
+
+                <!-- <a class="dropdown-item" href="/students/preference/notifications">Notification Settings</a> -->
 
 
                 <div class="dropdown-divider"></div>

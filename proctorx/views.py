@@ -101,6 +101,7 @@ def reservation(request):
         print(request.body)
         body = request.body.decode('utf-8')
         body = json.loads(body)
+        print(body)
         option = body['postOption']
         if option == 'search schedules':
             print(body)
@@ -278,37 +279,38 @@ def settings(request):
         context = {'cart_items_number': get_cart_items_number(request.user), 'form': form, 'form_password': form_password}
         return render(request, 'settings.html', context=context)
 
-    elif request.method == 'POST' and request.POST.get('Settings') == 'Submit':
-        # check if the form has changed 
-        student_record = Student.objects.get(id=request.user.id)
-        form = StudentSettings(request.POST, initial=settings_data)
-        if form.has_changed:
-            print(f'fields that changed {form.changed_data}')
-            for field in form.changed_data:
-                print(f'field is: {field}')
-                print(type(field))
-                print(request.POST.get(field))
-                setattr(student_record, field, str(request.POST.get(field)))
-                student_record.save()
-            print('new user information saved')
+    elif request.method == 'POST':
+        print(request.body)
+        body = request.body.decode('utf-8')
+        print(body)
+        body = json.loads(body)
+        option = body['postOption']
 
-        new_settings_data = {
-            'first_name': student_record.first_name, 'last_name': student_record.last_name,
-            'street_address': student_record.street_address, 'postal_code': student_record.postal_code, 'country': student_record.country,
-            'city': student_record.city, 'state': student_record.state, 'phone_number': student_record.phone_number,
-        }
+        if option == 'update user settings':
+            print(body)
+            
+            # check if the form has changed 
+            student_record = Student.objects.get(id=request.user.id)
+            form = StudentSettings(body, initial=settings_data)
+            if form.has_changed:
+                print(f'fields that changed {form.changed_data}')
+                for field in form.changed_data:
+                    print(f'field is: {field}')
+                    print(type(field))
+                    setattr(student_record, field, str(body[field]))
+                    student_record.save()
 
-        new_form = StudentSettings(initial=new_settings_data)
-        context = {'form': new_form}
-        return render(request, 'settings.html', context)
+            return JsonResponse({'status': 'success', 'message': 'Account settings updated'})
 
-    elif request.method == 'POST' and request.POST.get('Change password') == 'Change password':
-        form = ChangeStudentPassword(user=request.user, data=request.POST)
-        if form.is_valid():
-            form.save()
-            update_session_auth_hash(request, form.user)
-            # to-do: show message indicating password was changed successfully
-            return JsonResponse({'status': 'success', 'message': 'Password changed successfully'})
+        if request.POST.get('Change password') == 'Change password':
+            form = ChangeStudentPassword(user=request.user, data=request.POST)
+            if form.is_valid():
+                form.save()
+                update_session_auth_hash(request, form.user)
+                # request.session['message'] = 'Password changed successfully'
+                # return redirect('/student/session')
+
+                return JsonResponse({'status': 'success', 'message': 'Password changed successfully'})
         else:
             print('your form is not valid')
             # to-do: show message indicating form wasn't valid
@@ -323,6 +325,7 @@ def settings(request):
 
 @ login_required(login_url='/login')
 def session(request):
+
     # Query and dispaly current active reservations (aka paid sessions)
     current_reservations = Session.objects.filter(
         student_id=request.user.id).filter(session_status='Scheduled')

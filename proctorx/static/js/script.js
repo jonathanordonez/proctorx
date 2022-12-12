@@ -6,12 +6,14 @@
         else if (document.location.pathname == '/student/cart') {
             cartListeners();
         }
+        else if (document.location.pathname == '/student/settings') {
+            settingsListeners();
+        }
         globalEventListeners()
     }
 
     function globalEventListeners() {
-        console.log('h');
-        // Drop-down menu listener
+        // User settings drop-down menu listener
         let userSettings = document.querySelector('.user-settings')
         let dropDownMenu = document.querySelector('.user-settings-drop-down-menu')
         userSettings.onclick = function showHideDropDownMenu() {
@@ -28,25 +30,32 @@
             }
         })
 
-
         // Highlight sub menu option: My sessions, My Orders, Reserve a Session
         let session = document.querySelector('.session');
         let myOrders = document.querySelector('.my-orders');
         let reserve = document.querySelector('.reserve');
         let cart = document.querySelector('.student-cart-balance');
 
+        // Close message listener 
+        closeMessage();
+        
+
+        // Reservation listeners
         if (document.location.pathname == '/student/reservation') {
             reserve.classList.add("student-link-selected");
         }
 
+        // Session listeners
         else if (document.location.pathname == '/student/session') {
             session.classList.add("student-link-selected");
         }
 
+        // Order listeners
         else if (document.location.pathname == '/student/order') {
             myOrders.classList.add("student-link-selected");
         }
 
+        // Cart listeners
         else if (document.location.pathname == '/student/cart') {
             cart.classList.add("student-link-selected");
             cart.firstElementChild.style.color = 'white';
@@ -171,6 +180,33 @@
         }
     }
 
+    function settingsListeners() {
+        handleSettingsForm();
+        handleChangePasswordForm();
+
+        function handleSettingsForm() {
+            let settingsForm = document.querySelector('.settings-form');
+            settingsForm.addEventListener('submit', handleSubmit);
+
+            function handleSubmit(event) {
+                event.preventDefault();
+
+                const data = new FormData(event.target);
+                const jsonValues = Object.fromEntries(data.entries());
+                jsonValues.postOption = 'update user settings'
+                console.log(jsonValues);
+                let userSettings = postData('settings', jsonValues);
+                userSettings.then(function displayPromiseStatus(response) {
+                    console.log(response.status);
+                    response.json()
+                        .then(function createMessage(res) {
+                            displayMessage(res.status, res.message);
+                        });
+                })
+            }
+
+        }
+    }
 
     function updateCart() {
         let sessionNo = document.querySelectorAll('.cart-session-cost');
@@ -288,8 +324,37 @@
             })
     }
 
-    function displayMessage(type, message) {
-        console.log(`This is a ${type} message: ${message}`);
+    function dummy(status){
+        console.log('yooo');
+        console.log(status);
+    }
+
+    function displayMessage(status, message) {
+        let messageContainer = document.createElement('div');
+        messageContainer.classList.add('message-container');
+        messageContainer.classList.add(status);
+        let messageText = document.createElement('div');
+        messageText.classList.add('message-text');
+        messageText.classList.add('fs-5');
+        messageText.textContent = message;
+        let messageButton = document.createElement('button');
+        messageButton.classList.add('message-close');
+        messageButton.textContent = 'x';
+
+        messageContainer.appendChild(messageText);
+        messageContainer.appendChild(messageButton);
+
+        let headerWrapper = document.querySelector('.header-wrapper');
+        headerWrapper.insertBefore(messageContainer, headerWrapper.children[1]);
+        closeMessage();
+        // console.log(`This is a ${type} message: ${message}`);
+    }
+
+    function closeMessage() {
+        let closeMessage = document.querySelector('.message-close');
+        closeMessage.addEventListener('click', function closeMessageContainer() {
+            closeMessage.parentNode.remove();
+        })
     }
 
     function disableForm(form) {
