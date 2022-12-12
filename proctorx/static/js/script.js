@@ -117,22 +117,22 @@
                     button.addEventListener('click', deleteFromCart);
                 })
             }
-        }
 
-        function deleteFromCart() {
-            let session = window.event.target.parentElement;
-            let sessionId = session.getAttribute('sessionid');
-            let sessionObj = { 'sessionId': sessionId, 'postOption': 'deleteFromCart' };
-            let deleteSession = postData('cart', sessionObj);
-            deleteSession.then(function deleteSessionElement() {
-                session.remove();
-                document.querySelector('.student-cart-count').textContent = document.querySelectorAll('.cart-session').length; // update cart quantity 
-                updateCart();
-            },
-                function handleError() {
-                    displayMessage('error', 'Unable to delete session from cart. Please try again later or contact Support.')
-                }
-            )
+            function deleteFromCart() {
+                let session = window.event.target.parentElement;
+                let sessionId = session.getAttribute('sessionid');
+                let sessionObj = { 'sessionId': sessionId, 'postOption': 'deleteFromCart' };
+                let deleteSession = postData('cart', sessionObj);
+                deleteSession.then(function deleteSessionElement() {
+                    session.remove();
+                    document.querySelector('.student-cart-count').textContent = document.querySelectorAll('.cart-session').length; // update cart quantity 
+                    updateCart();
+                },
+                    function handleError() {
+                        displayMessage('error', 'Unable to delete session from cart. Please try again later or contact Support.')
+                    }
+                )
+            }
         }
 
         function handlePaymentForm() {
@@ -159,12 +159,17 @@
                 submitPayment.then(function toJson(response){
                     let result = response.json(response);
                     result.then(function readJsonResponse(result) {
-                        if (result.status == 'success') {
-                            // to-do show successful message
-                            window.location.href = 'session';
+                        if (result.status == 'success') {                         
+                            displayMessage(result.status, result.message, 'session');
+
+                            // Disables input elements
+                            document.querySelectorAll('.cart-form input').forEach(function disableInput(e){
+                                e.setAttribute('disabled','');
+                            })
+
                         }
                         else {
-                            // show unsuccessful message (payment failed)
+                            displayMessage(result.status, result.message);
                         }
                     }, function unableToReadJsonResponse() {
                         // show error message (unable to read json response)
@@ -194,6 +199,27 @@
                 const data = new FormData(event.target);
                 const jsonValues = Object.fromEntries(data.entries());
                 jsonValues.postOption = 'update user settings'
+                console.log(jsonValues);
+                let userSettings = postData('settings', jsonValues);
+                userSettings.then(function displayPromiseStatus(response) {
+                    console.log(response.status);
+                    response.json()
+                        .then(function createMessage(res) {
+                            displayMessage(res.status, res.message);
+                        });
+                })
+            }
+        }
+
+        function handleChangePasswordForm() {
+            let passwordForm = document.querySelector('.change-password-form');
+            passwordForm.addEventListener('submit', handleSubmit);
+
+            function handleSubmit(event) {
+                event.preventDefault();
+                const data = new FormData(event.target);
+                const jsonValues = Object.fromEntries(data.entries());
+                jsonValues.postOption = 'change password'
                 console.log(jsonValues);
                 let userSettings = postData('settings', jsonValues);
                 userSettings.then(function displayPromiseStatus(response) {
@@ -329,14 +355,14 @@
         console.log(status);
     }
 
-    function displayMessage(status, message) {
+    function displayMessage(status, message, redirect) { 
         let messageContainer = document.createElement('div');
         messageContainer.classList.add('message-container');
-        messageContainer.classList.add(status);
+        messageContainer.classList.add(`message-${status}`);
         let messageText = document.createElement('div');
         messageText.classList.add('message-text');
         messageText.classList.add('fs-5');
-        messageText.textContent = message;
+        messageText.textContent = `${message} (4)`;
         let messageButton = document.createElement('button');
         messageButton.classList.add('message-close');
         messageButton.textContent = 'x';
@@ -347,14 +373,31 @@
         let headerWrapper = document.querySelector('.header-wrapper');
         headerWrapper.insertBefore(messageContainer, headerWrapper.children[1]);
         closeMessage();
-        // console.log(`This is a ${type} message: ${message}`);
+        window.scrollTo(0,0);
+        let timerCount = 3;
+        intervalID = setInterval(function decreaseTimer(){
+            if(timerCount == 0) {
+                messageContainer.remove();
+                clearInterval(intervalID);
+                if(redirect) {
+                    window.location.href = 'session';
+                }
+            }
+            messageText.textContent = `${message} (${timerCount})`;
+            timerCount -= 1;
+        }, 1000);
+        console.log('message finished');
+
     }
 
     function closeMessage() {
         let closeMessage = document.querySelector('.message-close');
-        closeMessage.addEventListener('click', function closeMessageContainer() {
-            closeMessage.parentNode.remove();
-        })
+        if(closeMessage) {
+            closeMessage.addEventListener('click', function closeMessageContainer() {
+                closeMessage.parentNode.remove();
+            })
+        }
+        
     }
 
     function disableForm(form) {

@@ -33,7 +33,6 @@ header {
 }
 
 .message-container {
-    background-color:#42cd87;
     margin-top: 10px;
     margin-bottom: 10px;
     border: 1px solid transparent;
@@ -41,35 +40,40 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
     grid-column: 2/3;
 }
 
 .message-text {
     display: inline;
     text-align: center;
+    color: white;
 }
 
 .message-close {
     display: inline;
-    background-color:#42cd87;
+    background-color:inherit;
     border: none;
     font-weight: 600;
     opacity: .5;
     margin-left: 5px;
+    color: white;
 }
 
 .message-close:hover {
     opacity: 1;
     color: black;
-    background-color: #42cd87 !important;
+    background-color: inherit !important;
 }
 
 
 .message-success {
     color: white;
     background-color: #42cd87;
-    /* border-color: #c3e6cb; */
+}
+
+.message-failure {
+    color: white;
+    background-color: #ff991b;
 }
 
 .user-settings {

@@ -111,7 +111,9 @@ def get_cart_items_number(user):
     return result
 
 
-def make_payment(amount):
+def make_payment(cc_name, cc_no, cc_month, cc_year, cc_cvv, amount):
+    if cc_no != '4539788925004444' or cc_month != '01' or cc_year != '2025' or cc_cvv != '123':
+        return False
     # To include payment logic 
     print(f'payment made for {amount}')
     return True

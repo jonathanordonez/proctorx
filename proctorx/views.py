@@ -220,7 +220,8 @@ def cart(request):
                 payment_amount = 0
                 for session in sessions:
                     payment_amount += session.cost
-                if (payment_amount > 0) and make_payment(payment_amount):
+                if (payment_amount > 0) and make_payment(body['card-holder-name'], body['card-number'].replace(' ',''), 
+                body['month'], body['year'], body['cvv'], payment_amount):
                     order = Order.objects.create(total=payment_amount, student_id = request.user.id)
                     # Updates the sessions if the payment is successful
                     for session in sessions:
@@ -228,11 +229,11 @@ def cart(request):
                         session.session_status = 'Scheduled'
                         session.order = order
                         session.save()
-                    return JsonResponse({'status':'success', 'message':'Payment Successful'})
+                    return JsonResponse({'status':'success', 'message':'Payment successful. Redirecting to Sessions...'})
                 else:
-                    return JsonResponse({'status':'error', 'message':'Payment unsuccessful. Please try again or contact Support.'})
+                    return JsonResponse({'status':'failure', 'message':'Payment unsuccessful.\nPlease try again or contact Support.'})
             else:
-                return JsonResponse({'status':'error', 'message':'Payment not processed. Please try again or contact Support.'})
+                return JsonResponse({'status':'failure', 'message':'Payment not processed. Please try again or contact Support.'})
 
 
 @ login_required(login_url='/login')
@@ -302,15 +303,18 @@ def settings(request):
 
             return JsonResponse({'status': 'success', 'message': 'Account settings updated'})
 
-        if request.POST.get('Change password') == 'Change password':
-            form = ChangeStudentPassword(user=request.user, data=request.POST)
+        if option == 'change password':
+            form = ChangeStudentPassword(user=request.user, data=body)
             if form.is_valid():
+                print('form is valid')
                 form.save()
                 update_session_auth_hash(request, form.user)
                 # request.session['message'] = 'Password changed successfully'
                 # return redirect('/student/session')
 
                 return JsonResponse({'status': 'success', 'message': 'Password changed successfully'})
+            else:
+                return JsonResponse({'status': 'failure', 'message': 'Failed to change password. Please try again.'})
         else:
             print('your form is not valid')
             # to-do: show message indicating form wasn't valid

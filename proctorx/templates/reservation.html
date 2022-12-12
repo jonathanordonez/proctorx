@@ -12,11 +12,11 @@
         <div class="reservation-form-option">
             <label class="fs-5" for="university">University</label>
             {% if university %}
-            <select disabled class="form-option-university" type="text" name="university">
+            <select disabled class="form-option-university form-select" type="text" name="university">
                 <option value="UOBV">{{ university }}</option>
             </select>
             {% else %}
-            <select class="form-option-university" type="text" name="university">
+            <select class="form-option-university form-select" type="text" name="university">
                 <option value="University of the Opal Berry Village">University of the Opal Berry Village</option>
                 <option value="Rose Hills University">Rose Hills University</option>
                 <option value="Estate of Lemzilville University">Estate of Lemzilville University</option>
@@ -26,27 +26,27 @@
         <div class="reservation-form-option">
             <label class="fs-5" for="date">Date</label>
             {% if date %}
-            <input disabled class="form-option-date" value="{{ date }}" type="date" name="date">
+            <input disabled class="form-option-date form-control" value="{{ date }}" type="date" name="date">
             {% else %}
-            <input class="form-option-date" type="date" name="date">
+            <input class="form-option-date form-control" type="date" name="date">
             {% endif %}
         </div>
         <div class="reservation-form-option">
             <label class="fs-5" for="time">Time</label>
             {% if time %}
-            <input disabled class="form-option-time" value="{{ time }}" type="time" name="time">
+            <input disabled class="form-option-time form-control" value="{{ time }}" type="time" name="time">
             {% else %}
-            <input class="form-option-time" type="time" name="time">
+            <input class="form-option-time form-control" type="time" name="time">
             {% endif %}
         </div>
         <div class="reservation-form-option">
             <label class="fs-5" for="exam">Exam</label>
             {% if program %}
-            <select disabled class="form-option-program" type="text" name="exam">
+            <select disabled class="form-option-program form-select" type="text" name="exam">
                 <option value="{{ program }}">{{ program }}</option>
             </select>
             {% else %}
-            <select class="form-option-program" type="text" name="program">
+            <select class="form-option-program form-select" type="text" name="program">
                 <option value="Web Programming I">Web Programming I</option>
                 <option value="Systems Analysis and Design">Systems Analysis and Design</option>
                 {% endif %}
@@ -55,11 +55,11 @@
         <div class="reservation-form-option">
             <label class="fs-5" for="exam-length">Length</label>
             {% if length %}
-            <select disabled class="form-option-length" type="text" name="exam-length">
+            <select disabled class="form-option-length form-select" type="text" name="exam-length">
                 <option value="{{ length }}">{{ length }}</option>
             </select>
             {% else %}
-            <select class="form-option-length" type="text" name="exam-length">
+            <select class="form-option-length form-select" type="text" name="exam-length">
                 <option value="1 hour">1 hour</option>
                 <option value="2 hours">2 hours</option>
                 <option value="3 hours">3 hours</option>
@@ -69,10 +69,10 @@
         <div class="registration-form-submit-container">
             <div class="registration-form-submit-container-2">
                 {% if university is None %}
-                <input class="registration-form-submit fs-5" type="submit" value="Search Available Schedules"
+                <input class="registration-form-submit fs-5 form-control" type="submit" value="Search Available Schedules"
                     name="postOption">
                 {% else %}
-                <button type="button" class="registration-form-edit fs-5"
+                <button type="button" class="registration-form-edit fs-5 form-control"
                     onclick="window.location = window.location.href">Edit
                     Reservation Details</button>
                 {% endif %}
