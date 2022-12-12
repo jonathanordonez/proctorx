@@ -1,19 +1,15 @@
-html {
-    height: 100%;
-}
-
 body {
     background-color: #f8f9fa;
-    margin: 0;
-    /* min-height: 100%; */
 }
 
-main {
-    min-width: 640px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%)
+.main-wrapper {
+    background-color: #f8f9fa;
+    min-height: calc(100vh - 200px);
+    margin-top: 100px;
+    margin-bottom: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 640px;
 }
 
 .logo {
@@ -39,12 +35,8 @@ form input[type="submit"] {
     background-color: #42cd87;
 }
 
-.form-footer {
-
-}
-
 .form-footer a {
-    display: inline-block;
+    /* display: inline-block; */
     text-decoration: none !important;
     color: #0d6efd !important;
     margin-bottom: 10px;
@@ -77,26 +69,18 @@ hr {
 
 }
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
 
-    main {
-        min-width: 440px;
+    .main-wrapper {
+        width: 400px;
     }
 
 }
 
-@media (min-width: 600px) and (max-width: 768px) {
+/* @media (min-width: 600px) and (max-width: 768px) {
    
-    main {
-        min-width: 560px;
+    .main-wrapper {
+        width: 560px;
     }
 
-}
-
-@media (min-width: 768px) {
-    
-    main {
-
-    }
-    
-}
+} */
