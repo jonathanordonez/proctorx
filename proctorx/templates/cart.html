@@ -6,9 +6,8 @@
 {% endblock %}
 
 {% block content %}
-
+<h3>My Cart</h3>
 <div class="cart-container">
-
     <div class="cart-container-left">
         {% if unpaid_reservations %}
         <div class="cart-container-session-heading fs-4">Sessions</div>
@@ -24,10 +23,8 @@
         </div>
         {% endfor %}
         <div class="cart-session-total-container">
-            <div class="cart-session-total"></div>
             <div class="cart-session-total fs-5">Total</div>
             <div class="cart-session-amount fs-5">${{ total_cost }}</div>
-            <div class="cart-session-total"></div>
         </div>
         {% else %}
         <div class="cart-container-session-heading fs-4">Your cart is empty</div>
@@ -38,7 +35,7 @@
         {% endif %}
 
     </div>
-
+    <div class="cart-space"></div>
     <div class="cart-container-right">
         {% if unpaid_reservations %}
         <div class="cc-title fs-4">Credit card details</div>

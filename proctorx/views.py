@@ -139,32 +139,13 @@ def order(request):
             obj_sub['total'] = order.total
             obj_sub['sessions'] = sessions
             orders_list.append(obj_sub)
-            
+
+        orders_list.reverse()  
         context = context = {
             'cart_items_number': get_cart_items_number(request.user),
             'orders': orders_list,
         }
-        print(orders_list)
-
-        # obj = {
-        #     'order_id': 1,
-        #     'sessions':[]
-        # }
-
-        
-        # obj = [
-        # {
-        #     'order_id': 1,
-        #     'sessions':[]
-        # },
-        # {
-        #     'order_id': 2,
-        #     'sessions':[]
-        # },
-        # ]
-
-
-        
+    
 
     else: 
         context = {'cart_items_number': get_cart_items_number(request.user)}

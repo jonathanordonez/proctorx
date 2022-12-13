@@ -44,6 +44,7 @@ header {
 }
 
 .message-text {
+    padding-left: 5px;
     display: inline;
     text-align: center;
     color: white;
@@ -51,7 +52,7 @@ header {
 
 .message-close {
     display: inline;
-    background-color:inherit;
+    background-color: inherit;
     border: none;
     font-weight: 600;
     opacity: .5;
@@ -89,20 +90,51 @@ header {
 }
 
 .student-options-panel {
-    height: 80px;
+    min-height: 80px;
     background-color: white;
     display: grid;
     grid-template-columns: 2fr 1fr;
 
 }
 
+.button-student-links {
+    color: rgba(0, 0, 0, .5);
+    border-color: rgba(0, 0, 0, .1);
+    cursor: pointer;
+    padding: 0.25rem 0.75rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    background-color: transparent;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    display: none;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.button-student-links span {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.5%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    content: "";
+}
+
+.student-collapsed-links {
+    display: none;
+}
+
+.student-collapsed-link {
+    display: block;
+}
+
 .student-links {
     align-self: center;
     padding-left: 20px;
-
 }
 
-.student-links a {
+.student-links>a {
     margin-right: 20px;
 }
 
@@ -124,12 +156,12 @@ header {
     justify-self: right;
     align-self: center;
     margin-right: 20px;
+    grid-column: 2/3;
 }
 
 .student-cart-balance:hover {
     cursor: pointer;
 }
-
 
 .student-cart-count {
     background-color: #dee2e6;
@@ -184,6 +216,10 @@ header {
     border-radius: 0.25rem;
 }
 
+h3 {
+    margin: 20px;
+    display: none;
+}
 
 .main-wrapper {
     background-color: #f8f9fa;
@@ -209,7 +245,7 @@ main {
 
 footer {
     padding-top: 20px;
-    height: 220px;
+    min-height: 220px;
     background-color: white;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -221,7 +257,6 @@ footer {
 }
 
 .footer-sub-options a {
-    display: block;
     padding-bottom: 10px;
     text-decoration: none;
 
@@ -244,9 +279,18 @@ footer {
     margin-top: 10px;
 }
 
+.no-redirection {
+    opacity: .5;
+}
+
+.no-redirection:hover {
+    cursor: none !important;
+    /* background-color: red; */
+}
+
 .fa-twitter,
 .fa-facebook:hover {
-    cursor: pointer;
+    cursor: none;
 }
 
 /* Reservation page */
@@ -261,8 +305,8 @@ footer {
     align-items: center;
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 16% 16% 16% 16% 16% 18%;
     width: 100%;
+    min-height: 470px;
 }
 
 .reservation-form-option {
@@ -295,7 +339,11 @@ footer {
     transition: 0.2s
 }
 
-.registration-form-submit:hover {
+.registration-form-submit:hover:not(:disabled),
+.settings-form input[type='submit']:hover:not(:disabled),
+.change-password-form input[type='submit']:hover:not(:disabled),
+.cc-submit:hover:not(:disabled),
+.delete-from-cart:hover:not(:disabled) {
     background-color: #343a40;
     border-color: #343a40;
 }
@@ -341,7 +389,8 @@ button:hover {
 
 /* Session page */
 
-.session-container, .order-container {
+.session-container,
+.order-container {
     /* min-height: calc(100vh - 465px); */
     border: 1px solid rgba(0, 0, 0, .125);
     border-radius: 0.25rem;
@@ -349,7 +398,9 @@ button:hover {
 }
 
 
- .reservation-container, .cart-container, .settings-container {
+.reservation-container,
+.cart-container,
+.settings-container {
     min-height: calc(100vh - 465px);
     border: 1px solid rgba(0, 0, 0, .125);
     border-radius: 0.25rem;
@@ -369,6 +420,10 @@ button:hover {
     text-align: center;
 }
 
+.session-content:nth-child(2n) {
+    background-color: #f8f9fa;
+}
+
 .session-headings {
     display: grid;
     grid-template-columns: 25% 25% 25% 25%;
@@ -382,10 +437,21 @@ button:hover {
     margin-bottom: 0px;
 }
 
+.heading-large {
+    display: block;
+}
+
+.heading-small {
+    display: none;
+}
+
+
 /* Cart  */
 
+
+
 .cart-container {
-    display: grid; 
+    display: grid;
     grid-template-columns: 1fr 1fr;
 }
 
@@ -412,15 +478,33 @@ button:hover {
     grid-template-columns: 45% 20% 16% 18%;
 }
 
-.cart-session-element, .cart-container-session-heading {
+.cart-session-element,
+.cart-container-session-heading {
     margin: 10px;
     align-self: center;
     text-align: center;
 }
 
-.cart-session-amount, .cart-session-total {
+.cart-session-amount,
+.cart-session-total {
     margin: 10px;
     text-align: center;
+}
+
+.cart-session-total {
+    grid-column: 2/3;
+}
+
+.cart-session-amount {
+    grid-column: 3/4;
+}
+
+.cart-space {
+    height: 20px;
+    border-top: 1px solid #dee2e6 !important;
+    background-color: #f8f9fa;
+    width: 100%;
+    display: none;
 }
 
 .cart-container-right {
@@ -448,6 +532,7 @@ button:hover {
     padding-bottom: 10px;
 }
 
+
 input[name="cvv"] {
     width: 40%;
     justify-self: center;
@@ -456,11 +541,19 @@ input[name="cvv"] {
 
 }
 
-input[name="month"], input[name="year"] {
-    width: 80%;
+input[name="year"] {
+    width: 100%;
     justify-self: center;
     text-align: center;
-    
+
+}
+
+
+input[name="month"] {
+    width: 60%;
+    justify-self: center;
+    text-align: center;
+
 }
 
 label[for="cvv"] {
@@ -468,7 +561,8 @@ label[for="cvv"] {
     grid-column: 2/4;
 }
 
-label[for="month"], label[for="year"] {
+label[for="month"],
+label[for="year"] {
     width: 80%;
     justify-self: center;
     text-align: center;
@@ -507,6 +601,13 @@ label[for="month"], label[for="year"] {
     grid-column: 1/4;
 }
 
+.cc-submit:disabled {
+    pointer-events: none;
+    opacity: .65;
+    background-color: #42cd87;
+    border-color: #42cd87;
+}
+
 .delete-session-from-cart {
     min-height: auto !important;
 }
@@ -523,10 +624,13 @@ label[for="month"], label[for="year"] {
 }
 
 .order {
-    margin-top: 20px;
+    padding-top: 20px;
     padding-bottom: 20px;
     border-bottom: 1px solid #dee2e6 !important;
+}
 
+.order:nth-child(2n) {
+    background-color: #f8f9fa;
 }
 
 .order-heading {
@@ -539,7 +643,14 @@ label[for="month"], label[for="year"] {
     /* margin: 40px 40px 5px 160px; */
 }
 
-.order-heading li, .order-details li {
+.order-number-small,
+.order-date-small,
+.order-total-cost-small {
+    display: none !important;
+}
+
+.order-heading li,
+.order-details li {
     display: inline;
 }
 
@@ -564,20 +675,23 @@ label[for="month"], label[for="year"] {
 
 /* Settings */
 
-.settings-form, .change-password-form {
+.settings-form,
+.change-password-form {
     display: grid;
     grid-template-columns: 30% 70%;
     padding: 20px;
 }
 
-.settings-form input, .change-password-form input {
+.settings-form input,
+.change-password-form input {
     margin-left: 20px;
     margin-bottom: 20px;
     grid-column: 2/3;
     width: 80%;
 }
 
-.settings-form label, .change-password-form label {
+.settings-form label,
+.change-password-form label {
     text-align: end;
     grid-column: 1/2;
 }
@@ -588,33 +702,220 @@ label[for="month"], label[for="year"] {
     padding-top: 40px;
 }
 
-.settings-form input[type='submit'], .change-password-form input[type='submit'] {
+.settings-form input[type='submit'],
+.change-password-form input[type='submit'], .cc-submit {
     background-color: #42cd87;
+    color: white;
+    border-color: #42cd87;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 870px) {
 
-    header {}
+    h3 {
+        display: block;
+    }
 
-    main {}
+    .main-wrapper {
+        margin-top: 0px;
+    }
 
-    footer {}
-}
+    .button-student-links {
+        color: rgba(0, 0, 0, .5);
+        border-color: rgba(0, 0, 0, .1);
+        cursor: pointer;
+        padding: 0.25rem 0.75rem;
+        font-size: 1.25rem;
+        line-height: 1;
+        background-color: transparent;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        display: inline;
+    }
 
-@media (min-width: 601px) and (max-width: 768px) {
+    .button-student-links:hover {
+        background-color: #dee2e6;
+        border-color: #dee2e6;
+        /* border-color: inherit; */
+    }
 
-    header {}
+    .student-links>a {
+        display: none;
+    }
 
-    main {}
+    .student-collapsed-links {
+        margin-bottom: 10px;
+        display: block;
+    }
 
-    footer {}
-}
+    .student-collapsed-link {
+        color: #0d6efd !important;
+        margin-bottom: 5px;
+    }
 
-@media (min-width: 769px) {
+    .session-headings {
+        grid-template-columns: 50% 50%;
+    }
 
-    header {}
+    .heading-large {
+        display: none;
+    }
 
-    main {}
+    .heading-small {
+        display: block;
+    }
 
-    footer {}
+    .session-content {
+        grid-template-columns: 50% 50%;
+    }
+
+    .reservation-container {
+        grid-template-columns: 1fr;
+    }
+
+    .reservation-form {
+        min-width: 300px;
+    }
+
+    .reservation-form-option {
+        grid-template-columns: 100%;
+    }
+
+    .reservation-form-option label {
+        justify-self: center;
+        padding-left: 0px;
+    }
+
+    .reservation-form-option .form-control,
+    .reservation-form-option .form-select {
+        width: 70%;
+        justify-self: center;
+    }
+
+    .registration-form-submit-container {
+        justify-self: center;
+        width: auto;
+        padding-left: 0px;
+    }
+
+    .reservation-results {
+        border-top: 1px solid #dee2e6 !important;
+        margin-top: 0px;
+        padding-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .reservation-option {
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
+
+    .cart-container {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-space {
+        display: block;
+    }
+
+    .cart-container-right {
+        border-top: 1px solid #dee2e6 !important;
+        border-left: 0px solid #dee2e6 !important;
+    }
+
+    .cart-session {
+        grid-template-columns: 1fr 1fr 1fr;
+        max-height: inherit;
+    }
+
+    .cart-form {
+        grid-template-columns: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .cart-form input,
+    .cart-form label {
+        display: block;
+        grid-column: 1/2;
+        width: 80%;
+        justify-self: center;
+        text-align: center;
+    }
+
+    .cart-form input[name="card-holder-name"] {
+        grid-row: 2/3;
+    }
+
+    .cart-form input[name="card-number"] {
+        grid-row: 4/5;
+    }
+
+    .cart-form label[for="card-number"] {
+        grid-row: 3/4;
+    }
+
+    .cart-form label[for="month"] {
+        grid-row: 5/6;
+    }
+
+    .cart-form input[name="month"] {
+        grid-row: 6/7;
+
+    }
+
+    .cart-form label[for="year"] {
+        grid-row: 7/8;
+    }
+
+    .cart-form input[name="year"] {
+        grid-row: 8/9;
+
+    }
+
+    .cart-form label[for="cvv"] {
+        grid-row: 9/10;
+    }
+
+    .cart-form input[name="cvv"] {
+        grid-row: 10/11;
+
+    }
+
+    .delete-from-cart {
+        grid-column: 2/3;
+    }
+
+    .order-container {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .order-number,
+    .order-date,
+    .order-total-cost {
+        display: none !important;
+    }
+
+    .order-number-small,
+    .order-date-small,
+    .order-total-cost-small {
+        display: block !important;
+    }
+
+    .order-details li {
+        margin-left: 10px;
+        justify-self: center !important;
+    }
+
+
+
+    footer {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 20px;
+    }
+
+    .footer-options {
+        padding: 5px;
+    }
+
 }

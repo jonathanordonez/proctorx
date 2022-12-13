@@ -38,7 +38,26 @@
 
         // Close message listener 
         closeMessage();
-        
+
+        // Add collapse/uncollapse functionality for user links in smaller screens
+        uncollapseUserLinks();
+
+        function uncollapseUserLinks() {
+            let userLinksButton = document.querySelector('.button-student-links');
+            let collapsedLinks = document.querySelector('.student-collapsed-links');
+            userLinksButton.addEventListener('click', function showHideCollapsedLinks() {
+                let linksStatus = collapsedLinks.getAttribute('hidden');
+                if (linksStatus == '') { // it is hidden
+                    collapsedLinks.removeAttribute('hidden');
+                }
+                else if (linksStatus == null) { // not hidden
+                    collapsedLinks.setAttribute('hidden', '');
+                }
+            });
+
+        }
+
+
 
         // Reservation listeners
         if (document.location.pathname == '/student/reservation') {
@@ -75,8 +94,33 @@
             let reservationForm = document.querySelector('.reservation-form');
             reservationForm.addEventListener('submit', handleSubmit);
 
+            let sumbitButton = document.querySelector('.registration-form-submit');
+
             function handleSubmit(event) {
                 event.preventDefault();
+
+                // Ensures a time is entered between 7 AM and 7 PM
+                let reservationTime = document.querySelector('.reservation-form .form-option-time').value;
+                if (reservationTime == '') {
+                    displayMessage('failure', 'Please select a reservation time', null, sumbitButton);
+                    return;
+                }
+                let hour = reservationTime.split(':')[0]
+                if (hour > 19 || hour < 7) {
+                    displayMessage('failure', 'Please select an hour between 7AM and 7PM', null, sumbitButton);
+                    return;
+                }
+
+                // Ensures a date in the future is entered
+                let reservationDate = document.querySelector('.reservation-form .form-option-date').value;
+                let userTimezone = (new Date().getTimezoneOffset()) / 60 * -1
+                if (userTimezone >= 0) {
+                    userTimezone = `+{userTimezone}`
+                }
+                if (new Date() > new Date(`${reservationDate} GMT${userTimezone}`) || reservationDate == '') {
+                    displayMessage('failure', 'Please select a date in the future', null, sumbitButton);
+                    return;
+                }
 
                 // Replaces the current submit form button for an Edit button
                 document.querySelector('.registration-form-submit').remove();
@@ -109,6 +153,7 @@
     function cartListeners() {
         handleDeleteFromCart();
         handlePaymentForm();
+        cartCountColor();
 
         function handleDeleteFromCart() {
             let deleteButtons = document.querySelectorAll('.delete-from-cart');
@@ -138,10 +183,10 @@
         function handlePaymentForm() {
             let cartForm = document.querySelector('.cart-form');
 
-            if(cartForm) {
+            if (cartForm) {
                 cartForm.addEventListener('submit', handleSubmit);
             }
-            
+
             function handleSubmit(event) {
                 event.preventDefault();
                 const data = new FormData(event.target);
@@ -150,21 +195,21 @@
 
                 // Obtain sessions currently in cart and add them to the payload
                 let sessions = [];
-                document.querySelectorAll('.cart-container-left-sessions .cart-session').forEach(function obtainSessionId(element){
+                document.querySelectorAll('.cart-container-left-sessions .cart-session').forEach(function obtainSessionId(element) {
                     sessions.push(element.getAttribute('sessionid'));
                 })
                 sessionPaymentJson.sessions = sessions;
 
                 let submitPayment = postData('cart', sessionPaymentJson);
-                submitPayment.then(function toJson(response){
+                submitPayment.then(function toJson(response) {
                     let result = response.json(response);
                     result.then(function readJsonResponse(result) {
-                        if (result.status == 'success') {                         
+                        if (result.status == 'success') {
                             displayMessage(result.status, result.message, 'session');
 
                             // Disables input elements
-                            document.querySelectorAll('.cart-form input').forEach(function disableInput(e){
-                                e.setAttribute('disabled','');
+                            document.querySelectorAll('.cart-form input').forEach(function disableInput(e) {
+                                e.setAttribute('disabled', '');
                             })
 
                         }
@@ -174,14 +219,18 @@
                     }, function unableToReadJsonResponse() {
                         // show error message (unable to read json response)
                     })
-                }, function postDataFailed(){
+                }, function postDataFailed() {
                     // show error message (unable to proceed with payment)
                 })
-                
-                
-                
+
+
+
 
             }
+        }
+
+        function cartCountColor() {
+            document.querySelector('.student-cart-count').style.color = "black";
         }
     }
 
@@ -350,12 +399,10 @@
             })
     }
 
-    function dummy(status){
-        console.log('yooo');
-        console.log(status);
-    }
-
-    function displayMessage(status, message, redirect) { 
+    function displayMessage(status, message, redirect, disableElement) {
+        if (disableElement) {
+            disableElement.setAttribute('disabled', '');
+        }
         let messageContainer = document.createElement('div');
         messageContainer.classList.add('message-container');
         messageContainer.classList.add(`message-${status}`);
@@ -373,13 +420,16 @@
         let headerWrapper = document.querySelector('.header-wrapper');
         headerWrapper.insertBefore(messageContainer, headerWrapper.children[1]);
         closeMessage();
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
         let timerCount = 3;
-        intervalID = setInterval(function decreaseTimer(){
-            if(timerCount == 0) {
+        intervalID = setInterval(function decreaseTimer() {
+            if (timerCount == 0) {
                 messageContainer.remove();
                 clearInterval(intervalID);
-                if(redirect) {
+                if (disableElement) {
+                    disableElement.removeAttribute('disabled');
+                }
+                if (redirect) {
                     window.location.href = 'session';
                 }
             }
@@ -392,61 +442,23 @@
 
     function closeMessage() {
         let closeMessage = document.querySelector('.message-close');
-        if(closeMessage) {
+        if (closeMessage) {
             closeMessage.addEventListener('click', function closeMessageContainer() {
                 closeMessage.parentNode.remove();
+
+                // Re-enables submitButton if found in the page
+                let sumbitButton = document.querySelector('.registration-form-submit');
+                if (sumbitButton) {
+                    sumbitButton.removeAttribute('disabled');
+                }
             })
         }
-        
-    }
 
-    function disableForm(form) {
-        arrayForm = Array.from(form)
-        if (arrayForm.length > 0) {
-            for (e in arrayForm) {
-                if (e.hasChildNodes()) {
-                    for (child in e) {
 
-                    }
-                }
-            }
-        }
+
 
     }
 
-    function displaySchedules() {
-
-    }
-    // to-do: create a get request to obtain the available schedules form the server
-    // function availableSchedules() {
-    //     let optionSelected = window.event.target.parentElement;
-    //     let form = optionSelected.parentElement.parentElement.parentElement;
-    //     let university = form.querySelector('.from-option-university');
-    //     let date = form.querySelector('.from-option-date');
-    //     let time = form.querySelector('.from-option-time');
-    //     let program = form.querySelector('.from-option-program');
-    //     let length = form.querySelector('.from-option-length');
-
-    //     // let body = {
-    //     //     postType : 'searchSchedules',
-    //     //     university: university,
-    //     //     date: date,
-    //     //     time: time,
-    //     //     program: program,
-    //     //     length: length,
-    //     // }
-
-    //     let csrfToken = getCookie('csrftoken')
-
-    //     // fetch('reservation', {
-    //     //     method: 'POST',
-    //     //     headers: new Headers({
-    //     //         'Content-Type': 'application/json',
-    //     //         'X-CSRFToken': csrfToken
-    //     //     }),
-    //     //     body: JSON.stringify(body),
-    //     // })
-
-    //     console.log('function schedules ran')
-    // }
 })();
+
+
