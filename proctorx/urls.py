@@ -2,7 +2,7 @@ from django.urls import path, re_path
 from proctorx import views
 
 urlpatterns = [
-path('', views.homepage, name='homepage'),
+path('', views.sign_in, name='homepage'),
 path('register', views.register),
 path('help', views.help),
 path('login', views.sign_in, name = 'login'),

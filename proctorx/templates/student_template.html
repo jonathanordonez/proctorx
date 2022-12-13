@@ -9,7 +9,7 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="{% static 'fontawesome_free/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href={% static '/css/styles.css' %}>
-    <script></script>
+    <link href="{% static '/img/icon.svg' %}" rel="shortcut icon">
     {% block title %}{% endblock %}
 </head>
 
@@ -19,18 +19,11 @@
     <header>
         <div class="header-wrapper scale-down">
             <div class="logo">
-                <img class="brand-img" alt="ProctorX Logo" src={% static '/img/proctorX-white.svg' %}>
+                <a href="session">
+                    <img class="brand-img" alt="ProctorX Logo" src="{% static '/img/proctorX-white.svg' %}">
+                </a>
             </div>
 
-            {% if request.session.message %}
-            <div hidden class="session-message" type="success">{{request.session.message}}</div>
-            <!-- <div class="message-container message-success">
-                <div class="message-text fs-5">{{message.text}}</div>
-
-                <button class="message-close">x</button>
-            </div> -->
-
-            {% endif %}
 
             <div class="user-settings fs-5">
                 {{ request.user }}

@@ -715,6 +715,17 @@ label[for="year"] {
         display: block;
     }
 
+    .header-wrapper {
+        grid-template-columns: 30% 40% 30%;
+    }
+
+    .message-container {
+        position: absolute;
+        width: 50%;
+        justify-self: center;
+        min-height: 60px;
+    }
+
     .main-wrapper {
         margin-top: 0px;
     }

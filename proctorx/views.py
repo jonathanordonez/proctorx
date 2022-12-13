@@ -33,34 +33,47 @@ def homepage(request):
 
 
 def register(request):
+    form = StudentForm()
     if request.user.is_authenticated:
         return redirect('/student/session')
 
     if (request.method == 'GET'):
         # Show user registrarion form
-        form = StudentForm()
         context = {'form': form}
         return render(request, 'register.html', context=context)
 
     elif (request.method == 'POST'):
         email = request.POST.get('email')
+        student_exists = Student.objects.filter(email=email)
+        # Email address already exists
+        if (len(student_exists)>0):
+            message = {'status':'failure','message':'Email address already exists'}
+            context = {'form': form, 'message':message}
+            return render(request, 'register.html', context=context)
+
         # Register user
         form = StudentForm(request.POST)
         if (form.is_valid()):
-            form.save()
-
+            form_status =  form.save()
+            print(form_status)
             student_record = Student.objects.get(email=email)
             student_id_base64 = urlsafe_base64_encode(
                 force_bytes(student_record.id))
             activation_token = account_activation_token.make_token(
                 student_record)
-            email_activation_token(email, student_id_base64, activation_token)
+            email_activation_token(student_record.first_name, email, student_id_base64, activation_token)
 
             # to do: mail confirmation message
 
-            return redirect('/login')
+            message = {'status':'success','message':f'Please activate your account by clicking in activation link sent to {email}'}
+            context = {'message':message}
+            return render(request, 'register.html', context=context)
+        
+        # Form is not valid
         else:
-            print('*** form is not valid ***')
+            message = {'status':'failure','message':'Please check the information entered and try again'}
+            context = {'form': form, 'message':message}
+            return render(request, 'register.html', context=context)
 
         return render(request, 'register.html')
 
@@ -389,15 +402,23 @@ def set_password(request, uidb64, token):
             form = SetStudentPassword(user=student_record)
             context = {'form': form}
             return render(request, 'set_password.html', context=context)
+        else:
+            message = {'status':'failure','message':'This token link does not exist'}
+            context = {'message':message}
+            return render(request, 'set_password.html', context=context)
 
     elif request.method == 'POST':
         form = SetStudentPassword(user=student_record, data=request.POST)
         if form.is_valid():
             form.save()
+            authenticate(student_record.email,request.POST.get('password1'))
             # to-do: show message indicating password was changed successfully
             return redirect('/student/session')
         else:
-            print('form not valid')
+            form = SetStudentPassword(user=student_record)
+            message = {'status':'failure','message':'Please ensure both password fields match'}
+            context = {'form':form,'message':message}
+            return render(request, 'set_password.html', context=context)
 
     return render(request, 'set_password.html')
 
@@ -410,13 +431,22 @@ def set_password(request, uidb64, token):
 def activate_account(request, uidb64, token):
     student_id = force_str(urlsafe_base64_decode(uidb64))
     student_record = Student.objects.filter(id=student_id)
-
     if len(student_record) > 0:
-        student_record[0].is_active = True
-        student_record[0].save()
+        if (student_record[0].is_active):
+            return redirect('login')
+
+        else:
+            if account_activation_token.check_token(student_record[0], token):
+                student_record[0].is_active = True
+                student_record[0].save()
+                print('correct link - account activated')
+                return redirect('login')
+            else:
+                print('unable to activate account');
 
     else:
-        print(f'student id received {student_id} does not exist')
-
-    # to-do: show successful/unsuccessful message
-    return redirect('login')
+        print('user does not exist - token link incorrect')
+        message = {'status':'failure', 'message':'This activation link is invalid'}
+        context = {'message':message}
+        return render(request, 'login.html',context=context)
+    

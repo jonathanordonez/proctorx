@@ -7,22 +7,28 @@
 
 {% block content %}
 
-    <div class="form-container">
-        <h1>Register</h1>
-        <form method="POST" action="">
-            {% csrf_token %}
-            {% for field in form %}
-            <label class="form-label fs-5" for="{{ field.label }}">{{ field.label }}</label>
-            {{ field }}
-            {% endfor %}
-            <input class="form-control fs-5" type="submit" value="Register">
-        </form>
-        <hr>
-        <div class="form-footer">
-            <div><a class="fs-5" href="/login">Back to Sign In</a></div>
-            <div><a class="fs-5" href="/change_password">Forgot Password?</a></div>
-            
-        </div>
+<div class="form-container">
+    {% if message %}
+    <div class="message-container message-{{message.status}}"><div class="message-text fs-5">{{message.message}}</div><button class="message-close">x</button></div>
+    {% endif %}
+
+    {% if form %}
+    <h2>Register</h2>
+    <form method="POST" action="">
+        {% csrf_token %}
+        {% for field in form %}
+        <label class="form-label fs-5" for="{{ field.label }}">{{ field.label }}</label>
+        {{ field }}
+        {% endfor %}
+        <input class="form-control fs-5" type="submit" value="Register">
+    </form>
+    {% endif %}
+    <hr>
+    <div class="form-footer">
+        <div><a class="fs-5" href="/login">Back to Sign In</a></div>
+        <div><a class="fs-5" href="/change_password">Forgot Password?</a></div>
+
     </div>
+</div>
 
 {% endblock %}
