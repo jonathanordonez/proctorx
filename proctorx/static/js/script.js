@@ -102,12 +102,12 @@
                 // Ensures a time is entered between 7 AM and 7 PM
                 let reservationTime = document.querySelector('.reservation-form .form-option-time').value;
                 if (reservationTime == '') {
-                    displayMessage('failure', 'Please select a reservation time', null, sumbitButton);
+                    displayMessage('failure', 'Please select a reservation time');
                     return;
                 }
                 let hour = reservationTime.split(':')[0]
                 if (hour > 19 || hour < 7) {
-                    displayMessage('failure', 'Please select an hour between 7AM and 7PM', null, sumbitButton);
+                    displayMessage('failure', 'Please select an hour between 7AM and 7PM');
                     return;
                 }
 
@@ -118,7 +118,7 @@
                     userTimezone = `+{userTimezone}`
                 }
                 if (new Date() > new Date(`${reservationDate} GMT${userTimezone}`) || reservationDate == '') {
-                    displayMessage('failure', 'Please select a date in the future', null, sumbitButton);
+                    displayMessage('failure', 'Please select a date in the future');
                     return;
                 }
 
@@ -399,10 +399,22 @@
             })
     }
 
-    function displayMessage(status, message, redirect, disableElement) {
-        if (disableElement) {
-            disableElement.setAttribute('disabled', '');
+    function displayMessage(status, message, redirect) {
+        // Skips function if there is already a message in the screen
+        if (document.querySelector('.message-container')){
+            return;
         }
+
+        let sumbitButtons = document.querySelectorAll('input[type="submit"]');
+                if (sumbitButtons.length > 0) {
+                    sumbitButtons.forEach(function disableSubmit(e) {
+                        e.setAttribute('disabled','');
+                    })
+                }
+            
+
+            
+
         let messageContainer = document.createElement('div');
         messageContainer.classList.add('message-container');
         messageContainer.classList.add(`message-${status}`);
@@ -419,37 +431,47 @@
 
         let headerWrapper = document.querySelector('.header-wrapper');
         headerWrapper.insertBefore(messageContainer, headerWrapper.children[1]);
-        closeMessage();
         window.scrollTo(0, 0);
         let timerCount = 3;
         intervalID = setInterval(function decreaseTimer() {
+            console.log('inside set interval');
             if (timerCount == 0) {
                 messageContainer.remove();
                 clearInterval(intervalID);
-                if (disableElement) {
-                    disableElement.removeAttribute('disabled');
-                }
                 if (redirect) {
                     window.location.href = 'session';
+                }
+                if (sumbitButtons.length > 0) {
+                    sumbitButtons.forEach(function reEnableSubmit(e) {
+                        e.removeAttribute('disabled');
+                    })
                 }
             }
             messageText.textContent = `${message} (${timerCount})`;
             timerCount -= 1;
         }, 1000);
+        closeMessage(intervalID);
         console.log('message finished');
 
     }
 
-    function closeMessage() {
+    function closeMessage(intervalID) {
         let closeMessage = document.querySelector('.message-close');
         if (closeMessage) {
             closeMessage.addEventListener('click', function closeMessageContainer() {
+                
+                // Stop message timer
+                if(intervalID) {
+                    clearInterval(intervalID);
+                }
                 closeMessage.parentNode.remove();
 
-                // Re-enables submitButton if found in the page
-                let sumbitButton = document.querySelector('.registration-form-submit');
-                if (sumbitButton) {
-                    sumbitButton.removeAttribute('disabled');
+                // Re-enables submitButtons if found in the page
+                let sumbitButtons = document.querySelectorAll('input[type="submit"]');
+                if (sumbitButtons.length > 0) {
+                    sumbitButtons.forEach(function reEnableSubmit(e) {
+                        e.removeAttribute('disabled');
+                    })
                 }
             })
         }
