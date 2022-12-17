@@ -284,13 +284,13 @@ footer {
 }
 
 .no-redirection:hover {
-    cursor: none !important;
+    cursor: auto !important;
     /* background-color: red; */
 }
 
 .fa-twitter,
 .fa-facebook:hover {
-    cursor: none;
+    cursor: auto;
 }
 
 /* Reservation page */
@@ -435,6 +435,22 @@ button:hover {
 .session-headings h5 {
     font-weight: 400;
     margin-bottom: 0px;
+}
+
+.empty-sessions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 30px 20px;
+    border-bottom: 1px solid #dee2e6 !important;
+    margin-bottom: 0px;
+    background-color: #f8f9fa;
+}
+
+.empty-sessions-reserve {
+    grid-column: 2/3;
+    justify-self: cebter;
+    text-align: center;
+    text-decoration: none;
 }
 
 .heading-large {
@@ -661,6 +677,13 @@ label[for="year"] {
     grid-template-columns: 40% 35% 25%;
     margin-bottom: 0px;
     justify-items: center;
+}
+
+.orders-empty {
+    display: flex;
+    justify-content: center;
+    /* margin: 30px 20px; */
+    /* background-color: #f8f9fa; */
 }
 
 .order-exam-name {

@@ -20,6 +20,7 @@ from django.utils.encoding import force_str
 from django.contrib.auth.forms import PasswordChangeForm
 from django.http import JsonResponse
 import datetime
+import re
 
 import urllib.parse
 import json
@@ -33,6 +34,7 @@ def homepage(request):
 
 
 def register(request):
+    EMAIL_REGEX = re.compile(r"(?:[a-z0-9!#$%&'"+r"*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'"+r'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])')
     form = StudentForm()
     if request.user.is_authenticated:
         return redirect('/student/session')
@@ -53,7 +55,7 @@ def register(request):
 
         # Register user
         form = StudentForm(request.POST)
-        if (form.is_valid()):
+        if (form.is_valid() and EMAIL_REGEX.match(email)):
             form_status =  form.save()
             print(form_status)
             student_record = Student.objects.get(email=email)
@@ -61,13 +63,14 @@ def register(request):
                 force_bytes(student_record.id))
             activation_token = account_activation_token.make_token(
                 student_record)
-            email_activation_token(student_record.first_name, email, student_id_base64, activation_token)
-
-            # to do: mail confirmation message
-
-            message = {'status':'success','message':f'Please activate your account by clicking in activation link sent to {email}'}
-            context = {'message':message}
-            return render(request, 'register.html', context=context)
+            if (email_activation_token(student_record.first_name, email, student_id_base64, activation_token)):
+                message = {'status':'success','message':f'Please activate your account by clicking in activation link sent to {email}'}
+                context = {'message':message}
+                return render(request, 'register.html', context=context)
+            else:
+                message = {'status':'failure','message':'Please check the information entered and try again'}
+                context = {'form': form, 'message':message}
+                return render(request, 'register.html', context=context)
         
         # Form is not valid
         else:
@@ -75,7 +78,6 @@ def register(request):
             context = {'form': form, 'message':message}
             return render(request, 'register.html', context=context)
 
-        return render(request, 'register.html')
 
 
 def help(request):
@@ -83,6 +85,7 @@ def help(request):
 
 
 def sign_in(request):
+    context = {}
     if request.user.is_authenticated:
         return redirect('student/session')
 
@@ -100,7 +103,7 @@ def sign_in(request):
         else:
             messages.info(request, 'Username OR password is incorrect')
 
-    return render(request, 'login.html')
+    return render(request, 'login.html', context=context)
 
 
 @login_required(login_url='/login')
@@ -346,49 +349,29 @@ def sign_out(request):
 # Returns the forgot_password.html
 
 def change_password(request):
-    if request.user.is_authenticated and request.method == 'GET':
-        # load change password form
-        form = PasswordChangeForm(user=request.user)
-        context = {'form': form}
-        return render(request, 'change_password.html', context=context)
+    if request.user.is_authenticated:
+        return redirect('/student/settings#change-password')
 
-    elif request.user.is_authenticated and request.method == 'POST':
-        form = PasswordChangeForm(user=request.user, data=request.POST)
-        if form.is_valid():
-            form.save()
-            update_session_auth_hash(request, form.user)
-            # to-do: show message indicating password was changed successfully
-            return redirect('/student/session')
-        else:
-            print('your form is not valid')
-            # to-do: show message indicating form wasn't valid
-            return redirect('/change_password')
+    else:
+        if request.method == 'GET':
+            return render(request, 'change_password.html')
 
-    elif request.user.is_authenticated == False and request.method == 'GET':
-        context = {'message': 'Enter your email address below to reset your password:',
-                   'form': ChangeEmailForm()}
-        return render(request, 'change_password.html', context=context)
+        elif request.method == 'POST':
+            student_record = Student.objects.filter(
+                email=request.POST.get('email'))
+            if len(student_record) > 0:
+                student_record = student_record[0]
+                student_id_base64 = urlsafe_base64_encode(
+                    force_bytes(student_record.id))
+                student_token = password_reset_token.make_token(student_record)
+                email_password_reset_link(
+                    student_record.first_name, student_record.email, student_id_base64, student_token)
+            else:
+                print(f'student with email {request.POST.get("email")} not found')
+            message = {'status':'success', 'message':'A password reset link will be sent to the email address entered if it exits in our database'}
+            context = {'message': message}
 
-    elif request.user.is_authenticated == False and request.method == 'POST':
-        student_record = Student.objects.filter(
-            email=request.POST.get('email'))
-        if len(student_record) > 0:
-            student_record = student_record[0]
-            student_id_base64 = urlsafe_base64_encode(
-                force_bytes(student_record.id))
-            student_token = password_reset_token.make_token(student_record)
-            email_password_reset_link(
-                student_record.email, student_id_base64, student_token)
-        else:
-            print(f'student with email {request.POST.get("email")} not found')
-
-        context = {
-            'message': 'You will receive a password reset link if your email exists in our db'}
-
-        # to-do: message to let the customer know the email has been sent and to check his inbox
-        #        redirect to login in 15 seconds and show timer
-
-        return render(request, 'change_password.html', context=context)
+            return render(request, 'change_password.html', context=context)
 
     return render(request, 'change_password.html')
 
@@ -411,7 +394,8 @@ def set_password(request, uidb64, token):
         form = SetStudentPassword(user=student_record, data=request.POST)
         if form.is_valid():
             form.save()
-            authenticate(student_record.email,request.POST.get('password1'))
+            authenticate(email=student_record.email,password=request.POST.get('password1'))
+            login(request, student_record)
             # to-do: show message indicating password was changed successfully
             return redirect('/student/session')
         else:
@@ -439,10 +423,10 @@ def activate_account(request, uidb64, token):
             if account_activation_token.check_token(student_record[0], token):
                 student_record[0].is_active = True
                 student_record[0].save()
-                print('correct link - account activated')
-                return redirect('login')
+                response = '<div style="font-family:sans-serif">Account successfully activated. <a href="/login">Log in</a></div>'
+                return HttpResponse(response)
             else:
-                print('unable to activate account');
+                print('unable to activate account')
 
     else:
         print('user does not exist - token link incorrect')

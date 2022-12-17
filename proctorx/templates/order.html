@@ -7,6 +7,7 @@
 {% block content %}
 <h3>My Orders</h3>
 <div class="order-container">
+    {% if orders %}
     {% for order in orders %}
     <div class="order">
         <ul class="order-heading">
@@ -30,6 +31,15 @@
 
     </div>
     {% endfor %}
+    
+    {% else %}
+    <div class="order fs-5 orders-empty">
+        No orders to display
+    <!-- <div class="orders-empty "> -->
+        
+    <!-- </div> -->
+    </div>
+    {% endif %}
 
 </div>
 

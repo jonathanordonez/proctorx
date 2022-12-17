@@ -41,7 +41,7 @@ def obtain_exam_schedules(date_input, time_input):
 
     return suggestions
 
-def send_email(email_id, email_message, **kwargs):
+def send_email(name, email_id, email_message, **kwargs):
     message = Mail(
     from_email = 'proctorsx@gmail.com',
     to_emails = 'proctorsx@gmail.com',
@@ -58,15 +58,15 @@ def send_email(email_id, email_message, **kwargs):
     except Exception as e:
         print(e.message)
     
-def email_password_reset_link(email_id, student_base_64, student_token):
+def email_password_reset_link(name, email_id, student_base_64, student_token):
     message = Mail(
     from_email = 'proctorsx@gmail.com',
     to_emails = email_id,
-    subject = 'Activate your account',
-    plain_text_content = 'this is the plain text contenttt',
-    html_content = '<h1>Hello Proctor<h1>'
-                    '<p>Use the following <a href=http://127.0.0.1:8000/set_password/'+ str(student_base_64) + '/' + str(student_token) + '>link</a> to activate your account<p>'
-                    '<p>Use the following url if the link fails: http://127.0.0.1:8000/set_password/' + str(student_base_64) + '/' + str(student_token)
+    subject = 'Password reset link',
+    plain_text_content = 'Password reset link',
+    html_content = f'<h1>Hello {name} <h1>'
+                    '<p>Use the following <a href=http://127.0.0.1:8000/set_password/'+ str(student_base_64) + '/' + str(student_token) + '>link</a> to reset your password<p>'
+                    '<p>Or, copy and paste the following url into your browser: http://127.0.0.1:8000/set_password/' + str(student_base_64) + '/' + str(student_token)
               )
     try: 
         sg = SendGridAPIClient(os.environ['SENDGRID_API_KEY'])
@@ -82,7 +82,7 @@ def email_activation_token(name, email_id, student_base_64, student_token):
     from_email = 'proctorsx@gmail.com',
     to_emails = email_id,
     subject = 'Activate your account',
-    plain_text_content = 'this is the plain text contenttt',
+    plain_text_content = 'Activate your account',
     html_content = f'<h1>Hello {name} <h1>'
                     '<p>Use the following <a href=http://127.0.0.1:8000/activate_account/'+ str(student_base_64) + '/' + str(student_token) + '>link</a> to activate your account<p>'
                     '<p>Or, copy and paste the following url into your browser: http://127.0.0.1:8000/activate_account/' + str(student_base_64) + '/' + str(student_token)
@@ -93,8 +93,10 @@ def email_activation_token(name, email_id, student_base_64, student_token):
         print(response.status_code)
         print(response.body)
         print(response.headers)
+        return True
     except Exception as e:
-        print(e.message)
+        print("Error sending email to user")
+        return False
 
 def query_params_to_dict(values):
     list = values.split('&')
