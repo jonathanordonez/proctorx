@@ -77,8 +77,12 @@ WSGI_APPLICATION = 'proj1_proctorx.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'proctorx',
+        'USER': 'postgres',
+        'PASSWORD': 'Password00',
+        'HOST': 'database-proctorx.cwdbxobana3o.us-east-1.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
