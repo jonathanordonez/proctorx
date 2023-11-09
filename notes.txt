@@ -1,4 +1,0 @@
-Student.objects.create(first_name = 'Jonathan', last_name = 'Oliver', email_address = 'abc@hotmail.com', country = 'Mexico', city = 'Gudalajara', state = 'Jalisco', time_zone = 'UTC -6', postal_code = 123456, phone_number = 4621234567, street_address = 'Dirección')
-
-a) Create a new auth model
-b) Add required fields to existing auth model
