@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-8(9*_n070vsoapd*f$*=4ge2wn3&eb38gr%j3t!(#n$&ch8=9h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -77,12 +77,8 @@ WSGI_APPLICATION = 'proj1_proctorx.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'proctorx',
-        'USER': 'postgres',
-        'PASSWORD': 'Password00',
-        'HOST': 'database-proctorx.cwdbxobana3o.us-east-1.rds.amazonaws.com',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
