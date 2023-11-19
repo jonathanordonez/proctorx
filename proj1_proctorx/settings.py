@@ -56,12 +56,15 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_WHITELIST = [
     config('DJANGO_SERVER'),
+    config('REACT_SERVER'),
 ]
 
 CORS_ALLOWED_ORIGINS = [
     config('REACT_SERVER'),
     config('DJANGO_SERVER'),
 ]
+
+CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
     config('REACT_SERVER'),

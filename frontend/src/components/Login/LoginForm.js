@@ -31,6 +31,7 @@ export default function LoginForm() {
       <input className="form-control fs-5" type="submit" value="Login" />
     </form>
   );
+
   function handleSubmit(event) {
     event.preventDefault();
     signIn(email, password);

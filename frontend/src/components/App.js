@@ -1,10 +1,16 @@
 import React from "react";
 import Login from "./Login/Login";
-import Homepage from "./Homepage/Homepage";
-import { useState } from "react";
-
+import { Route, Routes } from "react-router-dom";
+import Register from "./Register/Register";
+import ChangePassword from "./ChangePassword/ChangePassword";
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  return isLoggedIn ? <Homepage /> : <Login />;
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/change_password" element={<ChangePassword />} />
+      </Routes>
+    </>
+  );
 }

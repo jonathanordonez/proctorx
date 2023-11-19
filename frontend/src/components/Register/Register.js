@@ -1,11 +1,12 @@
 import React from "react";
-import "../../css/styles-landing.css";
+import RegisterForm from "./RegisterForm";
 import proctorXlogo from "../../img/proctorX.svg";
-import LoginForm from "./LoginForm";
-import Register from "../Register/Register";
-import { BrowserRouter as Routes, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Toast from "../Toast/Toast";
 
-export default function login() {
+export default function Register() {
+  // const [isToastVisible, setIsToastVisible] = useState(false);
+
   return (
     <div className="main-wrapper">
       <main>
@@ -16,23 +17,26 @@ export default function login() {
             src={proctorXlogo}
           ></img>
         </div>
+
         <div className="form-container">
-          <h2>Sign In</h2>
-          <LoginForm />
+          <Toast />
+          <h2>Register</h2>
+          <RegisterForm />
           <hr />
           <div className="form-footer">
             <div>
-              <Link className="fs-5" to="/register">
-                Register
+              <Link className="fs-5" to="/">
+                Back to Sign In
               </Link>
             </div>
             <div>
-              <Link className="fs-5" to="/change_password">
+              <Link className="fs-5" href="/change_password">
                 Forgot Password?
               </Link>
             </div>
           </div>
         </div>
+
         <div className="login-footer">
           <h5>@2022 ProctorX, Inc.</h5>
         </div>
