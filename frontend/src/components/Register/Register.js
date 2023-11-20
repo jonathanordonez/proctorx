@@ -3,10 +3,9 @@ import RegisterForm from "./RegisterForm";
 import proctorXlogo from "../../img/proctorX.svg";
 import { Link } from "react-router-dom";
 import Toast from "../Toast/Toast";
+import "../../css/styles-landing.css";
 
 export default function Register() {
-  // const [isToastVisible, setIsToastVisible] = useState(false);
-
   return (
     <div className="main-wrapper">
       <main>
@@ -26,7 +25,7 @@ export default function Register() {
           <div className="form-footer">
             <div>
               <Link className="fs-5" to="/">
-                Back to Sign In
+                Sign In
               </Link>
             </div>
             <div>

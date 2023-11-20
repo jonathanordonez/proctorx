@@ -17,16 +17,18 @@ export const fetchData = async (url, options = {}) => {
   }
 };
 
-export const signIn = async (email, password) => {
+export const signIn = async (email, password, csrfToken) => {
   const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/sign_in`;
   const requestOptions = {
     method: "POST",
+    credentials: "include",
     headers: {
-      "Content-Type": "application/json",
+      "X-CSRFToken": csrfToken,
     },
     body: JSON.stringify({ email: email, password: password }),
   };
-  fetchData(apiUrl, requestOptions);
+  const response = await fetchData(apiUrl, requestOptions);
+  return response;
 };
 
 export const registerNewStudent = async (
@@ -96,4 +98,10 @@ export const showToast = (status, message) => {
   toastElement.className = `message-container message-${status}`;
   const toastText = document.getElementsByClassName("message-text")[0];
   toastText.textContent = message;
+  if (status === "success") {
+    const signInLink = document.createElement("a");
+    signInLink.textContent = "Sign in";
+    signInLink.href = "/";
+    toastText.appendChild(signInLink);
+  }
 };

@@ -20,15 +20,20 @@ import json
 import re
 
 def sign_in(request):
-    email = request.POST.get('email')
-    password = request.POST.get('password')
+    data = json.loads((request.body.decode('ascii')))
+    print(data)
+    email = data['email']
+    password = data['password']
 
     user = authenticate(request, email=email, password=password)
-    print(user)
 
+    if(user):
+        print('user authenticated: ',user)
+        return JsonResponse({'status': 'success'})
 
-    return JsonResponse({'test': 'test'})
-
+    else:
+        return JsonResponse({'status': 'failure'})
+    
 
 def register(request):
     data = json.loads((request.body.decode('ascii')))
@@ -51,7 +56,10 @@ def register(request):
     form = StudentForm(data)
     if (form.is_valid()):
         try:
-            form.save()
+            user = form.save()
+            user.is_active = True
+            user.save()
+            print('this user: ', user)
             json_data = {"status":"successful","description":f"Student created: {email}"}
         except Exception as e:
             print(f"An error occurred while saving the form: {e}")

@@ -1,10 +1,12 @@
 import React from "react";
 import { useState } from "react";
 import { signIn } from "../../utils";
+import useCsrfToken from "../../Hooks/CSRFToken/useCsrfToken";
 
-export default function LoginForm() {
+export default function LoginForm({ setIsAuthenticated }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const csrfToken = useCsrfToken();
 
   return (
     <form onSubmit={handleSubmit}>
@@ -32,8 +34,10 @@ export default function LoginForm() {
     </form>
   );
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    signIn(email, password);
+    const signInFetch = await signIn(email, password, csrfToken);
+    console.log("signInFetch: ", signInFetch);
+    setIsAuthenticated(signInFetch.status);
   }
 }

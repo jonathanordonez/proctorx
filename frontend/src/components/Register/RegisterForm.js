@@ -64,6 +64,7 @@ export default function RegisterForm() {
       <input
         type="text"
         name="first_name"
+        value={firstName}
         className="form-control"
         maxLength="30"
         required
@@ -77,6 +78,7 @@ export default function RegisterForm() {
       <input
         type="text"
         name="last_name"
+        value={lastName}
         className="form-control"
         maxLength="30"
         required
@@ -90,6 +92,7 @@ export default function RegisterForm() {
       <input
         type="text"
         name="email"
+        value={email}
         className={`form-control ${
           !isEmailValid && !isEmailEmpty ? "is-invalid" : ""
         }`}
@@ -111,6 +114,7 @@ export default function RegisterForm() {
       <input
         type="password"
         name="password1"
+        value={password}
         autoComplete="new-password"
         className={`form-control ${
           !isPasswordValid && !isPasswordEmpty ? "is-invalid" : ""
@@ -135,6 +139,7 @@ export default function RegisterForm() {
       <input
         type="password"
         name="password2"
+        value={password2}
         autoComplete="new-password"
         className={`form-control ${
           !isPasswordsMatch && !isPasswordEmpty ? "is-invalid" : ""

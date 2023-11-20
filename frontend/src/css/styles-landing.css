@@ -32,6 +32,11 @@ body {
   color: white;
 }
 
+.message-text a {
+  color: white;
+  display: block;
+}
+
 .message-close {
   display: inline;
   background-color: inherit;
