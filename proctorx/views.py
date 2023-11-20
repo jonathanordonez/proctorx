@@ -19,6 +19,12 @@ import datetime
 import json
 import re
 
+def is_user_authenticated(request):
+    if request.user.is_authenticated:
+        return JsonResponse({'is_authenticated': True})
+    else:
+        return JsonResponse({'is_authenticated': False}) 
+
 def sign_in(request):
     data = json.loads((request.body.decode('ascii')))
     print(data)
@@ -29,11 +35,15 @@ def sign_in(request):
 
     if(user):
         print('user authenticated: ',user)
+        login(request, user)
         return JsonResponse({'status': 'success'})
 
     else:
         return JsonResponse({'status': 'failure'})
     
+def sign_out(request):
+    logout(request)
+    return HttpResponse(status=200)
 
 def register(request):
     data = json.loads((request.body.decode('ascii')))

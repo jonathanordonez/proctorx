@@ -1,20 +1,37 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "../../css/styles-landing.css";
 import proctorXlogo from "../../img/proctorX.svg";
 import LoginForm from "./LoginForm";
 import { Link } from "react-router-dom";
 import Reservtions from "../Reservations/Reservtions";
+import { isUserAuthenticated } from "../../utils";
+import Loading from "../Loading/Loading";
+import Toast from "../Toast/Toast";
 
 export default function Login() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticatedInBackend, setIsAuthenticatedInBackend] = useState("");
+  const [isBackendAuthenticationFinished, setIsBackendAuthenticationFinished] =
+    useState(false);
 
-  console.log("this isAuthenticate: ", isAuthenticated);
+  useEffect(() => {
+    (async () => {
+      const response = await isUserAuthenticated();
+      setIsAuthenticatedInBackend(response.is_authenticated);
+      setIsBackendAuthenticationFinished(true);
+    })();
+  }, []);
 
   return (
     <>
-      {isAuthenticated ? (
-        <Reservtions />
+      {!isBackendAuthenticationFinished ? (
+        <Loading />
+      ) : isAuthenticated || isAuthenticatedInBackend ? (
+        <Reservtions
+          setIsAuthenticated={setIsAuthenticated}
+          setIsAuthenticatedInBackend={setIsAuthenticatedInBackend}
+        />
       ) : (
         <div className="main-wrapper">
           <main>
@@ -26,6 +43,7 @@ export default function Login() {
               ></img>
             </div>
             <div className="form-container">
+              <Toast />
               <h2>Sign In</h2>
               <LoginForm setIsAuthenticated={setIsAuthenticated} />
               <hr />

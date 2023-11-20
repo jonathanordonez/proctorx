@@ -17,6 +17,15 @@ export const fetchData = async (url, options = {}) => {
   }
 };
 
+export const isUserAuthenticated = async () => {
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/is_user_authenticated`;
+  const requestOptions = {
+    credentials: "include",
+  };
+  const response = await fetchData(apiUrl, requestOptions);
+  return response;
+};
+
 export const signIn = async (email, password, csrfToken) => {
   const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/sign_in`;
   const requestOptions = {
@@ -29,6 +38,16 @@ export const signIn = async (email, password, csrfToken) => {
   };
   const response = await fetchData(apiUrl, requestOptions);
   return response;
+};
+
+export const signOut = async () => {
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/sign_out`;
+  const requestOptions = {
+    credentials: "include",
+  };
+  const response = await fetch(apiUrl, requestOptions);
+
+  return response.ok ? "success" : "failure";
 };
 
 export const registerNewStudent = async (

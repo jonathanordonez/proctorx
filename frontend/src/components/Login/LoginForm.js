@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { signIn } from "../../utils";
 import useCsrfToken from "../../Hooks/CSRFToken/useCsrfToken";
+import { showToast } from "../../utils";
 
 export default function LoginForm({ setIsAuthenticated }) {
   const [email, setEmail] = useState("");
@@ -37,7 +38,14 @@ export default function LoginForm({ setIsAuthenticated }) {
   async function handleSubmit(event) {
     event.preventDefault();
     const signInFetch = await signIn(email, password, csrfToken);
-    console.log("signInFetch: ", signInFetch);
-    setIsAuthenticated(signInFetch.status);
+    if (signInFetch.status === "success") {
+      setIsAuthenticated(true);
+    } else {
+      showToast(
+        "failure",
+        "Please check your username and password and try again. If you've forgotten your password, you can reset it <a href='/reset_password'>here<a>."
+      );
+    }
+    // setIsAuthenticated(signInFetch.status === "success" ? true : false);
   }
 }
