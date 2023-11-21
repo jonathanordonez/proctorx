@@ -3,6 +3,7 @@ import proctorXlogo from "../../img/proctorX-white.svg";
 import { useContext } from "react";
 import { UserDetailsContext } from "../Login/Login";
 import { signOut } from "../../utils";
+import { Link } from "react-router-dom";
 
 export default function Header({
   setIsAuthenticated,
@@ -11,6 +12,8 @@ export default function Header({
   const userDetails = useContext(UserDetailsContext);
   const [isSettingsDropDownMenuVisible, setIsSettingsDropDownMenuVisible] =
     useState(false);
+
+  console.log("cONTEXT: ", userDetails);
 
   return (
     <header>
@@ -27,9 +30,9 @@ export default function Header({
 
         {isSettingsDropDownMenuVisible && (
           <div className="user-settings-drop-down-menu">
-            <a className="dropdown-item" href="/student/settings">
+            <Link className="dropdown-item" to="/user_settings">
               Account Settings
-            </a>
+            </Link>
             <a
               className="dropdown-item"
               href="/student/settings#change-password"

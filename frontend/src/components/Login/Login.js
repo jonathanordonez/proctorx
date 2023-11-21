@@ -38,14 +38,10 @@ export default function Login() {
           />
         </UserDetailsContext.Provider>
       ) : (
-        <div className="main-wrapper">
+        <div className="main-wrapper-landing">
           <main>
-            <div className="logo">
-              <img
-                className="brand-img"
-                alt="ProctorX Logo"
-                src={proctorXlogo}
-              ></img>
+            <div className="logo-landing">
+              <img alt="ProctorX Logo" src={proctorXlogo}></img>
             </div>
             <div className="form-container">
               <Toast />

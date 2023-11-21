@@ -2,7 +2,7 @@ body {
   background-color: #f8f9fa;
 }
 
-.main-wrapper {
+.main-wrapper-landing {
   background-color: #f8f9fa;
   display: flex;
   align-items: center;
@@ -63,7 +63,7 @@ body {
   background-color: #ff991b;
 }
 
-.logo {
+.logo-landing {
   margin-bottom: 30px;
 }
 

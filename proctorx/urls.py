@@ -5,9 +5,8 @@ urlpatterns = [
 path('is_user_authenticated', views.is_user_authenticated),
 path('sign_in', views.sign_in),
 path('sign_out', views.sign_out),
-
 path('register', views.register),
 path('get_csrf_token', views.get_csrf_token),
-
+path('get_json', views.get_json),
 ]
 
