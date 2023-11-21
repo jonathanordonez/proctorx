@@ -4,7 +4,7 @@ import proctorXlogo from "../../img/proctorX.svg";
 import LoginForm from "./LoginForm";
 import { Link } from "react-router-dom";
 import Homepage from "../Homepage/Homepage";
-import { isUserAuthenticated } from "../../utils";
+import { isUserAuthenticatedInBackend } from "../../utils";
 import Loading from "../Loading/Loading";
 import Toast from "../Toast/Toast";
 
@@ -19,12 +19,12 @@ export default function Login() {
 
   useEffect(() => {
     (async () => {
-      const response = await isUserAuthenticated();
+      const response = await isUserAuthenticatedInBackend();
       setIsAuthenticatedInBackend(response.is_authenticated);
       setUserDetails(response.is_authenticated ? response : {});
       setIsBackendAuthenticationFinished(true);
     })();
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <>
