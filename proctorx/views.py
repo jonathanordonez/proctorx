@@ -21,7 +21,11 @@ import re
 
 def is_user_authenticated(request):
     if request.user.is_authenticated:
-        return JsonResponse({'is_authenticated': True})
+
+        return JsonResponse({'is_authenticated': True,'first_name':request.user.first_name, 'last_name': request.user.last_name, 
+                             'email':request.user.email, 'country':request.user.country, 'city':request.user.city,
+                             'state':request.user.state,'time_zone':request.user.time_zone,'postal_code':request.user.postal_code,
+                             'phone_number':request.user.phone_number,'street_address':request.user.street_address})
     else:
         return JsonResponse({'is_authenticated': False}) 
 

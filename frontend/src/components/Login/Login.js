@@ -1,24 +1,27 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState, createContext } from "react";
 import "../../css/styles-landing.css";
 import proctorXlogo from "../../img/proctorX.svg";
 import LoginForm from "./LoginForm";
 import { Link } from "react-router-dom";
-import Reservtions from "../Reservations/Reservtions";
+import Homepage from "../Homepage/Homepage";
 import { isUserAuthenticated } from "../../utils";
 import Loading from "../Loading/Loading";
 import Toast from "../Toast/Toast";
+
+export const UserDetailsContext = createContext({});
 
 export default function Login() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthenticatedInBackend, setIsAuthenticatedInBackend] = useState("");
   const [isBackendAuthenticationFinished, setIsBackendAuthenticationFinished] =
     useState(false);
+  const [userDetails, setUserDetails] = useState({});
 
   useEffect(() => {
     (async () => {
       const response = await isUserAuthenticated();
       setIsAuthenticatedInBackend(response.is_authenticated);
+      setUserDetails(response.is_authenticated ? response : {});
       setIsBackendAuthenticationFinished(true);
     })();
   }, []);
@@ -28,10 +31,12 @@ export default function Login() {
       {!isBackendAuthenticationFinished ? (
         <Loading />
       ) : isAuthenticated || isAuthenticatedInBackend ? (
-        <Reservtions
-          setIsAuthenticated={setIsAuthenticated}
-          setIsAuthenticatedInBackend={setIsAuthenticatedInBackend}
-        />
+        <UserDetailsContext.Provider value={userDetails}>
+          <Homepage
+            setIsAuthenticated={setIsAuthenticated}
+            setIsAuthenticatedInBackend={setIsAuthenticatedInBackend}
+          />
+        </UserDetailsContext.Provider>
       ) : (
         <div className="main-wrapper">
           <main>

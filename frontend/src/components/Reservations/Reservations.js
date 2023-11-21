@@ -1,7 +1,8 @@
 import React from "react";
 import { signOut } from "../../utils";
+import "../../css/styles.css";
 
-export default function Reservtions({
+export default function Reservations({
   setIsAuthenticated,
   setIsAuthenticatedInBackend,
 }) {
