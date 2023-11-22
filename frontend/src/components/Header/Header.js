@@ -9,6 +9,7 @@ import Toast from "../Toast/Toast";
 export default function Header({
   setIsAuthenticated,
   setIsAuthenticatedInBackend,
+  setIsScrollToChangePassword,
 }) {
   const userDetails = useContext(UserDetailsContext);
   const [isSettingsDropDownMenuVisible, setIsSettingsDropDownMenuVisible] =
@@ -31,15 +32,20 @@ export default function Header({
 
         {isSettingsDropDownMenuVisible && (
           <div className="user-settings-drop-down-menu">
-            <Link className="dropdown-item" to="/user_settings">
+            <Link
+              className="dropdown-item"
+              to="/user_settings"
+              onClick={showSettings}
+            >
               Account Settings
             </Link>
-            <a
+            <Link
               className="dropdown-item"
-              href="/student/settings#change-password"
+              to="/user_settings"
+              onClick={handleScrollToChangePassword}
             >
               Change Password
-            </a>
+            </Link>
 
             <div className="dropdown-divider"></div>
             <a
@@ -61,6 +67,16 @@ export default function Header({
       isSettingsDropDownMenuVisible ? false : true
     );
   }
+
+  function handleScrollToChangePassword() {
+    showSettings();
+    const changePasswordElement = document.getElementById("change-password");
+    if (changePasswordElement) {
+      changePasswordElement.scrollIntoView({ behavior: "smooth" });
+    }
+    setIsScrollToChangePassword(true);
+  }
+
   async function logOut() {
     const fetchStatus = await signOut();
     if (fetchStatus === "success") {

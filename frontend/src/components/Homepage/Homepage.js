@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../Header/Header";
 import "../../css/styles.css";
 import Footer from "../Footer/Footer";
@@ -10,18 +10,28 @@ export default function Homepage({
   setIsAuthenticated,
   setIsAuthenticatedInBackend,
 }) {
+  const [isScrollToChangePassword, setIsScrollToChangePassword] =
+    useState(false);
   return (
     <>
       <Header
         setIsAuthenticated={setIsAuthenticated}
         setIsAuthenticatedInBackend={setIsAuthenticatedInBackend}
+        setIsScrollToChangePassword={setIsScrollToChangePassword}
       />
       <Menu />
       <div>
         <div className="main-wrapper">
           <main className="scale-down">
             <Routes>
-              <Route path="/user_settings" element={<UserSettings />} />
+              <Route
+                path="/user_settings"
+                element={
+                  <UserSettings
+                    isScrollToChangePassword={isScrollToChangePassword}
+                  />
+                }
+              />
             </Routes>
           </main>
         </div>
