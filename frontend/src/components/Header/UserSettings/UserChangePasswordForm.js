@@ -9,7 +9,7 @@ export default function UserChangePasswordForm() {
         <input
           type="password"
           name="old_password"
-          autocomplete="old-password"
+          autoComplete="old-password"
           className="form-control"
           required=""
           id="id_old_password"
@@ -18,7 +18,7 @@ export default function UserChangePasswordForm() {
         <input
           type="password"
           name="new_password1"
-          autocomplete="new-password"
+          autoComplete="new-password"
           className="form-control"
           required=""
           id="id_new_password1"
@@ -28,7 +28,7 @@ export default function UserChangePasswordForm() {
         <input
           type="password"
           name="new_password2"
-          autocomplete="new-password"
+          autoComplete="new-password"
           className="form-control"
           required=""
           id="id_new_password2"

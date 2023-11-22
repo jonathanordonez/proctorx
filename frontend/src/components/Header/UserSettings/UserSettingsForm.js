@@ -16,7 +16,6 @@ export default function UserSettingsForm() {
   const [country, setCountry] = useState(userDetails.country);
   const [postalCode, setPostalCode] = useState(userDetails.postal_code);
 
-  console.log("this det: ", userDetails);
   return (
     <>
       <form className="settings-form" onSubmit={handleForm}>
@@ -24,7 +23,7 @@ export default function UserSettingsForm() {
         <input
           type="text"
           name="first_name"
-          value={firstName}
+          value={firstName ? firstName : ""}
           className="form-control"
           maxLength="30"
           required=""
@@ -36,7 +35,7 @@ export default function UserSettingsForm() {
         <input
           type="text"
           name="last_name"
-          value={lastName}
+          value={lastName ? lastName : ""}
           className="form-control"
           maxLength="30"
           required=""
@@ -48,7 +47,7 @@ export default function UserSettingsForm() {
         <input
           type="numeric"
           name="phone_number"
-          value={phoneNumber}
+          value={phoneNumber ? phoneNumber : ""}
           className="form-control"
           maxLength="20"
           required=""
@@ -60,7 +59,7 @@ export default function UserSettingsForm() {
         <input
           type="text"
           name="street_address"
-          value={streetAddress}
+          value={streetAddress ? streetAddress : ""}
           className="form-control"
           maxLength="50"
           required=""
@@ -72,7 +71,7 @@ export default function UserSettingsForm() {
         <input
           type="text"
           name="city"
-          value={city}
+          value={city ? city : ""}
           className="form-control"
           maxLength="30"
           required=""
@@ -84,7 +83,7 @@ export default function UserSettingsForm() {
         <input
           type="text"
           name="state"
-          value={state}
+          value={state ? state : ""}
           className="form-control"
           maxLength="30"
           required=""
@@ -96,7 +95,7 @@ export default function UserSettingsForm() {
         <input
           type="text"
           name="country"
-          value={country}
+          value={country ? country : ""}
           className="form-control"
           maxLength="30"
           required=""
@@ -108,7 +107,7 @@ export default function UserSettingsForm() {
         <input
           type="text"
           name="postal_code"
-          value={postalCode}
+          value={postalCode ? postalCode : ""}
           className="form-control"
           maxLength="10"
           required=""
@@ -125,16 +124,23 @@ export default function UserSettingsForm() {
       </form>
     </>
   );
-  function handleForm() {
-    changeUserDetails({
-      firstName: firstName,
-      lastName: lastName,
-      phoneNumber: phoneNumber,
-      streetAddress: streetAddress,
+  async function handleForm(e) {
+    e.preventDefault();
+    const response = await changeUserDetails({
+      first_name: firstName,
+      last_name: lastName,
+      phone_number: phoneNumber,
+      street_address: streetAddress,
       city: city,
       state: state,
       country: country,
-      postalCode: postalCode,
+      postal_code: postalCode,
     });
+    if (response.status === "success") {
+      console.log("Form successful ");
+      // show toast
+    } else {
+      // show failed toast
+    }
   }
 }

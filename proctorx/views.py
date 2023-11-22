@@ -96,6 +96,34 @@ def get_csrf_token(request):
     response["Access-Control-Allow-Credentials"] = 'true'
     return response
 
+def set_user_details(request):
+    data = json.loads((request.body.decode('ascii')))
+    if request.user.is_authenticated:
+        print('data: ', data)
+        try:
+            student = Student.objects.get(email=request.user.email)
+            student.first_name = data['first_name']
+            student.last_name = data['last_name']
+            student.phone_number = data['phone_number']
+            student.street_address = data['street_address']
+            student.city = data['city']
+            student.state = data['state']
+            student.country = data['country']
+            student.postal_code = data['postal_code']
+            student.save()
+            response = JsonResponse({'status':'success'})
+        except Exception as e:
+            response = JsonResponse({'status':'failure', 'description': 'Error occurred when updating Student information'})
+    else:
+        response = JsonResponse({'status':'failure', 'description': 'User is not authenticated'})
+    
+    return response
+
+
+
+
+
+
 def get_json(request):
     return JsonResponse ({
     "state": True,

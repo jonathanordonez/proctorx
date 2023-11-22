@@ -125,6 +125,24 @@ export const showToast = (status, message) => {
   }
 };
 
-export const changeUserDetails = (userDetails) => {
+export const changeUserDetails = async (userDetails) => {
   const csrfToken = getCookie("csrftoken");
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/set_user_details`;
+  const requestOptions = {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "X-CSRFToken": csrfToken,
+    },
+    body: JSON.stringify(userDetails),
+  };
+  try {
+    return await fetchData(apiUrl, requestOptions);
+  } catch (error) {
+    console.error(
+      "The following error occurred in changing user details: ",
+      error
+    );
+    return { status: "failure", description: error };
+  }
 };
