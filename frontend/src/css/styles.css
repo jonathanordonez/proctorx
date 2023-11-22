@@ -706,13 +706,13 @@ label[for="year"] {
   padding-top: 40px;
 }
 
-.settings-form input[type="submit"],
+/* .settings-form input[type="submit"],
 .change-password-form input[type="submit"],
 .cc-submit {
   background-color: #42cd87;
   color: white;
   border-color: #42cd87;
-}
+} */
 
 @media (max-width: 870px) {
   h3 {

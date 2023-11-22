@@ -111,17 +111,35 @@ export const getCookie = (cookieName) => {
   return null;
 };
 
-export const showToast = (status, message) => {
+export const showToast = (status, message, seconds) => {
   const toastElement = document.getElementsByClassName("message-container")[0];
   toastElement.hidden = false;
   toastElement.className = `message-container message-${status}`;
   const toastText = document.getElementsByClassName("message-text")[0];
-  toastText.textContent = message;
-  if (status === "success") {
-    const signInLink = document.createElement("a");
-    signInLink.textContent = "Sign in";
-    signInLink.href = "/";
-    toastText.appendChild(signInLink);
+  if (!seconds) {
+    toastText.textContent = message;
+  } else if (seconds) {
+    toastText.textContent = `${message} (${seconds}) `;
+    if (toastElement.querySelectorAll("button").length === 0) {
+      // Add the button element only if there is no other button like it already added as children
+      const button = document.createElement("button");
+      button.className = "message-close";
+      button.textContent = "x";
+      button.onclick = () => {
+        toastElement.hidden = true;
+      };
+      toastElement.appendChild(button);
+    }
+
+    let secondsLeft = seconds;
+    const interval = setInterval(() => {
+      secondsLeft--;
+      toastText.textContent = `${message} (${secondsLeft}) `;
+      if (secondsLeft <= 0) {
+        clearInterval(interval);
+        toastElement.hidden = true;
+      }
+    }, 1000);
   }
 };
 

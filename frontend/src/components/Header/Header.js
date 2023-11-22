@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { UserDetailsContext } from "../Login/Login";
 import { signOut } from "../../utils";
 import { Link } from "react-router-dom";
+import Toast from "../Toast/Toast";
 
 export default function Header({
   setIsAuthenticated,
@@ -23,7 +24,7 @@ export default function Header({
             <img className="brand-img" alt="ProctorX Logo" src={proctorXlogo} />
           </a>
         </div>
-
+        <Toast />
         <div className="user-settings fs-5" onClick={showSettings}>
           {userDetails.first_name}
         </div>

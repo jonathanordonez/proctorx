@@ -2,6 +2,7 @@ import React from "react";
 import { UserDetailsContext } from "../../Login/Login";
 import { useContext, useState } from "react";
 import { changeUserDetails } from "../../../utils";
+import { showToast } from "../../../utils";
 
 export default function UserSettingsForm() {
   const userDetails = useContext(UserDetailsContext);
@@ -15,6 +16,7 @@ export default function UserSettingsForm() {
   const [state, setState] = useState(userDetails.state);
   const [country, setCountry] = useState(userDetails.country);
   const [postalCode, setPostalCode] = useState(userDetails.postal_code);
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
 
   return (
     <>
@@ -120,6 +122,7 @@ export default function UserSettingsForm() {
           value="Submit"
           name="Settings"
           className="form-control fs-5"
+          disabled={isSubmitDisabled}
         />
       </form>
     </>
@@ -137,7 +140,14 @@ export default function UserSettingsForm() {
       postal_code: postalCode,
     });
     if (response.status === "success") {
-      console.log("Form successful ");
+      showToast("success", "User settings updated", 5);
+
+      // Disable submit button for 5 seconds while Toast disappears
+      setIsSubmitDisabled(true);
+      setTimeout(() => {
+        setIsSubmitDisabled(false);
+      }, 5000);
+
       // show toast
     } else {
       // show failed toast
