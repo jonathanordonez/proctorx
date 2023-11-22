@@ -1,6 +1,6 @@
 import React from "react";
 import { UserDetailsContext } from "../../Login/Login";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { changeUserDetails } from "../../../utils";
 import { showToast } from "../../../utils";
 
@@ -17,6 +17,13 @@ export default function UserSettingsForm() {
   const [country, setCountry] = useState(userDetails.country);
   const [postalCode, setPostalCode] = useState(userDetails.postal_code);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
+
+  useEffect(() => {
+    if (!isSubmitDisabled) {
+      return;
+    }
+    window.scrollTo(0, 0);
+  }, [isSubmitDisabled]);
 
   return (
     <>
@@ -147,8 +154,6 @@ export default function UserSettingsForm() {
       setTimeout(() => {
         setIsSubmitDisabled(false);
       }, 5000);
-
-      // show toast
     } else {
       // show failed toast
     }
