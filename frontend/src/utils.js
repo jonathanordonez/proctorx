@@ -1,3 +1,5 @@
+import passwordValidator from "password-validator";
+
 export const fetchData = async (url, options = {}) => {
   try {
     const response = await fetch(url, options);
@@ -163,4 +165,17 @@ export const changeUserDetails = async (userDetails) => {
     );
     return { status: "failure", description: error };
   }
+};
+
+export const passwordSchemaRestrictions = () => {
+  const schema = new passwordValidator();
+  schema.is().min(8); // Minimum length 8
+  //Other options available:
+  //   .is().max(100)
+  //   .has().uppercase()
+  //   .has().lowercase()
+  //   .has().digits()
+  //   .has().symbols()
+  //   .has().not().spaces();
+  return schema;
 };
