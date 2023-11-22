@@ -124,3 +124,7 @@ export const showToast = (status, message) => {
     toastText.appendChild(signInLink);
   }
 };
+
+export const changeUserDetails = (userDetails) => {
+  const csrfToken = getCookie("csrftoken");
+};
