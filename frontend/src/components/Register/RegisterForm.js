@@ -1,60 +1,19 @@
-import React, { useState, useEffect, useMemo } from "react";
-import passwordValidator from "password-validator";
+import React, { useState } from "react";
 import { registerNewStudent } from "../../utils";
 import useCsrfToken from "../../Hooks/CSRFToken/useCsrfToken";
 import { showToast } from "../../utils";
+import usePasswordValidation from "../../Hooks/usePasswordValidation";
 
 export default function RegisterForm() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
-  const [isPasswordValid, setIsPasswordValid] = useState(false);
-  const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
-  const [isPasswordsMatch, setIsPasswordsMatch] = useState(false);
-  const [isEmailValid, setIsEmailValid] = useState(false);
-  const [isEmailEmpty, setIsEmailEmpty] = useState(true);
-  const [isRegisterDisabled, setIsRegisterDisabled] = useState(true);
+  const [isEmailValid, setIsEmailValid] = useState();
+  const [isEmailEmpty, setIsEmailEmpty] = useState();
+  const passwordDetails = usePasswordValidation(password1, password2);
   const csrfToken = useCsrfToken();
-
-  // Sets password restrictions
-  const passwordSchema = useMemo(() => {
-    const schema = new passwordValidator();
-    schema.is().min(8); // Minimum length 8
-    //Other options available:
-    //   .is().max(100)
-    //   .has().uppercase()
-    //   .has().lowercase()
-    //   .has().digits()
-    //   .has().symbols()
-    //   .has().not().spaces();
-
-    return schema;
-  }, []);
-
-  // Enables/disables the Register button
-  useEffect(() => {
-    firstName && lastName && isEmailValid && isPasswordValid && isPasswordsMatch
-      ? setIsRegisterDisabled(false)
-      : setIsRegisterDisabled(true);
-  }, [
-    firstName,
-    lastName,
-    email,
-    isPasswordValid,
-    isPasswordsMatch,
-    isEmailValid,
-  ]);
-
-  // Password validation
-  useEffect(() => {
-    setIsPasswordEmpty(!password ? true : false);
-    setIsPasswordValid(passwordSchema.validate(password));
-    password === password2
-      ? setIsPasswordsMatch(true)
-      : setIsPasswordsMatch(false);
-  }, [password, password2, passwordSchema, isPasswordValid]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -104,7 +63,7 @@ export default function RegisterForm() {
         autoComplete="email"
         style={{ marginBottom: isEmailValid || isEmailEmpty ? "20px" : "0px" }}
       />
-      {!isEmailValid && !isEmailEmpty && (
+      {!isEmailValid && email !== "" && (
         <div className="invalid-feedback">Invalid email format</div>
       )}
 
@@ -113,23 +72,24 @@ export default function RegisterForm() {
       </label>
       <input
         type="password"
-        name="password1"
-        value={password}
+        name="new_password1"
         autoComplete="new-password"
         className={`form-control ${
-          !isPasswordValid && !isPasswordEmpty ? "is-invalid" : ""
+          !passwordDetails.password1.isValid && password1 ? "is-invalid" : ""
         }`}
-        required
-        id="id_password1"
+        required=""
+        id="id_new_password1"
         aria-autocomplete="list"
-        onChange={(event) => setPassword(event.target.value)}
         style={{
-          marginBottom: isPasswordValid || isPasswordEmpty ? "" : "0px",
+          marginBottom:
+            passwordDetails.password1.isValid || !password1 ? "" : "0px",
         }}
+        value={password1}
+        onChange={(event) => setPassword1(event.target.value)}
       />
-      {!isPasswordValid && !isPasswordEmpty && (
-        <div className="invalid-feedback">
-          Password must contain at least 8 characters
+      {!passwordDetails.password1.isValid && (
+        <div className="invalid-feedback" style={{ marginBottom: "10px" }}>
+          {passwordDetails.password1.description}
         </div>
       )}
 
@@ -138,28 +98,35 @@ export default function RegisterForm() {
       </label>
       <input
         type="password"
-        name="password2"
-        value={password2}
+        name="new_password2"
         autoComplete="new-password"
         className={`form-control ${
-          !isPasswordsMatch && !isPasswordEmpty ? "is-invalid" : ""
+          !passwordDetails.password2.isValid && password2 ? "is-invalid" : ""
         }`}
-        required
-        id="id_password2"
-        onChange={(event) => setPassword2(event.target.value)}
+        required=""
+        id="id_new_password2"
         style={{
-          marginBottom: isPasswordsMatch || isPasswordEmpty ? "" : "0px",
+          marginBottom:
+            passwordDetails.password2.isValid || !password2 ? "" : "0px",
         }}
+        value={password2}
+        onChange={(event) => setPassword2(event.target.value)}
       />
-      {!isPasswordsMatch && (
-        <div className="invalid-feedback">Password doesn't match</div>
+      {passwordDetails.password2.isValid === false && (
+        <div className="invalid-feedback" style={{ marginBottom: "10px" }}>
+          {passwordDetails.password2.description}
+        </div>
       )}
 
       <input
         type="submit"
         className="form-control fs-5"
         value="Register"
-        disabled={isRegisterDisabled}
+        disabled={
+          passwordDetails.password1.isValid && passwordDetails.password2.isValid
+            ? false
+            : true
+        }
       />
     </form>
   );
@@ -173,7 +140,8 @@ export default function RegisterForm() {
   }
   async function handleSubmit(event) {
     event.preventDefault();
-    if (isRegisterDisabled) {
+    const submitButton = document.querySelector('input[type="submit"]');
+    if (submitButton.disabled) {
       return;
     }
 
@@ -182,7 +150,7 @@ export default function RegisterForm() {
         firstName,
         lastName,
         email,
-        password,
+        password1,
         password2,
         csrfToken
       );
@@ -196,7 +164,7 @@ export default function RegisterForm() {
     setFirstName("");
     setLastName("");
     setEmail("");
-    setPassword("");
+    setPassword1("");
     setPassword2("");
   }
 }
