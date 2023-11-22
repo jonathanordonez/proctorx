@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Toast from "../Toast/Toast";
 import "../../css/styles-landing.css";
 
-export default function Register() {
+export default function Register({ setComponentRendered }) {
   return (
     <div className="main-wrapper-landing">
       <main>
@@ -20,22 +20,25 @@ export default function Register() {
           <hr />
           <div className="form-footer">
             <div>
-              <Link className="fs-5" to="/">
+              <a className="fs-5" onClick={handleComponentRendered}>
                 Sign In
-              </Link>
+              </a>
             </div>
             <div>
-              <Link className="fs-5" href="/change_password">
+              <a className="fs-5" onClick={handleComponentRendered}>
                 Forgot Password?
-              </Link>
+              </a>
             </div>
           </div>
         </div>
 
         <div className="login-footer">
-          <h5>@2022 ProctorX, Inc.</h5>
+          <h5>@2022 Pro Inc.</h5>
         </div>
       </main>
     </div>
   );
+  function handleComponentRendered(e) {
+    setComponentRendered(e.target.textContent);
+  }
 }

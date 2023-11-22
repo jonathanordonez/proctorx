@@ -2,15 +2,16 @@ import React, { useEffect, useState, createContext } from "react";
 import "../../css/styles-landing.css";
 import proctorXlogo from "../../img/proctorX.svg";
 import LoginForm from "./LoginForm";
-import { Link } from "react-router-dom";
+import { Link, Routes, Route } from "react-router-dom";
 import Homepage from "../Homepage/Homepage";
 import { isUserAuthenticatedInBackend } from "../../utils";
 import Loading from "../Loading/Loading";
 import Toast from "../Toast/Toast";
+import UserSettings from "../Header/UserSettings/UserSettings";
 
 export const UserDetailsContext = createContext({});
 
-export default function Login() {
+export default function Login({ setComponentRendered }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthenticatedInBackend, setIsAuthenticatedInBackend] = useState("");
   const [isBackendAuthenticationFinished, setIsBackendAuthenticationFinished] =
@@ -50,14 +51,14 @@ export default function Login() {
               <hr />
               <div className="form-footer">
                 <div>
-                  <Link className="fs-5" to="/register">
+                  <a className="fs-5" onClick={handleComponentRendered}>
                     Register
-                  </Link>
+                  </a>
                 </div>
                 <div>
-                  <Link className="fs-5" to="/change_password">
+                  <a className="fs-5" onClick={handleComponentRendered}>
                     Forgot Password?
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>
@@ -69,4 +70,7 @@ export default function Login() {
       )}
     </>
   );
+  function handleComponentRendered(e) {
+    setComponentRendered(e.target.textContent);
+  }
 }
