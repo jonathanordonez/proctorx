@@ -179,3 +179,28 @@ export const passwordSchemaRestrictions = () => {
   //   .has().not().spaces();
   return schema;
 };
+
+export const changePassword = async (oldPassword, newPassword) => {
+  const csrfToken = getCookie("csrftoken");
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/change_password`;
+  const requestOptions = {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "X-CSRFToken": csrfToken,
+    },
+    body: JSON.stringify({
+      old_password: oldPassword,
+      new_password: newPassword,
+    }),
+  };
+  try {
+    return await fetchData(apiUrl, requestOptions);
+  } catch (error) {
+    console.error(
+      "The following error occurred in changing the user password: ",
+      error
+    );
+    return { status: "failure", description: error };
+  }
+};

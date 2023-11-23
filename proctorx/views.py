@@ -31,7 +31,6 @@ def is_user_authenticated(request):
 
 def sign_in(request):
     data = json.loads((request.body.decode('ascii')))
-    print(data)
     email = data['email']
     password = data['password']
 
@@ -73,7 +72,6 @@ def register(request):
             user = form.save()
             user.is_active = True
             user.save()
-            print('this user: ', user)
             json_data = {"status":"successful","description":f"Student created: {email}"}
         except Exception as e:
             print(f"An error occurred while saving the form: {e}")
@@ -99,7 +97,6 @@ def get_csrf_token(request):
 def set_user_details(request):
     data = json.loads((request.body.decode('ascii')))
     if request.user.is_authenticated:
-        print('data: ', data)
         try:
             student = Student.objects.get(email=request.user.email)
             student.first_name = data['first_name']
@@ -119,6 +116,27 @@ def set_user_details(request):
     
     return response
 
+def change_password(request):
+    data = json.loads((request.body.decode('ascii')))
+    if request.user.is_authenticated:
+        old_password = data['old_password']
+        new_password = data['new_password']
+        if not request.user.check_password(old_password):
+            return JsonResponse({'status':'failure', 'details':'Old password is incorrect'})
+        try:
+            request.user.set_password(new_password)
+            request.user.save()
+            user = authenticate(request, email=request.user.email, password=new_password)
+            if user is not None:
+                print('logged in user: ' , user)
+                login(request, request.user)
+                return JsonResponse({'status':'success'})
+            else:
+                return JsonResponse({'status': 'failure', 'details': 'Authentication failed'})
+        except Exception as e:
+            return JsonResponse({'status':'failure', 'details':'Error in changing the user password'})
+    else:
+        return JsonResponse({'status':'failure', 'details':'User is not authenticated'})
 
 
 

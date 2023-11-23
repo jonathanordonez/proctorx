@@ -54,7 +54,7 @@ export default function LoginForm({ setIsAuthenticated }) {
     } else {
       showToast(
         "failure",
-        "Please check your username and password and try again. If you've forgotten your password, you can reset it <a href='/reset_password'>here<a>."
+        "Please check your username and password and try again"
       );
     }
     // setIsAuthenticated(signInFetch.status === "success" ? true : false);
