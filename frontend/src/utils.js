@@ -169,7 +169,7 @@ export const changeUserDetails = async (userDetails) => {
 
 export const passwordSchemaRestrictions = () => {
   const schema = new passwordValidator();
-  schema.is().min(8); // Minimum length 8
+  // schema.is().min(8); // Minimum length 8
   //Other options available:
   //   .is().max(100)
   //   .has().uppercase()

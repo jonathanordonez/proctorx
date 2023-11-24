@@ -1,8 +1,7 @@
 import React from "react";
-import { UserDetailsContext } from "../../Login/Login";
+import { UserDetailsContext } from "../../../Login/Login";
 import { useContext, useState, useEffect } from "react";
-import { changeUserDetails } from "../../../utils";
-import { showToast } from "../../../utils";
+import { changeUserDetails, showToast } from "../../../../utils";
 
 export default function UserSettingsForm() {
   const userDetails = useContext(UserDetailsContext);

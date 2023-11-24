@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import proctorXlogo from "../../img/proctorX-white.svg";
+import proctorXlogo from "../../../img/proctorX-white.svg";
 import { useContext } from "react";
-import { UserDetailsContext } from "../Login/Login";
-import { signOut } from "../../utils";
+import { UserDetailsContext } from "../../Login/Login";
+import { signOut } from "../../../utils";
 import { Link } from "react-router-dom";
-import Toast from "../Toast/Toast";
+import Toast from "../../Toast/Toast";
 
 export default function Header({
   setIsAuthenticated,

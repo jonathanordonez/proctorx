@@ -61,7 +61,7 @@ CORS_ORIGIN_WHITELIST = [
 
 CORS_ALLOWED_ORIGINS = [
     config('REACT_SERVER'),
-    config('DJANGO_SERVER'),
+    config('DJANGO_SERVER'),    
 ]
 
 CORS_ALLOW_CREDENTIALS = True

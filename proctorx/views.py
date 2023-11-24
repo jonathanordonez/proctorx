@@ -143,6 +143,27 @@ def change_password(request):
 
 
 def get_json2(request):
+    print("Request Method:", request.method)
+
+    # Access and print the full URL
+    print("Full URL:", request.get_full_path())
+
+    # Access and print the query parameters
+    print("Query Parameters:", request.GET)
+
+    # Access and print the request body (for POST requests)
+    print("Request Body:", request.body.decode('utf-8'))
+
+    # Access and print request headers
+    print("Request Headers:", request.headers)
+
+    # Access and print the user agent
+    print("User Agent:", request.META.get('HTTP_USER_AGENT'))
+
+    print ('X-FOR: ',request.META.get('HTTP_X_FORWARDED_FOR'))
+
+    print ('client ip:', request.META.get('REMOTE_ADDR'))
+
     return JsonResponse ({
     "state": True,
     "page": 10,

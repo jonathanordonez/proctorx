@@ -1,5 +1,5 @@
 import React from "react";
-import { signOut } from "../../utils";
+import { signOut } from "../../../utils";
 import "../../css/styles.css";
 
 export default function Reservations({

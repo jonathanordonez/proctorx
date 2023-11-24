@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import usePasswordValidation from "../../../Hooks/usePasswordValidation";
-import { changePassword, showToast } from "../../../utils";
+import usePasswordValidation from "../../../../Hooks/usePasswordValidation";
+import { changePassword, showToast } from "../../../../utils";
 
 export default function UserChangePasswordForm() {
   const [oldPassword, setOldPassword] = useState("");
@@ -9,6 +9,8 @@ export default function UserChangePasswordForm() {
   const [password2, setPassword2] = useState("");
   const passwordDetails = usePasswordValidation(password1, password2);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+
+  console.log("passwordDetails:  ", passwordDetails);
 
   useEffect(() => {
     if (!isSubmitDisabled) {
@@ -23,7 +25,7 @@ export default function UserChangePasswordForm() {
         ? false
         : true
     );
-  }, [passwordDetails]);
+  }, [passwordDetails.password1.isValid, passwordDetails.password2.isValid]);
 
   return (
     <>
@@ -127,4 +129,6 @@ export default function UserChangePasswordForm() {
     setPassword2("");
     setIsSubmitDisabled(true);
   }
+
+  async function cleanFields() {}
 }

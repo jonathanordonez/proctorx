@@ -11,7 +11,7 @@ export default function RegisterForm() {
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
   const [isEmailValid, setIsEmailValid] = useState();
-  const [isEmailEmpty, setIsEmailEmpty] = useState();
+  // const [isEmailEmpty, setIsEmailEmpty] = useState();
   const passwordDetails = usePasswordValidation(password1, password2);
   const csrfToken = useCsrfToken();
 
@@ -52,16 +52,14 @@ export default function RegisterForm() {
         type="text"
         name="email"
         value={email}
-        className={`form-control ${
-          !isEmailValid && !isEmailEmpty ? "is-invalid" : ""
-        }`}
+        className={`form-control ${!isEmailValid && email ? "is-invalid" : ""}`}
         maxLength="50"
         autoFocus
         required
         id="id_email"
         onChange={(event) => handleEmail(event.target.value)}
         autoComplete="email"
-        style={{ marginBottom: isEmailValid || isEmailEmpty ? "20px" : "0px" }}
+        style={{ marginBottom: isEmailValid || !email ? "20px" : "0px" }}
       />
       {!isEmailValid && email !== "" && (
         <div className="invalid-feedback">Invalid email format</div>
@@ -133,7 +131,6 @@ export default function RegisterForm() {
 
   function handleEmail(email) {
     setEmail(email);
-    setIsEmailEmpty(email ? false : true);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const isEmailValidRegex = emailRegex.test(email);
     setIsEmailValid(isEmailValidRegex ? true : false);

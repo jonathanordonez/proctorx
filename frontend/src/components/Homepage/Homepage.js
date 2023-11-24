@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Header from "../Header/Header";
+import Header from "./Header/Header";
 import "../../css/styles.css";
-import Footer from "../Footer/Footer";
-import Menu from "../Menu/Menu";
+import Footer from "./Footer/Footer";
+import Menu from "./Menu/Menu";
 import { Route, Routes } from "react-router-dom";
-import UserSettings from "../Header/UserSettings/UserSettings";
+import UserSettings from "./Header/UserSettings/UserSettings";
 
 export default function Homepage({
   setIsAuthenticated,
