@@ -21,7 +21,7 @@ export default function Header({
     <header>
       <div className="header-wrapper scale-down">
         <div>
-          <a href="session">
+          <a href="/">
             <img className="brand-img" alt="ProctorX Logo" src={proctorXlogo} />
           </a>
         </div>

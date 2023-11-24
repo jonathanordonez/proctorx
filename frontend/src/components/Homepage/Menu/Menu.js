@@ -10,7 +10,7 @@ export default function Menu() {
             <span></span>
           </button>
           <div className="student-collapsed-links" hidden>
-            <a className="student-collapsed-link" href="session">
+            <a className="student-collapsed-link" href="/">
               Current Sessions
             </a>
             <a className="student-collapsed-link" href="reservation">
@@ -20,7 +20,7 @@ export default function Menu() {
               My Orders
             </a>
           </div>
-          <a className="session" href="session">
+          <a className="session" href="/">
             Current Sessions
           </a>
           <a className="reserve" href="reservation">

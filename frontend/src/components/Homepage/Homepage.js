@@ -5,6 +5,7 @@ import Footer from "./Footer/Footer";
 import Menu from "./Menu/Menu";
 import { Route, Routes } from "react-router-dom";
 import UserSettings from "./Header/UserSettings/UserSettings";
+import Sessions from "./Sessions/Sessions";
 
 export default function Homepage({
   setIsAuthenticated,
@@ -24,6 +25,7 @@ export default function Homepage({
         <div className="main-wrapper">
           <main className="scale-down">
             <Routes>
+              <Route exact path="/" element={<Sessions />} />
               <Route
                 path="/user_settings"
                 element={

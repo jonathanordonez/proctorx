@@ -9,7 +9,12 @@ path('register', views.register),
 path('get_csrf_token', views.get_csrf_token),
 path('set_user_details', views.set_user_details),
 path('change_password', views.change_password),
+path('get_sessions', views.get_sessions),
 
+path('get_json1', views.get_json1),
 path('get_json2', views.get_json2),
+path('get_json3', views.get_json3),
+path('get_json5', views.get_json5),
+
 ]
 
