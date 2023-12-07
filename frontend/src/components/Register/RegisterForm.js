@@ -16,7 +16,7 @@ export default function RegisterForm() {
   const csrfToken = useCsrfToken();
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="landing">
       <label className="form-label fs-5" htmlFor="first_name">
         First name
       </label>

@@ -6,6 +6,7 @@ import Menu from "./Menu/Menu";
 import { Route, Routes } from "react-router-dom";
 import UserSettings from "./Header/UserSettings/UserSettings";
 import Sessions from "./Sessions/Sessions";
+import Reservation from "./Reservation/Reservation";
 
 export default function Homepage({
   setIsAuthenticated,
@@ -34,6 +35,7 @@ export default function Homepage({
                   />
                 }
               />
+              <Route path="/reservation" element={<Reservation />} />
             </Routes>
           </main>
         </div>

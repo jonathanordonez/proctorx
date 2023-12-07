@@ -87,7 +87,7 @@ input[type="submit"]:not(:disabled):hover {
   text-align: center;
 }
 
-form input {
+.landing input {
   margin-bottom: 20px;
 }
 

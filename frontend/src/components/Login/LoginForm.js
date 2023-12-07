@@ -16,7 +16,7 @@ export default function LoginForm({ setIsAuthenticated }) {
   }, [email, password]);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="landing">
       <label className="form-label fs-5" htmlFor="email">
         Email
       </label>
