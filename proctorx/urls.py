@@ -11,6 +11,7 @@ path('set_user_details', views.set_user_details),
 path('change_password', views.change_password),
 path('get_sessions', views.get_sessions),
 path('add_to_cart', views.add_to_cart),
+path('sessions', views.sessions),
 
 
 path('get_json1', views.get_json1),

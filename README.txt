@@ -1,4 +1,4 @@
-This is my first JS project. The site mimics the functionality from ProctorU.com, a site for scheduling online exams with proctors.
+This project mimics the functionality from ProctorU.com, a site for scheduling online exams with proctors.
 
 The webiste uses "Vanilla" JS and Django:
 > See proctorx/static/js/script.js for all JS code

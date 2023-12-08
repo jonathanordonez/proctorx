@@ -251,3 +251,15 @@ export const saveToCart = async (
     throw error; // Re-throw the error to be caught by the calling code
   }
 };
+
+export const fetchCartSessions = async () => {
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/sessions?cart=true`;
+  try {
+    const response = await fetch(apiUrl, {
+      credentials: "include",
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
