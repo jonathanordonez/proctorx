@@ -10,6 +10,8 @@ path('get_csrf_token', views.get_csrf_token),
 path('set_user_details', views.set_user_details),
 path('change_password', views.change_password),
 path('get_sessions', views.get_sessions),
+path('add_to_cart', views.add_to_cart),
+
 
 path('get_json1', views.get_json1),
 path('get_json2', views.get_json2),

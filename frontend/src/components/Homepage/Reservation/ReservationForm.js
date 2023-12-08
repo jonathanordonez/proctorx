@@ -94,7 +94,7 @@ export default function ReservationForm({ setReservationResults }) {
         </label>
 
         <select
-          className="form-option-program form-select"
+          className="form-option-exam form-select"
           type="text"
           name="exam"
           disabled={isDisabled}
@@ -147,8 +147,7 @@ export default function ReservationForm({ setReservationResults }) {
     const dateTime =
       document.getElementsByClassName("form-option-date")[0].value;
     const time = document.getElementsByClassName("form-option-time")[0].value;
-    const exam = document.getElementsByClassName("form-option-program")[0]
-      .value;
+    const exam = document.getElementsByClassName("form-option-exam")[0].value;
     const length =
       document.getElementsByClassName("form-option-length")[0].value;
 

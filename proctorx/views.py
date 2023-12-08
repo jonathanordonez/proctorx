@@ -142,7 +142,6 @@ def change_password(request):
 
 def get_sessions(request):
     if request.user.is_authenticated:
-        print(request.user)
         try:
             sessions = StudentSession.objects.filter(student=request.user)
             if(len(sessions)>0):
@@ -156,6 +155,24 @@ def get_sessions(request):
             return JsonResponse({'status':'failure','description':'Error in querying database'})
     else:
         return JsonResponse({'status':'failure','description':'User is not authenticated'})
+
+def add_to_cart(request):
+    data = json.loads((request.body.decode('ascii')))
+    print( data)
+    exam_date = data['dateSelected'].split(' ')[0].split('-')
+    exam_time = data['dateSelected'].split(' ')[1].split(':')
+    exam_date_time = datetime.datetime(int(exam_date[0]), int(
+        exam_date[1]), int(exam_date[2]), int(exam_time[0]), int(exam_time[1]))
+    exam_length = int(data['lengthSelected'].split(' ')[0])
+    # print(exam_date)
+    # print(exam_time)
+    # print(exam_date_time)
+    # print(exam_length)
+    
+    StudentSession.objects.create(student_id=request.user.id, exam_date_time=exam_date_time, university=data['university'], exam_name=data['exam'],
+                            exam_length=exam_length, session_status='Cart', date_purchased=None, cost=exam_length * 35, payment_status='pending')
+    return JsonResponse({'status':'success', 'message': 'Added to cart'})
+
 
 
 def get_json5(request):

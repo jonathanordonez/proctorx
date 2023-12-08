@@ -78,7 +78,7 @@ export const registerNewStudent = async (
   };
 
   try {
-    const response = fetchData(apiUrl, requestOptions);
+    const response = await fetchData(apiUrl, requestOptions);
     return response;
   } catch (error) {
     throw error; // Re-throw the error to be caught by the calling code
@@ -218,5 +218,36 @@ export const getSessions = async () => {
       error
     );
     return { status: "failure", description: error };
+  }
+};
+
+export const saveToCart = async (
+  dateSelected,
+  lengthSelected,
+  university,
+  exam,
+  csrfToken
+) => {
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/add_to_cart`;
+  const requestOptions = {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "X-CSRFToken": csrfToken,
+    },
+
+    body: JSON.stringify({
+      dateSelected: dateSelected,
+      lengthSelected: lengthSelected,
+      university: university,
+      exam: exam,
+    }),
+  };
+
+  try {
+    const response = await fetchData(apiUrl, requestOptions);
+    return response;
+  } catch (error) {
+    throw error; // Re-throw the error to be caught by the calling code
   }
 };
