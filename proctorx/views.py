@@ -158,16 +158,11 @@ def get_sessions(request):
 
 def add_to_cart(request):
     data = json.loads((request.body.decode('ascii')))
-    print( data)
     exam_date = data['dateSelected'].split(' ')[0].split('-')
     exam_time = data['dateSelected'].split(' ')[1].split(':')
     exam_date_time = datetime.datetime(int(exam_date[0]), int(
         exam_date[1]), int(exam_date[2]), int(exam_time[0]), int(exam_time[1]))
     exam_length = int(data['lengthSelected'].split(' ')[0])
-    # print(exam_date)
-    # print(exam_time)
-    # print(exam_date_time)
-    # print(exam_length)
     
     StudentSession.objects.create(student_id=request.user.id, exam_date_time=exam_date_time, university=data['university'], exam_name=data['exam'],
                             exam_length=exam_length, session_status='Cart', date_purchased=None, cost=exam_length * 35, payment_status='pending')
@@ -177,162 +172,43 @@ def sessions(request):
     is_cart = request.GET.get('cart')
     
     if is_cart:
-        cart_sessions = StudentSession.objects.filter(student_id = request.user.id)
-        if len(cart_sessions) > 0:
-            cart_sessions_array = list(cart_sessions.values())
-            print(cart_sessions_array)
-            return JsonResponse({'status':'success', 'cart_sessions':cart_sessions_array })
-        else:
-            return JsonResponse({'status':'success', 'cart_sessions':[] })
+        try:
+            cart_sessions = StudentSession.objects.filter(student_id = request.user.id)
+            if len(cart_sessions) > 0:
+                cart_sessions_array = list(cart_sessions.values())
+                print(cart_sessions_array)
+                return JsonResponse({'status':'success', 'cart_sessions':cart_sessions_array })
+            else:
+                return JsonResponse({'status':'success', 'cart_sessions':[] })
+        except Exception as e:
+            return JsonResponse({'status':'failure', 'message':'An error occurred while fetching cart sessions'})
+    
     elif not is_cart:
         return
 
-    data = {
-        "state": True,
-        "page": 10,
-        "total_pages": 10,
-        "response": [
-            {
-                "id": 180696724,
-                "id_prog_viaje_detalle": None,
-                "fecha": "2023-11-07",
-                "empresa": "ARENA VERDE S.A.C.",
-                "ruc": "10426099280",
-                "proveedor": "SANTAMARIA SANDOVAL PEDRO",
-                "placa": "M1V-877",
-                "tipobus": "CAMIONETA",
-                "conductordoc": "75403630",
-                "conductor": "CARLOS VIDAL SANTISTEBAN BALLENA",
-                "ruta": "MORROPE-GARITA LOTE CENTRO",
-                "origen": "MORROPE",
-                "destino": "GARITA LOTE CENTRO",
-                "horaingreso": "05:50",
-                "horasalida": "17:44",
-                "horavalidacion": "07:00",
-                "fechainicioviaje": "2023-11-07T00:00:00Z",
-                "horapartida": "05:30",
-                "fechafinviaje": None,
-                "horaretorno": "",
-                "tipoproveedor": "TERCERO",
-                "estado": 3,
-                "validado": "SI",
-                "liquidado": "SI",
-                "comentario": "",
-                "cultivo": "SERVICIOS GENERALES",
-                "area": "SOPORTE",
-                "denominacionceco": "CAMPO",
-                "propietario": "SANTAMARIA SANDOVAL PEDRO",
-                "propietarioruc": "42609928",
-                "responsable": "LEONARDO LUCERO SEGUNDO MANUEL",
-                "rutaacceso": "LA COLORADA",
-                "solicitante": "ANGELES SANCHEZ LUIS ALBERTO",
-                "subzona": "ZONA 1-B",
-                "turnoida": "DÍA",
-                "turnovuelta": "",
-                "zona": "ZONA 1",
-                "b_activacionunidad": "NO",
-                "departamento": "LAMBAYEQUE",
-                "distrito": "MORROPE",
-                "duracion": 2,
-                "fundonombre": "FUNDO LOTE CENTRO",
-                "horallegada": "18:30:00",
-                "provincia": "LAMBAYEQUE",
-                "versionmovil": "2.0.3"
-            },
-            {
-                "id": 180696725,
-                "id_prog_viaje_detalle": None,
-                "fecha": "2023-11-07",
-                "empresa": "ARENA VERDE S.A.C.",
-                "ruc": "10426099280",
-                "proveedor": "SANTAMARIA SANDOVAL PEDRO",
-                "placa": "T5O-803",
-                "tipobus": "CAMIONETA",
-                "conductordoc": "46749680",
-                "conductor": "ANGEL YOVERA DAMIAN",
-                "ruta": "CAMPAMENTO-FUNDO LOTE NORTE",
-                "origen": "CAMPAMENTO",
-                "destino": "FUNDO LOTE NORTE",
-                "horaingreso": "06:37",
-                "horasalida": "18:24",
-                "horavalidacion": "08:48",
-                "fechainicioviaje": "2023-11-07T00:00:00Z",
-                "horapartida": "05:30",
-                "fechafinviaje": None,
-                "horaretorno": "",
-                "tipoproveedor": "TERCERO",
-                "estado": 3,
-                "validado": "SI",
-                "liquidado": "SI",
-                "comentario": "",
-                "cultivo": "SERVICIOS GENERALES",
-                "area": "SOPORTE",
-                "denominacionceco": "CAMPO",
-                "propietario": "SANTISTEBAN",
-                "propietarioruc": "76343 83 6",
-                "responsable": "LEONARDO",
-                "rutaacceso": "DIRECTO",
-                "solicitante": "ANGELES SANCHEZ",
-                "subzona": "ZONA 1-A",
-                "turnoida": "DÍA",
-                "turnovuelta": "",
-                "zona": "ZONA 1",
-                "b_activacionunidad": "NO",
-                "departamento": "LAMBAYEQUE",
-                "distrito": "MORROPE",
-                "duracion": 0,
-                "fundonombre": "FUNDO LN",
-                "horallegada": "06:30:00",
-                "provincia": "LAMBAYEQUE",
-                "versionmovil": "2.0.3"
-            },
-            {
-                "id": 180696726,
-                "id_prog_viaje_detalle": None,
-                "fecha": "2023-11-07",
-                "empresa": "AGROVISION PERU S.A.C.",
-                "ruc": "20554556192",
-                "proveedor": "AGROVISION PERU S.A.C.",
-                "placa": "T5M-105",
-                "tipobus": "MINIBUS",
-                "conductordoc": "16763212",
-                "conductor": "HENRRY AQUINO SOSA",
-                "ruta": "CAMPAMENTO-FUNDO C5/C6",
-                "origen": "CAMPAMENTO",
-                "destino": "FUNDO C5/C6",
-                "horaingreso": "05:26",
-                "horasalida": "06:25",
-                "horavalidacion": "05:31",            
-                "fechainicioviaje": "2023-11-07T00:00:00Z",
-                "horapartida": "05:30",
-                "fechafinviaje": None,
-                "horaretorno": "",
-                "tipoproveedor": "PROPIO",
-                "estado": 3,
-                "validado": "SI",
-                "liquidado": "NO",
-                "comentario": "",
-                "cultivo": "SERVICIOS GENERALES",
-                "area": "CALIFICADOS",
-                "denominacionceco": "CAMPO",
-                "propietario": "SCOTIABANK PERU SAA",
-                "propietarioruc": "20100043140",
-                "responsable": "ROCHA BECERRA JOSE FRANCISCO",
-                "rutaacceso": "DIRECTO",
-                "solicitante": "LEONARDO LUCERO SEGUNDO MANUEL",
-                "subzona": "ZONA 1-A",
-                "turnoida": "DÍA",
-                "turnovuelta": "",
-                "zona": "ZONA 1",
-                "b_activacionunidad": "NO",
-                "departamento": "LAMBAYEQUE",
-                "distrito": "MORROPE",
-                "duracion": 1,
-                "fundonombre": "FUNDO C5/C6",
-                "horallegada": "06:30:00",
-                "provincia": "LAMBAYEQUE",
-                "versionmovil": "2.0.3"
-            }
-        ]
-    }
-    return JsonResponse(data)
+def delete_cart_session(request):
+    data = json.loads((request.body.decode('ascii')))
+    if request.user.is_authenticated:
+        try:
+            session = StudentSession.objects.get(id=data['session_id'])
+            if (session.student_id == request.user.id):
+                session.delete()
+                return JsonResponse({'status':'success'})
+            else:
+                return JsonResponse({'status':'failure'})
+            
+        except Exception as e:
+            return JsonResponse({'status':'failure','description':'Error deleting cart session'})
+    else:
+        return JsonResponse({'status':'failure','description':'User is not authenticated'})
+
+def cart_items_quantity(request):
+    if request.user.is_authenticated:
+        try:
+            sessions = StudentSession.objects.filter(student_id=request.user.id, session_status='Cart')
+            return JsonResponse({'status':'success', 'cart_items_quantity':len(sessions)})
+        except Exception as e:
+            return JsonResponse({'status':'failure'})
+    else:
+        return JsonResponse({'status':'failure','description':'User is not authenticated'})
+

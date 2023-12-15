@@ -18,6 +18,8 @@ export default function Login({ setComponentRendered }) {
 
   useEffect(() => {
     (async () => {
+      console.log("UEF loads ");
+
       const response = await isUserAuthenticatedInBackend();
       setIsAuthenticatedInBackend(response.is_authenticated);
       setUserDetails(response.is_authenticated ? response : {});

@@ -12,12 +12,10 @@ path('change_password', views.change_password),
 path('get_sessions', views.get_sessions),
 path('add_to_cart', views.add_to_cart),
 path('sessions', views.sessions),
+path('delete_cart_session', views.delete_cart_session),
+path('cart_items_quantity', views.cart_items_quantity),
 
 
-path('get_json1', views.get_json1),
-path('get_json2', views.get_json2),
-path('get_json3', views.get_json3),
-path('get_json5', views.get_json5),
 
 ]
 

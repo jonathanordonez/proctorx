@@ -1,7 +1,7 @@
 import React from "react";
 
-export default function Menu() {
-  const cart_items_number = 10;
+export default function Menu({ cartItemsQuantity }) {
+  console.log("this ", cartItemsQuantity);
   return (
     <div className="student-options-panel-wrapper">
       <div className="student-options-panel scale-down fs-5">
@@ -34,7 +34,7 @@ export default function Menu() {
           <a className="cart" href="cart">
             Cart
           </a>
-          <span className="student-cart-count">{cart_items_number}</span>
+          <span className="student-cart-count">{cartItemsQuantity}</span>
         </div>
       </div>
     </div>

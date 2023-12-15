@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header/Header";
 import "../../css/styles.css";
 import Footer from "./Footer/Footer";
@@ -15,6 +15,11 @@ export default function Homepage({
 }) {
   const [isScrollToChangePassword, setIsScrollToChangePassword] =
     useState(false);
+  const [cartItemsQuantity, setCartItemsQuantity] = useState();
+
+  useEffect(() => {
+    fetchCartItemsQuantity();
+  }, []);
   return (
     <>
       <Header
@@ -22,7 +27,7 @@ export default function Homepage({
         setIsAuthenticatedInBackend={setIsAuthenticatedInBackend}
         setIsScrollToChangePassword={setIsScrollToChangePassword}
       />
-      <Menu />
+      <Menu cartItemsQuantity={cartItemsQuantity} />
       <div>
         <div className="main-wrapper">
           <main className="scale-down">
@@ -45,4 +50,23 @@ export default function Homepage({
       </div>
     </>
   );
+  async function fetchCartItemsQuantity() {
+    const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/cart_items_quantity`;
+    try {
+      const request = await fetch(apiUrl, { credentials: "include" });
+      const json = await request.json();
+      if (json.status === "success") {
+        setCartItemsQuantity(json.cart_items_quantity);
+      } else {
+        console.error(
+          "An error occurred when fetching the cart items quantity "
+        );
+      }
+    } catch (error) {
+      console.error(
+        "The following error occurred when fetching the cart items quantity: ",
+        error
+      );
+    }
+  }
 }

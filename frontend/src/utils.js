@@ -263,3 +263,25 @@ export const fetchCartSessions = async () => {
     throw error;
   }
 };
+
+export const deleteCartSession = async (sessionId) => {
+  const csrfToken = getCookie("csrftoken");
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/delete_cart_session`;
+  const requestOptions = {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "X-CSRFToken": csrfToken,
+    },
+    body: JSON.stringify({
+      session_id: sessionId,
+    }),
+  };
+
+  try {
+    const response = await fetch(apiUrl, requestOptions);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
