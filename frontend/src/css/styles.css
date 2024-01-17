@@ -342,7 +342,7 @@ footer {
 .registration-form-submit:hover:not(:disabled),
 .settings-form input[type="submit"]:hover:not(:disabled),
 .change-password-form input[type="submit"]:hover:not(:disabled),
-.cc-submit:hover:not(:disabled),
+.cc-form-submit:hover:not(:disabled),
 .delete-from-cart:hover:not(:disabled) {
   background-color: #343a40;
   border-color: #343a40;
@@ -600,6 +600,19 @@ label[for="year"] {
 
 .cart-empy-make-reservation a {
   text-decoration: none;
+}
+
+.cc-form-submit {
+  margin-top: 20px !important;
+  grid-column: 1/4;
+  width: 100%;
+  background-color: #42cd87;
+  border-color: #42cd87;
+  border-radius: 0.25rem;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: white;
+  transition: 0.2s;
 }
 
 .cc-title {

@@ -77,7 +77,7 @@ export default function CartCreditCardForm({ isCartEmpty }) {
             />
 
             <input
-              className="cc-submit btn btn-primary"
+              className="cc-form-submit fs-5 form-control"
               type="submit"
               name="submit"
             />
