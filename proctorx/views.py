@@ -141,22 +141,6 @@ def change_password(request):
     else:
         return JsonResponse({'status':'failure', 'details':'User is not authenticated'})
 
-def get_sessions(request):
-    if request.user.is_authenticated:
-        try:
-            sessions = StudentSession.objects.filter(student=request.user)
-            if(len(sessions)>0):
-                data = serialize('json', sessions)
-                return JsonResponse({'status':'success','data':data})
-            else:
-                return JsonResponse({'status':'success','data':[]})
-            
-        except Exception as e:
-            print(e)
-            return JsonResponse({'status':'failure','description':'Error in querying database'})
-    else:
-        return JsonResponse({'status':'failure','description':'User is not authenticated'})
-
 def add_to_cart(request):
     data = json.loads((request.body.decode('ascii')))
     exam_date = data['dateSelected'].split(' ')[0].split('-')

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import SessionHeader from "./SessionHeader";
 import SessionRecord from "./SessionRecord";
-import { getSessions } from "../../../utils";
 import { fetchUpcomingSessions } from "../../../utils";
 import { formatDateTimeString } from "../../../utils";
 import { showToast } from "../../../utils";
 
 export default function Sessions() {
-  const [sessions, setSessions] = useState(getSessions());
+  const [sessions, setSessions] = useState([]);
 
   useEffect(() => {
     const parameter = window.location.href.split("?");

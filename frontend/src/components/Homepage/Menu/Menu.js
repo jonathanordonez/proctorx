@@ -33,12 +33,10 @@ export default function Menu({ cartItemsQuantity }) {
             My Orders
           </NavLink>
         </div>
-        <div className="student-cart-balance">
-          <NavLink className="cart" to="cart">
-            Cart
-          </NavLink>
+        <NavLink className="student-cart-balance" to="cart">
+          <span className="cart">Cart</span>
           <span className="student-cart-count">{cartItemsQuantity}</span>
-        </div>
+        </NavLink>
       </div>
     </div>
   );

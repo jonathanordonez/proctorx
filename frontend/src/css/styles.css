@@ -139,7 +139,7 @@ header {
 .session.active,
 .reserve.active,
 .my-orders.active,
-.cart.active {
+.student-cart-balance.active {
   background-color: #343a40;
   border-radius: 0.3rem;
   padding: 5px 10px;

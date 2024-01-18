@@ -205,22 +205,6 @@ export const changePassword = async (oldPassword, newPassword) => {
   }
 };
 
-export const getSessions = async () => {
-  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/get_sessions`;
-  try {
-    const response = await fetch(apiUrl, { credentials: "include" });
-    const data = await response.json();
-    console.log("this data: ", data);
-    return data;
-  } catch (error) {
-    console.error(
-      "The following error occurred when requesting the student sessions: ",
-      error
-    );
-    return { status: "failure", description: error };
-  }
-};
-
 export const saveToCart = async (
   dateSelected,
   lengthSelected,
