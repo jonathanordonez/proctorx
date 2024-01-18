@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import SessionHeader from "./SessionHeader";
 import SessionRecord from "./SessionRecord";
 import { getSessions } from "../../../utils";
@@ -6,11 +6,7 @@ import { getSessions } from "../../../utils";
 export default function Sessions() {
   const [sessions, setSessions] = useState(getSessions());
 
-  // Highlight selected option upon loading it
-  useEffect(() => {
-    const sessionMenuObject = document.getElementsByClassName("session")[0];
-    sessionMenuObject.className = "session student-link-selected";
-  }, []);
+  // console.log("this activeMenuOption: ", activeMenuOption);
 
   return (
     <div className="main-wrapper">

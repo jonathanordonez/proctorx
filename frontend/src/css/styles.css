@@ -136,7 +136,10 @@ header {
   margin-right: 20px;
 }
 
-.student-link-selected {
+.session.active,
+.reserve.active,
+.my-orders.active,
+.cart.active {
   background-color: #343a40;
   border-radius: 0.3rem;
   padding: 5px 10px;
@@ -470,6 +473,10 @@ button:hover {
 }
 
 /* Cart  */
+
+.cart {
+  padding: 0px 10px;
+}
 
 .cart-container {
   display: grid;

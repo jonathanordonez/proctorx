@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 
 export default function Menu({ cartItemsQuantity }) {
+  const [activeMenuOption, setActiveMenuOption] = useState("");
+
   console.log("this ", cartItemsQuantity);
   return (
     <div className="student-options-panel-wrapper">
@@ -10,30 +13,30 @@ export default function Menu({ cartItemsQuantity }) {
             <span></span>
           </button>
           <div className="student-collapsed-links" hidden>
-            <a className="student-collapsed-link" href="/">
+            <Link className="student-collapsed-link" to="/">
               Current Sessions
-            </a>
-            <a className="student-collapsed-link" href="reservation">
+            </Link>
+            <Link className="student-collapsed-link" to="reservation">
               Reserve a Session
-            </a>
-            <a className="student-collapsed-link" href="order">
+            </Link>
+            <Link className="student-collapsed-link" to="order">
               My Orders
-            </a>
+            </Link>
           </div>
-          <a className="session" href="/">
+          <NavLink className="session" to="/">
             Current Sessions
-          </a>
-          <a className="reserve" href="reservation">
+          </NavLink>
+          <NavLink className="reserve" to="reservation">
             Reserve a Session
-          </a>
-          <a className="my-orders" href="order">
+          </NavLink>
+          <NavLink className="my-orders" to="order">
             My Orders
-          </a>
+          </NavLink>
         </div>
         <div className="student-cart-balance">
-          <a className="cart" href="cart">
+          <NavLink className="cart" to="cart">
             Cart
-          </a>
+          </NavLink>
           <span className="student-cart-count">{cartItemsQuantity}</span>
         </div>
       </div>
