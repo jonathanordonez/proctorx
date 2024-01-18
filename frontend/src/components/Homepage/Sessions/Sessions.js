@@ -4,11 +4,20 @@ import SessionRecord from "./SessionRecord";
 import { getSessions } from "../../../utils";
 import { fetchUpcomingSessions } from "../../../utils";
 import { formatDateTimeString } from "../../../utils";
+import { showToast } from "../../../utils";
 
 export default function Sessions() {
   const [sessions, setSessions] = useState(getSessions());
 
-  console.log("this sessions: ", sessions);
+  useEffect(() => {
+    const parameter = window.location.href.split("?");
+    const is_session_added = true ? parameter[1] === "session-added" : false;
+    if (is_session_added) {
+      showToast("success", "Upcoming session added", 5);
+      const updatedURL = window.location.href.replace("/?session-added", "");
+      window.history.replaceState({}, "", updatedURL);
+    }
+  }, []);
 
   useEffect(() => {
     (async () => {

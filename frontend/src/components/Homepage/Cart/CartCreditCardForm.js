@@ -101,7 +101,7 @@ export default function CartCreditCardForm({ isCartEmpty }) {
       const response = await payCartSession(cartSessionId);
       const json = await response.json();
       if (json.status === "success") {
-        window.location.href = "order?cart-paid";
+        window.location.href = "/?session-added";
       } else {
         showToast("failure", "Unable to pay cart. Please try again later.", 5);
       }
