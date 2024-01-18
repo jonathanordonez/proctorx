@@ -680,6 +680,10 @@ label[for="year"] {
   display: none !important;
 }
 
+.order-date-small {
+  margin-left: 10px;
+}
+
 .order-heading li,
 .order-details li {
   display: inline;
@@ -765,7 +769,8 @@ label[for="year"] {
   }
 
   .main-wrapper {
-    margin-top: 0px;
+    margin-top: 40px;
+    margin-bottom: 40px;
   }
 
   .button-student-links {

@@ -9,7 +9,10 @@ export default function Menu({ cartItemsQuantity }) {
     <div className="student-options-panel-wrapper">
       <div className="student-options-panel scale-down fs-5">
         <div className="student-links">
-          <button className="button-student-links">
+          <button
+            className="button-student-links"
+            onClick={displayCollapsedLinks}
+          >
             <span></span>
           </button>
           <div className="student-collapsed-links" hidden>
@@ -40,4 +43,12 @@ export default function Menu({ cartItemsQuantity }) {
       </div>
     </div>
   );
+  function displayCollapsedLinks() {
+    const links = document.getElementsByClassName("student-collapsed-links")[0];
+    if (links.hidden === true) {
+      links.hidden = false;
+    } else {
+      links.hidden = true;
+    }
+  }
 }

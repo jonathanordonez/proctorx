@@ -43,7 +43,9 @@ export default function Orders() {
             <li className="order-date fs-5">{`Order date: ${formatDateString(
               order.date_purchased
             )}`}</li>
-            <li className="order-date-small fs-5">{`Exam date: ${order.exam_date_time}`}</li>
+            <li className="order-date-small fs-5">{`Exam date: ${formatDateTimeString(
+              order.exam_date_time
+            )}`}</li>
             <li className="order-total-cost fs-5">{`Total: $${order.cost}`}</li>
             <li className="order-total-cost-small fs-5">
               {`Total: $${order.cost}`}
