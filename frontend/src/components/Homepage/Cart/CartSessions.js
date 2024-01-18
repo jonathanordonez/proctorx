@@ -8,7 +8,7 @@ import {
 
 export default function CartSessions({ setIsCartEmpty }) {
   const [cartSessions, setCartSessions] = useState([]);
-  const [cartTotal, setCartTotal] = useState();
+  const [cartTotal, setCartTotal] = useState(0);
   const [refreshCounter, setRefreshCounter] = useState(0);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function CartSessions({ setIsCartEmpty }) {
     function calculateCartTotal() {
       let total = 0;
       cartSessions.map((session) => {
-        total += session.cost * session.exam_length;
+        total += Number(session.cost);
         return total;
       });
       setCartTotal(total);
@@ -80,7 +80,7 @@ export default function CartSessions({ setIsCartEmpty }) {
                 {session.exam_length + " hour(s)"}
               </div>
               <div className="cart-session-element cart-session-cost">
-                {"$" + session.cost * session.exam_length + ".00"}
+                {"$" + session.cost}
               </div>
               <div
                 onClick={handleDeleteCartSession}

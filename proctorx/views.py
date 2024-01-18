@@ -12,6 +12,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.utils.encoding import force_str
+from django.utils import timezone
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 from django.contrib.sessions.models import Session
@@ -165,7 +166,7 @@ def add_to_cart(request):
     exam_length = int(data['lengthSelected'].split(' ')[0])
     
     StudentSession.objects.create(student_id=request.user.id, exam_date_time=exam_date_time, university=data['university'], exam_name=data['exam'],
-                            exam_length=exam_length, session_status='Cart', date_purchased=None, cost=exam_length * 35, payment_status='pending')
+                            exam_length=exam_length, session_status='Cart', date_purchased=timezone.now(), cost=exam_length * 35, payment_status='pending')
     return JsonResponse({'status':'success', 'message': 'Added to cart'})
 
 def sessions(request):
@@ -173,7 +174,7 @@ def sessions(request):
     
     if is_cart:
         try:
-            cart_sessions = StudentSession.objects.filter(student_id = request.user.id)
+            cart_sessions = StudentSession.objects.filter(student_id = request.user.id, session_status = "Cart")
             if len(cart_sessions) > 0:
                 cart_sessions_array = list(cart_sessions.values())
                 print(cart_sessions_array)
@@ -184,7 +185,18 @@ def sessions(request):
             return JsonResponse({'status':'failure', 'message':'An error occurred while fetching cart sessions'})
     
     elif not is_cart:
-        return
+        try:
+            orders = StudentSession.objects.filter(student_id = request.user.id, session_status = "Paid")
+            print('this orders', orders)
+            if len(orders) > 0:
+                orders_list = list(orders.values())
+                print(orders_list)
+                return JsonResponse({'status':'success', 'orders':orders_list })
+            else:
+                return JsonResponse({'status':'success', 'orders':[] })
+        except Exception as e:
+            return JsonResponse({'status':'failure', 'message':'An error occurred while fetching orders'})
+        
 
 def delete_cart_session(request):
     data = json.loads((request.body.decode('ascii')))

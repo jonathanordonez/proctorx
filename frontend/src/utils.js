@@ -305,3 +305,15 @@ export const payCartSession = async (sessionId) => {
     throw error;
   }
 };
+
+export const fetchOrders = async () => {
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/sessions`;
+  try {
+    const response = await fetch(apiUrl, {
+      credentials: "include",
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
