@@ -212,3 +212,21 @@ def cart_items_quantity(request):
     else:
         return JsonResponse({'status':'failure','description':'User is not authenticated'})
 
+def pay_cart_session(request):
+    data = json.loads((request.body.decode('ascii')))
+    print(f' this is the data: {data}')
+    if request.user.is_authenticated:
+        try:
+            for session_id in data:
+                session = StudentSession.objects.filter(id=session_id)
+                if(len(session) ==1):
+                    cart_session = session[0]
+                    cart_session.session_status = 'Paid'
+                    cart_session.save()
+                else:
+                    return JsonResponse({'status':'failure','description':f'error filtering session {session["sessionid"]}'})
+            return JsonResponse({'status':'success',})
+        except Exception as e:
+            return JsonResponse({'status':'failure','description':'failed to modify sessions'})
+    else:
+        return JsonResponse({'status':'failure','description':'User is not authenticated'})

@@ -8,6 +8,7 @@ import UserSettings from "./Header/UserSettings/UserSettings";
 import Sessions from "./Sessions/Sessions";
 import Reservation from "./Reservation/Reservation";
 import Cart from "./Cart/Cart";
+import Orders from "./Orders/Orders";
 
 export default function Homepage({
   setIsAuthenticated,
@@ -43,6 +44,7 @@ export default function Homepage({
               />
               <Route path="/reservation" element={<Reservation />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/order" element={<Orders />} />
             </Routes>
           </main>
         </div>

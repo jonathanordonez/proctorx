@@ -1,5 +1,7 @@
 import React from "react";
 import { useState } from "react";
+import { payCartSession } from "../../../utils";
+import { showToast } from "../../../utils";
 
 export default function CartCreditCardForm({ isCartEmpty }) {
   const [cardName, setCardName] = useState("John Smith");
@@ -18,7 +20,7 @@ export default function CartCreditCardForm({ isCartEmpty }) {
       ) : (
         <>
           <div className="cc-title fs-4">Credit card details</div>
-          <form className="cart-form">
+          <form className="cart-form" onSubmit={handleCreditCardForm}>
             <label className="fs-5 cc-name-label" htmlFor="card-holder-name">
               Name on card
             </label>
@@ -86,4 +88,26 @@ export default function CartCreditCardForm({ isCartEmpty }) {
       )}
     </>
   );
+  async function handleCreditCardForm(e) {
+    e.preventDefault();
+    const cartSessions = Array.from(
+      document.getElementsByClassName("cart-session")
+    );
+    const cartSessionId = cartSessions.map((session) =>
+      session.getAttribute("sessionid")
+    );
+    console.log("this ", cartSessionId);
+    try {
+      const response = await payCartSession(cartSessionId);
+      const json = await response.json();
+      if (json.status === "success") {
+        window.location.href = "order?cart-paid";
+      } else {
+        showToast("failure", "Unable to pay cart. Please try again later.", 5);
+      }
+    } catch (error) {
+      showToast("failure", "Unable to pay cart. Please try again later.", 5);
+      console.error(error);
+    }
+  }
 }
