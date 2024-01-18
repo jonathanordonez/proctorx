@@ -187,7 +187,7 @@ def sessions(request):
     elif not is_cart:
         complete_sessions(request.user.id) # Checks for scheduled sessions that are now completed
         try:
-            orders = StudentSession.objects.filter(student_id = request.user.id, session_status = "scheduled")
+            orders = StudentSession.objects.filter(student_id = request.user.id, payment_status = "paid")
             print('this orders', orders)
             if len(orders) > 0:
                 orders_list = list(orders.values())
@@ -252,3 +252,16 @@ def pay_cart_session(request):
             return JsonResponse({'status':'failure','description':'failed to modify sessions'})
     else:
         return JsonResponse({'status':'failure','description':'User is not authenticated'})
+    
+def upcoming_sessions(request):
+    try:
+        upcoming_sessions = StudentSession.objects.filter(student_id = request.user.id, session_status = "scheduled")
+        if len(upcoming_sessions) > 0:
+            upcoming_sessions_array = list(upcoming_sessions.values())
+            return JsonResponse({'status':'success', 'upcoming_sessions':upcoming_sessions_array })
+        else:
+            return JsonResponse({'status':'success', 'upcoming_sessions':[] })
+    except Exception as e:
+        return JsonResponse({'status':'failure', 'message':'An error occurred while fetching upcoming sessions'})
+    
+    

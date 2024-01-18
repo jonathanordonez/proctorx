@@ -317,3 +317,30 @@ export const fetchOrders = async () => {
     throw error;
   }
 };
+
+export const fetchUpcomingSessions = async () => {
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/upcoming_sessions`;
+  try {
+    const response = await fetch(apiUrl, {
+      credentials: "include",
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export function formatDateTimeString(inputDateString) {
+  const inputDate = new Date(inputDateString);
+
+  const options = {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minutes: "numeric",
+  };
+  const formattedDate = inputDate.toLocaleDateString("en-US", options);
+
+  return formattedDate;
+}

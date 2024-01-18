@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchOrders } from "../../../utils";
 import { showToast } from "../../../utils";
+import { formatDateTimeString } from "../../../utils";
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
@@ -28,13 +29,13 @@ export default function Orders() {
       {orders.map((order) => (
         <div className="order">
           <ul className="order-heading">
-            <li className="order-number fs-4">{`Order ID #${order.id}`}</li>
-            <li className="order-date fs-4">{`Order date: ${formatDateString(
+            <li className="order-number fs-5">{`Order ID #${order.id}`}</li>
+            <li className="order-date fs-5">{`Order date: ${formatDateString(
               order.date_purchased
             )}`}</li>
-            <li className="order-date-small fs-4">{`Exam date: ${order.exam_date_time}`}</li>
-            <li className="order-total-cost fs-4">{`Total: $${order.cost}`}</li>
-            <li className="order-total-cost-small fs-4">
+            <li className="order-date-small fs-5">{`Exam date: ${order.exam_date_time}`}</li>
+            <li className="order-total-cost fs-5">{`Total: $${order.cost}`}</li>
+            <li className="order-total-cost-small fs-5">
               {`Total: $${order.cost}`}
             </li>
           </ul>
@@ -54,21 +55,6 @@ export default function Orders() {
     const inputDate = new Date(inputDateString);
 
     const options = { month: "short", day: "numeric", year: "numeric" };
-    const formattedDate = inputDate.toLocaleDateString("en-US", options);
-
-    return formattedDate;
-  }
-
-  function formatDateTimeString(inputDateString) {
-    const inputDate = new Date(inputDateString);
-
-    const options = {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minutes: "numeric",
-    };
     const formattedDate = inputDate.toLocaleDateString("en-US", options);
 
     return formattedDate;

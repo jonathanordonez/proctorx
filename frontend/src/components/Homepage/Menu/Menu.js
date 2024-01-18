@@ -14,7 +14,7 @@ export default function Menu({ cartItemsQuantity }) {
           </button>
           <div className="student-collapsed-links" hidden>
             <Link className="student-collapsed-link" to="/">
-              Current Sessions
+              Upcoming Sessions
             </Link>
             <Link className="student-collapsed-link" to="reservation">
               Reserve a Session
@@ -24,7 +24,7 @@ export default function Menu({ cartItemsQuantity }) {
             </Link>
           </div>
           <NavLink className="session" to="/">
-            Current Sessions
+            Upcoming Sessions
           </NavLink>
           <NavLink className="reserve" to="reservation">
             Reserve a Session
