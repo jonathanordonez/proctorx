@@ -66,7 +66,7 @@ export default function Footer() {
           </div>
           <div className="footer-signature">
             <p>ProctorX, Inc. All rights reserved.</p>
-            <p>© Copyright 2022</p>
+            <p>© Copyright 2024</p>
           </div>
         </div>
       </footer>

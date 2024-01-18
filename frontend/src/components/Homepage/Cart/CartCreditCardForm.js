@@ -1,7 +1,8 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { payCartSession } from "../../../utils";
 import { showToast } from "../../../utils";
+import { SessionsContext } from "../Homepage";
 
 export default function CartCreditCardForm({ isCartEmpty }) {
   const [cardName, setCardName] = useState("John Smith");
@@ -9,6 +10,9 @@ export default function CartCreditCardForm({ isCartEmpty }) {
   const [cardNumber, setCardNumber] = useState("4539 7889 2500 4444");
   const [cardMonth, setCardMonth] = useState("01");
   const [cardYear, setCardYear] = useState("2027");
+  const { sessionsContext } = useContext(SessionsContext);
+  const { setSessionsContext } = useContext(SessionsContext);
+
   return (
     <>
       {!isCartEmpty ? (
@@ -96,11 +100,27 @@ export default function CartCreditCardForm({ isCartEmpty }) {
     const cartSessionId = cartSessions.map((session) =>
       session.getAttribute("sessionid")
     );
-    console.log("this ", cartSessionId);
     try {
       const response = await payCartSession(cartSessionId);
       const json = await response.json();
       if (json.status === "success") {
+        const newSessionsContext = {
+          ...sessionsContext,
+          upcomingSessions: {
+            ...sessionsContext.upcomingSessions,
+            fetch: "yes",
+          },
+          orders: {
+            ...sessionsContext.orders,
+            fetch: "yes",
+          },
+          cartSessions: {
+            ...sessionsContext.cartSessions,
+            fetch: "yes",
+          },
+        };
+        setSessionsContext(newSessionsContext);
+
         window.location.href = "/?session-added";
       } else {
         showToast("failure", "Unable to pay cart. Please try again later.", 5);

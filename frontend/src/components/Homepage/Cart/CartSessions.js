@@ -1,28 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import EmptyCartSvg from "../../../img/cart-empty.svg";
 import {
   fetchCartSessions,
   deleteCartSession,
   showToast,
 } from "../../../utils";
+import { SessionsContext } from "../Homepage";
 
-export default function CartSessions({ setIsCartEmpty }) {
-  const [cartSessions, setCartSessions] = useState([]);
+export default function CartSessions() {
+  // const [cartSessions, setCartSessions] = useState([]);
   const [cartTotal, setCartTotal] = useState(0);
   const [refreshCounter, setRefreshCounter] = useState(0);
+  const { sessionsContext } = useContext(SessionsContext);
+  const { setSessionsContext } = useContext(SessionsContext);
 
   useEffect(() => {
     calculateCartTotal();
 
     function calculateCartTotal() {
       let total = 0;
-      cartSessions.map((session) => {
+      sessionsContext.cartSessions.data.map((session) => {
         total += Number(session.cost);
         return total;
       });
       setCartTotal(total);
     }
-  }, [cartSessions]);
+  }, [sessionsContext.cartSessions.data]);
 
   useEffect(() => {
     (async () => {
@@ -30,21 +33,26 @@ export default function CartSessions({ setIsCartEmpty }) {
 
       async function handleFetchCartSessions() {
         try {
-          const response = await fetchCartSessions();
-          const json = await response.json();
-          if (json.status === "success") {
-            setCartSessions(json.cart_sessions);
-            if (json.cart_sessions.length > 0) {
-              setIsCartEmpty(true);
+          if (sessionsContext.cartSessions.fetch === "yes") {
+            const response = await fetchCartSessions();
+            const json = await response.json();
+
+            if (json.status === "success") {
+              const newSessionsContext = {
+                ...sessionsContext,
+                cartSessions: {
+                  data: json.cart_sessions,
+                  fetch: "no",
+                },
+              };
+              setSessionsContext(newSessionsContext);
             } else {
-              setIsCartEmpty(false);
+              showToast(
+                "failure",
+                "Unable to fetch cart sessions. Please try again later.",
+                5
+              );
             }
-          } else {
-            showToast(
-              "failure",
-              "Unable to fetch cart sessions. Please try again later.",
-              5
-            );
           }
         } catch (err) {
           console.error(
@@ -63,7 +71,7 @@ export default function CartSessions({ setIsCartEmpty }) {
 
   return (
     <>
-      {cartSessions.length === 0 ? (
+      {sessionsContext.cartSessions.data.length === 0 ? (
         <div className="cart-container-session-heading fs-4">
           Your cart is empty
         </div>
@@ -72,8 +80,8 @@ export default function CartSessions({ setIsCartEmpty }) {
       )}
 
       <div className="cart-container-left-sessions">
-        {cartSessions.length > 0 &&
-          cartSessions.map((session, key) => (
+        {sessionsContext.cartSessions.data.length > 0 &&
+          sessionsContext.cartSessions.data.map((session, key) => (
             <div key={key} sessionid={session.id} className="cart-session">
               <div className="cart-session-element">{session.exam_name}</div>
               <div className="cart-session-element">
@@ -91,13 +99,13 @@ export default function CartSessions({ setIsCartEmpty }) {
             </div>
           ))}
 
-        {cartSessions.length === 0 && (
+        {sessionsContext.cartSessions.data.length === 0 && (
           <div className="cart-container-left-sessions">
             <img className="cart-empty" src={EmptyCartSvg} alt="empty cart" />
           </div>
         )}
       </div>
-      {cartSessions.length > 0 && (
+      {sessionsContext.cartSessions.data.length > 0 && (
         <div className="cart-session-total-container">
           <div className="cart-session-total fs-5">Total</div>
           <div className="cart-session-amount fs-5">

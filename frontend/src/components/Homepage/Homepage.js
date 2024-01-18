@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import Header from "./Header/Header";
 import "../../css/styles.css";
 import Footer from "./Footer/Footer";
@@ -10,6 +10,8 @@ import Reservation from "./Reservation/Reservation";
 import Cart from "./Cart/Cart";
 import Orders from "./Orders/Orders";
 
+export const SessionsContext = createContext({});
+
 export default function Homepage({
   setIsAuthenticated,
   setIsAuthenticatedInBackend,
@@ -17,6 +19,12 @@ export default function Homepage({
   const [isScrollToChangePassword, setIsScrollToChangePassword] =
     useState(false);
   const [cartItemsQuantity, setCartItemsQuantity] = useState();
+  const [sessionsContext, setSessionsContext] = useState({
+    upcomingSessions: { data: [], fetch: "yes" },
+    orders: { data: [], fetch: "yes" },
+    cartSessions: { data: [], fetch: "yes" },
+    cartItemNumber: { data: 0, fetch: "yes" },
+  });
 
   useEffect(() => {
     fetchCartItemsQuantity();
@@ -33,7 +41,17 @@ export default function Homepage({
         <div className="main-wrapper">
           <main className="scale-down">
             <Routes>
-              <Route exact path="/" element={<Sessions />} />
+              <Route
+                exact
+                path="/"
+                element={
+                  <SessionsContext.Provider
+                    value={{ sessionsContext, setSessionsContext }}
+                  >
+                    <Sessions />
+                  </SessionsContext.Provider>
+                }
+              />
               <Route
                 path="/user_settings"
                 element={
@@ -43,8 +61,26 @@ export default function Homepage({
                 }
               />
               <Route path="/reservation" element={<Reservation />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/order" element={<Orders />} />
+              <Route
+                path="/cart"
+                element={
+                  <SessionsContext.Provider
+                    value={{ sessionsContext, setSessionsContext }}
+                  >
+                    <Cart />
+                  </SessionsContext.Provider>
+                }
+              />
+              <Route
+                path="/order"
+                element={
+                  <SessionsContext.Provider
+                    value={{ sessionsContext, setSessionsContext }}
+                  >
+                    <Orders />
+                  </SessionsContext.Provider>
+                }
+              />
             </Routes>
           </main>
         </div>

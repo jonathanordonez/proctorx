@@ -1,21 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext } from "react";
 import { fetchOrders } from "../../../utils";
 import { showToast } from "../../../utils";
 import { formatDateTimeString } from "../../../utils";
+import { SessionsContext } from "../Homepage";
 
 export default function Orders() {
-  const [orders, setOrders] = useState([]);
+  const { sessionsContext } = useContext(SessionsContext);
+  const { setSessionsContext } = useContext(SessionsContext);
 
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetchOrders();
-        const json = await response.json();
-        if (json.status === "success") {
-          setOrders(json.orders);
-          console.log("this orders: ", json.orders);
-        } else {
-          showToast("failure", "Failed to load orders", 5);
+        if (sessionsContext.orders.fetch === "yes") {
+          const response = await fetchOrders();
+          const json = await response.json();
+          if (json.status === "success") {
+            const newSessionsContext = {
+              ...sessionsContext,
+              orders: {
+                data: json.orders,
+                fetch: "no",
+              },
+            };
+            setSessionsContext(newSessionsContext);
+          } else {
+            showToast("failure", "Failed to load orders", 5);
+          }
         }
       } catch (error) {
         console.error(error);
@@ -26,7 +36,7 @@ export default function Orders() {
 
   return (
     <div className="order-container">
-      {orders.map((order) => (
+      {sessionsContext.orders.data.map((order) => (
         <div className="order">
           <ul className="order-heading">
             <li className="order-number fs-5">{`Order ID #${order.id}`}</li>
