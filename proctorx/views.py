@@ -20,7 +20,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.serializers import serialize
 import datetime
 import json
-import re
+import pytz
 
 def is_user_authenticated(request):
     if request.user.is_authenticated:
@@ -185,8 +185,9 @@ def sessions(request):
             return JsonResponse({'status':'failure', 'message':'An error occurred while fetching cart sessions'})
     
     elif not is_cart:
+        complete_sessions(request.user.id) # Checks for scheduled sessions that are now completed
         try:
-            orders = StudentSession.objects.filter(student_id = request.user.id, session_status = "Paid")
+            orders = StudentSession.objects.filter(student_id = request.user.id, session_status = "scheduled")
             print('this orders', orders)
             if len(orders) > 0:
                 orders_list = list(orders.values())
@@ -196,7 +197,15 @@ def sessions(request):
                 return JsonResponse({'status':'success', 'orders':[] })
         except Exception as e:
             return JsonResponse({'status':'failure', 'message':'An error occurred while fetching orders'})
-        
+
+def complete_sessions(student_id):
+    student_sessions = StudentSession.objects.filter(student_id=student_id, session_status='scheduled')
+    for session in student_sessions:
+        timezone_utc = pytz.timezone('UTC')
+        now_utc = timezone_utc.localize(datetime.datetime.now()) 
+        if(session.exam_date_time < now_utc):
+            session.session_status = 'completed'
+            session.save()
 
 def delete_cart_session(request):
     data = json.loads((request.body.decode('ascii')))
@@ -233,7 +242,8 @@ def pay_cart_session(request):
                 session = StudentSession.objects.filter(id=session_id)
                 if(len(session) ==1):
                     cart_session = session[0]
-                    cart_session.session_status = 'Paid'
+                    cart_session.payment_status = 'paid'
+                    cart_session.session_status = 'scheduled'
                     cart_session.save()
                 else:
                     return JsonResponse({'status':'failure','description':f'error filtering session {session["sessionid"]}'})

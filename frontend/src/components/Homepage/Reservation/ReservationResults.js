@@ -37,7 +37,7 @@ export default function ReservationResults({ reservationResults }) {
           <div className="reservation-option fs-5">
             <p className="reservation-option-datetime">
               {reservationResults.dateTime + " "}
-              {schedule}
+              {schedule} UTC-5
             </p>
             <p className="reservation-option-length">
               {reservationResults.length}

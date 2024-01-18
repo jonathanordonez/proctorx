@@ -28,7 +28,7 @@ export default function Orders() {
       {orders.map((order) => (
         <div className="order">
           <ul className="order-heading">
-            <li className="order-number fs-4">{`Order ID: ${order.id}`}</li>
+            <li className="order-number fs-4">{`Order ID #${order.id}`}</li>
             <li className="order-date fs-4">{`Order date: ${formatDateString(
               order.date_purchased
             )}`}</li>
