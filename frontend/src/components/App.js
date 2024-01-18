@@ -7,8 +7,6 @@ import ChangePassword from "./ChangePassword/ChangePassword";
 export default function App() {
   const [componentRendered, setComponentRendered] = useState("Sign In");
 
-  console.log("aPP LOADS ");
-
   return componentRendered === "Sign In" ? (
     <Login setComponentRendered={setComponentRendered} />
   ) : componentRendered === "Register" ? (

@@ -18,8 +18,6 @@ export default function Login({ setComponentRendered }) {
 
   useEffect(() => {
     (async () => {
-      console.log("UEF loads ");
-
       const response = await isUserAuthenticatedInBackend();
       setIsAuthenticatedInBackend(response.is_authenticated);
       setUserDetails(response.is_authenticated ? response : {});
@@ -63,7 +61,7 @@ export default function Login({ setComponentRendered }) {
               </div>
             </div>
             <div className="login-footer">
-              <h5>@2022 ProctorX, Inc.</h5>
+              <h5>@2024 ProctorX, Inc.</h5>
             </div>
           </main>
         </div>

@@ -10,8 +10,6 @@ export default function UserChangePasswordForm() {
   const passwordDetails = usePasswordValidation(password1, password2);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
 
-  console.log("passwordDetails:  ", passwordDetails);
-
   useEffect(() => {
     if (!isSubmitDisabled) {
       return;
@@ -111,7 +109,6 @@ export default function UserChangePasswordForm() {
     try {
       const response = await changePassword(oldPassword, password1);
       if (response.status === "success") {
-        console.log("successful ");
         showToast("success", "Password updated", 5);
       } else {
         console.log("failure: ", response.details);

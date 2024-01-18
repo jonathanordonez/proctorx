@@ -1,11 +1,4 @@
 {
   "short_name": "Proctor X",
-  "name": "Proctor X",
-  "icons": [
-    {
-      "src": "soundlists.ico",
-      "sizes": "32x32",
-      "type": "image/x-icon"
-    }
-  ]
+  "name": "Proctor X"
 }

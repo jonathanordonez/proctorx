@@ -151,7 +151,6 @@ export default function RegisterForm() {
         password2,
         csrfToken
       );
-      console.log("this response: ", response);
       response.status === "successful"
         ? showToast("success", `Registered student: ${email} `)
         : showToast("failure", `Failed to register student: ${email} `);

@@ -15,8 +15,6 @@ export default function Header({
   const [isSettingsDropDownMenuVisible, setIsSettingsDropDownMenuVisible] =
     useState(false);
 
-  console.log("cONTEXT: ", userDetails);
-
   return (
     <header>
       <div className="header-wrapper scale-down">

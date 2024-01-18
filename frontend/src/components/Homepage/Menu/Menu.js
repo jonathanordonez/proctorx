@@ -1,10 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, NavLink } from "react-router-dom";
 
 export default function Menu({ cartItemsQuantity }) {
-  const [activeMenuOption, setActiveMenuOption] = useState("");
-
-  console.log("this ", cartItemsQuantity);
   return (
     <div className="student-options-panel-wrapper">
       <div className="student-options-panel scale-down fs-5">

@@ -84,7 +84,10 @@ export default function Homepage({
             </Routes>
           </main>
         </div>
-        <Footer />
+        <Footer
+          setIsAuthenticated={setIsAuthenticated}
+          setIsAuthenticatedInBackend={setIsAuthenticatedInBackend}
+        />
       </div>
     </>
   );

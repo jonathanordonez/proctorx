@@ -10,8 +10,6 @@ export default function Sessions() {
   const { sessionsContext } = useContext(SessionsContext);
   const { setSessionsContext } = useContext(SessionsContext);
 
-  console.log("this sessionsContext: ", sessionsContext);
-
   useEffect(() => {
     const parameter = window.location.href.split("?");
     const is_session_added = true ? parameter[1] === "session-added" : false;

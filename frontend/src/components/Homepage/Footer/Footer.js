@@ -1,6 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { signOut } from "../../../utils";
 
-export default function Footer() {
+export default function Footer({
+  setIsAuthenticated,
+  setIsAuthenticatedInBackend,
+}) {
   return (
     <div className="footer-wrapper">
       <footer className="scale-down">
@@ -22,19 +27,19 @@ export default function Footer() {
           <h4>My Account</h4>
           <div className="footer-sub-options fs-5">
             <div>
-              <a className="fs-6" href="/student/settings">
+              <Link className="fs-6" to="/user_settings">
                 Account Settings
-              </a>
+              </Link>
             </div>
             <div>
-              <a className="fs-6" href="/student/settings#change-password">
+              <Link className="fs-6" to="/user_settings">
                 Change Password
-              </a>
+              </Link>
             </div>
             <div>
-              <a className="fs-6" href="/logout">
+              <button className="fs-6" onClick={logOut}>
                 Logout
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -72,4 +77,14 @@ export default function Footer() {
       </footer>
     </div>
   );
+  async function logOut() {
+    const fetchStatus = await signOut();
+    if (fetchStatus === "success") {
+      setIsAuthenticated(false);
+      setIsAuthenticatedInBackend(false);
+    } else {
+      // errro handling
+      // Toast
+    }
+  }
 }
