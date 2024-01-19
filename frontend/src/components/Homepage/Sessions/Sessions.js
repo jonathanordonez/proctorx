@@ -5,6 +5,7 @@ import { fetchUpcomingSessions } from "../../../utils";
 import { formatDateTimeString } from "../../../utils";
 import { showToast } from "../../../utils";
 import { SessionsContext } from "../Homepage";
+import { Link } from "react-router-dom";
 
 export default function Sessions() {
   const { sessionsContext } = useContext(SessionsContext);
@@ -60,6 +61,12 @@ export default function Sessions() {
                 status={session.session_status}
               />
             ))}
+          {sessionsContext.upcomingSessions.data.length === 0 && (
+            <div className="session-content-empty fs-5">
+              <span>No upcoming sessions. </span>
+              <Link to={"reservation"}>Reserve a session.</Link>
+            </div>
+          )}
         </div>
       </main>
     </div>

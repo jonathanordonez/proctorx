@@ -449,6 +449,23 @@ button:hover {
   background-color: #f8f9fa;
 }
 
+.session-content-empty {
+  display: flex;
+  justify-content: center;
+  padding: 30px 20px;
+  border-bottom: 1px solid #dee2e6 !important;
+  margin-bottom: 0px;
+}
+
+.session-content-empty a {
+  padding-left: 5px;
+  text-decoration: none;
+}
+
+.session-content-empty:nth-child(2n) {
+  background-color: #f8f9fa;
+}
+
 .session-headings {
   display: grid;
   grid-template-columns: 25% 25% 25% 25%;
@@ -684,8 +701,22 @@ label[for="year"] {
   padding: 0px;
   justify-items: center;
   margin-bottom: 0px;
-  /* width: 100%; */
-  /* margin: 40px 40px 5px 160px; */
+}
+
+.order-empty {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #dee2e6 !important;
+  /* background: #f8f9fa; */
+}
+
+.order-empty div {
+  display: flex;
+  justify-content: center;
+}
+
+.order-empty div a {
+  padding-left: 5px;
 }
 
 .order-number-small,

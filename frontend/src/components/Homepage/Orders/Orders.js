@@ -3,6 +3,7 @@ import { fetchOrders } from "../../../utils";
 import { showToast } from "../../../utils";
 import { formatDateTimeString } from "../../../utils";
 import { SessionsContext } from "../Homepage";
+import { Link } from "react-router-dom";
 
 export default function Orders() {
   const { sessionsContext } = useContext(SessionsContext);
@@ -36,30 +37,39 @@ export default function Orders() {
 
   return (
     <div className="order-container">
-      {sessionsContext.orders.data.map((order) => (
-        <div className="order">
-          <ul className="order-heading">
-            <li className="order-number fs-5">{`Order ID #${order.id}`}</li>
-            <li className="order-date fs-5">{`Order date: ${formatDateString(
-              order.date_purchased
-            )}`}</li>
-            <li className="order-date-small fs-5">{`Exam date: ${formatDateTimeString(
-              order.exam_date_time
-            )}`}</li>
-            <li className="order-total-cost fs-5">{`Total: $${order.cost}`}</li>
-            <li className="order-total-cost-small fs-5">
-              {`Total: $${order.cost}`}
-            </li>
-          </ul>
-          <ul className="order-details">
-            <li className="order-exam-name">{`${order.exam_name}, ${order.university}`}</li>
-            <li className="order-exam-length">{`Exam date: ${formatDateTimeString(
-              order.exam_date_time
-            )} - ${order.exam_length} hour`}</li>
-            <li className="order-exam-cost">Proctor cost per hour: $35.00</li>
-          </ul>
+      {sessionsContext.orders.data.length > 0 &&
+        sessionsContext.orders.data.map((order) => (
+          <div className="order">
+            <ul className="order-heading">
+              <li className="order-number fs-5">{`Order ID #${order.id}`}</li>
+              <li className="order-date fs-5">{`Order date: ${formatDateString(
+                order.date_purchased
+              )}`}</li>
+              <li className="order-date-small fs-5">{`Exam date: ${formatDateTimeString(
+                order.exam_date_time
+              )}`}</li>
+              <li className="order-total-cost fs-5">{`Total: $${order.cost}`}</li>
+              <li className="order-total-cost-small fs-5">
+                {`Total: $${order.cost}`}
+              </li>
+            </ul>
+            <ul className="order-details">
+              <li className="order-exam-name">{`${order.exam_name}, ${order.university}`}</li>
+              <li className="order-exam-length">{`Exam date: ${formatDateTimeString(
+                order.exam_date_time
+              )} - ${order.exam_length} hour`}</li>
+              <li className="order-exam-cost">Proctor cost per hour: $35.00</li>
+            </ul>
+          </div>
+        ))}
+      {sessionsContext.orders.data.length === 0 && (
+        <div className="order-empty">
+          <div className="fs-5">
+            <span>No orders found.</span>{" "}
+            <Link to={"/reservation"}>Reserve a session.</Link>
+          </div>
         </div>
-      ))}
+      )}
     </div>
   );
 
