@@ -16,8 +16,8 @@ export default function Homepage({
   setIsAuthenticated,
   setIsAuthenticatedInBackend,
 }) {
-  const [isScrollToChangePassword, setIsScrollToChangePassword] =
-    useState(false);
+  const [refreshUserSettingsCounter, setRefreshUserSettingsCounter] =
+    useState(0);
   const [cartItemsQuantity, setCartItemsQuantity] = useState();
   const [sessionsContext, setSessionsContext] = useState({
     upcomingSessions: { data: [], fetch: "yes" },
@@ -34,7 +34,7 @@ export default function Homepage({
       <Header
         setIsAuthenticated={setIsAuthenticated}
         setIsAuthenticatedInBackend={setIsAuthenticatedInBackend}
-        setIsScrollToChangePassword={setIsScrollToChangePassword}
+        setRefreshUserSettingsCounter={setRefreshUserSettingsCounter}
       />
       <Menu cartItemsQuantity={cartItemsQuantity} />
       <div>
@@ -56,7 +56,7 @@ export default function Homepage({
                 path="/user_settings"
                 element={
                   <UserSettings
-                    isScrollToChangePassword={isScrollToChangePassword}
+                    refreshUserSettingsCounter={refreshUserSettingsCounter}
                   />
                 }
               />

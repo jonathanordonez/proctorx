@@ -32,7 +32,7 @@ export default function Footer({
               </Link>
             </div>
             <div>
-              <Link className="fs-6" to="/user_settings">
+              <Link className="fs-6" to="/user_settings?change_password">
                 Change Password
               </Link>
             </div>
