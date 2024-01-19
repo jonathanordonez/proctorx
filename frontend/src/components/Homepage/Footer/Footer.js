@@ -1,10 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { signOut } from "../../../utils";
+import { showToast } from "../../../utils";
 
 export default function Footer({
   setIsAuthenticated,
   setIsAuthenticatedInBackend,
+  setRefreshUserSettingsCounter,
 }) {
   return (
     <div className="footer-wrapper">
@@ -27,12 +29,20 @@ export default function Footer({
           <h4>My Account</h4>
           <div className="footer-sub-options fs-5">
             <div>
-              <Link className="fs-6" to="/user_settings">
+              <Link
+                className="fs-6"
+                to="/user_settings"
+                onClick={setRefreshUserSettingsCounter}
+              >
                 Account Settings
               </Link>
             </div>
             <div>
-              <Link className="fs-6" to="/user_settings?change_password">
+              <Link
+                className="fs-6"
+                to="/user_settings?change_password"
+                onClick={setRefreshUserSettingsCounter}
+              >
                 Change Password
               </Link>
             </div>
@@ -78,13 +88,21 @@ export default function Footer({
     </div>
   );
   async function logOut() {
-    const fetchStatus = await signOut();
-    if (fetchStatus === "success") {
-      setIsAuthenticated(false);
-      setIsAuthenticatedInBackend(false);
-    } else {
-      // errro handling
-      // Toast
+    try {
+      const fetchStatus = await signOut();
+      if (fetchStatus === "success") {
+        setIsAuthenticated(false);
+        setIsAuthenticatedInBackend(false);
+      } else {
+        console.error("Unable to log out user");
+        showToast("failure", "Error in logging out user", 5);
+      }
+    } catch (error) {
+      showToast("failure", "Error in logging out user", 5);
+      console.error(
+        "The following error occurred when attempting to log out user: ",
+        error
+      );
     }
   }
 }

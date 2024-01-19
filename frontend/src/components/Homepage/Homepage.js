@@ -87,6 +87,7 @@ export default function Homepage({
         <Footer
           setIsAuthenticated={setIsAuthenticated}
           setIsAuthenticatedInBackend={setIsAuthenticatedInBackend}
+          setRefreshUserSettingsCounter={setRefreshUserSettingsCounter}
         />
       </div>
     </>

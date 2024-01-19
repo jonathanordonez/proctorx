@@ -11,6 +11,8 @@ export default function UserSettings({ refreshUserSettingsCounter }) {
       window.history.replaceState({}, "", updatedURL);
       const changePasswordElement = document.getElementById("change-password");
       changePasswordElement.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.scrollTo(0, 0);
     }
   }, [refreshUserSettingsCounter]);
 
