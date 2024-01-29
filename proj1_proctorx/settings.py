@@ -67,7 +67,7 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
-    config('REACT_SERVER'),
+    config('REACT_SERVER'), 'https://proctorx.soundlists.com'
 ]
 
 ROOT_URLCONF = 'proj1_proctorx.urls'
