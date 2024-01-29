@@ -1,23 +1,11 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
-from .forms import StudentForm, StudentSettings, ChangeEmailForm, SetStudentPassword, ChangeStudentPassword
-from .functions import obtain_exam_schedules, email_password_reset_link, email_activation_token, get_cart_items_number, make_payment
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from .models import Student, Order
+from .forms import StudentForm
+from .models import Student
 from .models import Session as StudentSession
-from .tokens import account_activation_token, password_reset_token
-from django.utils.http import urlsafe_base64_decode
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes
-from django.utils.encoding import force_str
 from django.utils import timezone
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
-from django.contrib.sessions.models import Session
-from django.views.decorators.csrf import csrf_exempt
-from django.core.serializers import serialize
 import datetime
 import json
 import pytz
