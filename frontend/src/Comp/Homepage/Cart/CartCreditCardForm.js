@@ -3,6 +3,7 @@ import { useState, useContext } from "react";
 import { payCartSession } from "../../../utils";
 import { showToast } from "../../../utils";
 import { SessionsContext } from "../Homepage";
+import { Link } from "react-router-dom";
 
 export default function CartCreditCardForm({ isCartEmpty }) {
   const [cardName, setCardName] = useState("John Smith");
@@ -17,9 +18,9 @@ export default function CartCreditCardForm({ isCartEmpty }) {
     <>
       {!isCartEmpty ? (
         <div className="cart-empy-make-reservation">
-          <a className="fs-4" href="/reservation">
+          <Link className="fs-4" to="/reservation">
             Make a new reservation
-          </a>
+          </Link>
         </div>
       ) : (
         <>
