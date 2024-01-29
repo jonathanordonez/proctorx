@@ -1,8 +1,8 @@
 import React from "react";
-import Login from "./Login/Login";
+import Login from "./Components/Login/Login";
 import { useState } from "react";
-import Register from "./Register/Register";
-import ChangePassword from "./ChangePassword/ChangePassword";
+import Register from "./Components/Register/Register";
+import ChangePassword from "./Components/ChangePassword/ChangePassword";
 
 export default function App() {
   const [componentRendered, setComponentRendered] = useState("Sign In");
