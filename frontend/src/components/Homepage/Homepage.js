@@ -93,7 +93,7 @@ export default function Homepage({
     </>
   );
   async function fetchCartItemsQuantity() {
-    const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/cart_items_quantity`;
+    const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/api/cart_items_quantity`;
     try {
       const request = await fetch(apiUrl, { credentials: "include" });
       const json = await request.json();

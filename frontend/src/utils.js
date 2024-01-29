@@ -20,7 +20,7 @@ export const fetchData = async (url, options = {}) => {
 };
 
 export const isUserAuthenticatedInBackend = async () => {
-  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/is_user_authenticated`;
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/api/is_user_authenticated`;
   const requestOptions = {
     credentials: "include",
   };
@@ -29,7 +29,7 @@ export const isUserAuthenticatedInBackend = async () => {
 };
 
 export const signIn = async (email, password, csrfToken) => {
-  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/sign_in`;
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/api/sign_in`;
   const requestOptions = {
     method: "POST",
     credentials: "include",
@@ -43,7 +43,7 @@ export const signIn = async (email, password, csrfToken) => {
 };
 
 export const signOut = async () => {
-  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/sign_out`;
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/api/sign_out`;
   const requestOptions = {
     credentials: "include",
   };
@@ -60,7 +60,7 @@ export const registerNewStudent = async (
   password2,
   csrfToken
 ) => {
-  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/register`;
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/api/register`;
   const requestOptions = {
     method: "POST",
     credentials: "include",
@@ -86,7 +86,7 @@ export const registerNewStudent = async (
 };
 
 export const fetchCsrfToken = async () => {
-  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/get_csrf_token`;
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/api/get_csrf_token`;
   const requestOptions = {
     credentials: "include",
   };
@@ -147,7 +147,7 @@ export const showToast = (status, message, seconds) => {
 
 export const changeUserDetails = async (userDetails) => {
   const csrfToken = getCookie("csrftoken");
-  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/set_user_details`;
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/api/set_user_details`;
   const requestOptions = {
     method: "POST",
     credentials: "include",
@@ -182,7 +182,7 @@ export const passwordSchemaRestrictions = () => {
 
 export const changePassword = async (oldPassword, newPassword) => {
   const csrfToken = getCookie("csrftoken");
-  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/change_password`;
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/api/change_password`;
   const requestOptions = {
     method: "POST",
     credentials: "include",
@@ -212,7 +212,7 @@ export const saveToCart = async (
   exam,
   csrfToken
 ) => {
-  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/add_to_cart`;
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/api/add_to_cart`;
   const requestOptions = {
     method: "POST",
     credentials: "include",
@@ -237,7 +237,7 @@ export const saveToCart = async (
 };
 
 export const fetchCartSessions = async () => {
-  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/sessions?cart=true`;
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/api/sessions?cart=true`;
   try {
     const response = await fetch(apiUrl, {
       credentials: "include",
@@ -250,7 +250,7 @@ export const fetchCartSessions = async () => {
 
 export const deleteCartSession = async (sessionId) => {
   const csrfToken = getCookie("csrftoken");
-  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/delete_cart_session`;
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/api/delete_cart_session`;
   const requestOptions = {
     method: "POST",
     credentials: "include",
@@ -272,7 +272,7 @@ export const deleteCartSession = async (sessionId) => {
 
 export const payCartSession = async (sessionId) => {
   const csrfToken = getCookie("csrftoken");
-  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/pay_cart_session`;
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/api/pay_cart_session`;
   const requestOptions = {
     method: "POST",
     credentials: "include",
@@ -291,7 +291,7 @@ export const payCartSession = async (sessionId) => {
 };
 
 export const fetchOrders = async () => {
-  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/sessions`;
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/api/sessions`;
   try {
     const response = await fetch(apiUrl, {
       credentials: "include",
@@ -303,7 +303,7 @@ export const fetchOrders = async () => {
 };
 
 export const fetchUpcomingSessions = async () => {
-  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/upcoming_sessions`;
+  const apiUrl = `${process.env.REACT_APP_PYTHONHOST}/api/upcoming_sessions`;
   try {
     const response = await fetch(apiUrl, {
       credentials: "include",
