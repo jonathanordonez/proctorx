@@ -22,9 +22,10 @@ export default function Sessions() {
   }, []);
 
   useEffect(() => {
+    console.log("thisss ");
     (async () => {
-      try {
-        if (sessionsContext.upcomingSessions.fetch === "yes") {
+      if (sessionsContext.upcomingSessions.fetch === "yes") {
+        try {
           const response = await fetchUpcomingSessions();
           const json = await response.json();
           if (json.status === "success") {
@@ -39,12 +40,12 @@ export default function Sessions() {
           } else {
             showToast("failure", "Failed to load sessions", 5);
           }
+        } catch (error) {
+          console.error(error);
         }
-      } catch (error) {
-        console.error(error);
       }
     })();
-  }, []);
+  }, [sessionsContext]);
 
   return (
     <div className="main-wrapper">
