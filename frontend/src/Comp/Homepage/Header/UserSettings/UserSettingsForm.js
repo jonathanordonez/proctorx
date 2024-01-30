@@ -4,7 +4,7 @@ import { useContext, useState, useEffect } from "react";
 import { changeUserDetails, showToast } from "../../../../utils";
 
 export default function UserSettingsForm() {
-  const userDetails = useContext(UserDetailsContext);
+  const { userDetails } = useContext(UserDetailsContext);
   const [firstName, setFirstName] = useState(userDetails.first_name);
   const [lastName, setLastName] = useState(userDetails.last_name);
   const [phoneNumber, setPhoneNumber] = useState(userDetails.phone_number);
@@ -16,8 +16,9 @@ export default function UserSettingsForm() {
   const [country, setCountry] = useState(userDetails.country);
   const [postalCode, setPostalCode] = useState(userDetails.postal_code);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
-
+  const { setUserDetails } = useContext(UserDetailsContext);
   useEffect(() => {
+    console.log("this userDetails", userDetails);
     if (!isSubmitDisabled) {
       return;
     }
@@ -153,8 +154,20 @@ export default function UserSettingsForm() {
       setTimeout(() => {
         setIsSubmitDisabled(false);
       }, 5000);
+      const newUserDetails = {
+        ...userDetails,
+        first_name: firstName,
+        last_name: lastName,
+        phone_number: phoneNumber,
+        street_address: streetAddress,
+        city: city,
+        state: state,
+        country: country,
+        postal_code: postalCode,
+      };
+      setUserDetails(newUserDetails);
     } else {
-      // show failed toast
+      showToast("failure", "Unable to update user settings", 5);
     }
   }
 }

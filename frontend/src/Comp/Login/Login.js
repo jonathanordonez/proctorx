@@ -30,7 +30,7 @@ export default function Login({ setComponentRendered }) {
       {!isBackendAuthenticationFinished ? (
         <Loading />
       ) : isAuthenticated || isAuthenticatedInBackend ? (
-        <UserDetailsContext.Provider value={userDetails}>
+        <UserDetailsContext.Provider value={{ userDetails, setUserDetails }}>
           <Homepage
             setIsAuthenticated={setIsAuthenticated}
             setIsAuthenticatedInBackend={setIsAuthenticatedInBackend}

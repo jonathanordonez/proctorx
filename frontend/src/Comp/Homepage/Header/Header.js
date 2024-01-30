@@ -11,7 +11,7 @@ export default function Header({
   setIsAuthenticatedInBackend,
   setRefreshUserSettingsCounter,
 }) {
-  const userDetails = useContext(UserDetailsContext);
+  const { userDetails } = useContext(UserDetailsContext);
   const [isSettingsDropDownMenuVisible, setIsSettingsDropDownMenuVisible] =
     useState(false);
 
