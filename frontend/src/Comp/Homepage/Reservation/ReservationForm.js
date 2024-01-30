@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { showToast } from "../../../utils";
 
 export default function ReservationForm({ setReservationResults }) {
   const [universitySelectStyle, setUniversitySelectStyle] = useState({
@@ -22,6 +23,10 @@ export default function ReservationForm({ setReservationResults }) {
       setIsSubmitDisabled(true);
     }
   }, [university, dateTime, time, exam, length]);
+
+  useEffect(() => {
+    console.log("this dateTime: ", dateTime, typeof dateTime);
+  }, [dateTime]);
 
   return (
     <form className="reservation-form" onSubmit={handleSubmitForm}>
@@ -140,6 +145,14 @@ export default function ReservationForm({ setReservationResults }) {
   );
   function handleSubmitForm(e) {
     e.preventDefault();
+    const date = document.querySelector("input[type='date']").value;
+
+    const utcMinus5Date = new Date(`${date}, 12:00:00 PM`);
+
+    if (new Date(utcMinus5Date) <= new Date()) {
+      showToast("failure", "Please select a date in the future", 5);
+      return;
+    }
 
     const university = document.getElementsByClassName(
       "form-option-university"
