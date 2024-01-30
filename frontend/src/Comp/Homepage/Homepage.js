@@ -18,7 +18,6 @@ export default function Homepage({
 }) {
   const [refreshUserSettingsCounter, setRefreshUserSettingsCounter] =
     useState(0);
-  const [cartItemsQuantity, setCartItemsQuantity] = useState();
   const [sessionsContext, setSessionsContext] = useState({
     upcomingSessions: { data: [], fetch: "yes" },
     orders: { data: [], fetch: "yes" },
@@ -36,7 +35,9 @@ export default function Homepage({
         setIsAuthenticatedInBackend={setIsAuthenticatedInBackend}
         setRefreshUserSettingsCounter={setRefreshUserSettingsCounter}
       />
-      <Menu cartItemsQuantity={cartItemsQuantity} />
+      <SessionsContext.Provider value={{ sessionsContext, setSessionsContext }}>
+        <Menu></Menu>
+      </SessionsContext.Provider>
       <div>
         <div className="main-wrapper">
           <main className="scale-down">
@@ -60,7 +61,16 @@ export default function Homepage({
                   />
                 }
               />
-              <Route path="/reservation" element={<Reservation />} />
+              <Route
+                path="/reservation"
+                element={
+                  <SessionsContext.Provider
+                    value={{ sessionsContext, setSessionsContext }}
+                  >
+                    <Reservation />
+                  </SessionsContext.Provider>
+                }
+              />
               <Route
                 path="/cart"
                 element={
@@ -98,7 +108,14 @@ export default function Homepage({
       const request = await fetch(apiUrl, { credentials: "include" });
       const json = await request.json();
       if (json.status === "success") {
-        setCartItemsQuantity(json.cart_items_quantity);
+        const newSessionsContext = {
+          ...sessionsContext,
+          cartItemNumber: {
+            data: json.cart_items_quantity,
+            fetch: "yes",
+          },
+        };
+        setSessionsContext(newSessionsContext);
       } else {
         console.error(
           "An error occurred when fetching the cart items quantity "

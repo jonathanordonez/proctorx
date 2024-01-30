@@ -115,13 +115,34 @@ export default function CartSessions() {
       )}
     </>
   );
+
   async function handleDeleteCartSession(e) {
     const sessionId = e.target.parentElement.getAttribute("sessionid");
     try {
       const response = await deleteCartSession(sessionId);
       const json = await response.json();
       if (json.status === "success") {
+        const cartSessionsOnly = sessionsContext.cartSessions.data;
+        const newCartSessions = cartSessionsOnly.filter(
+          (cartSession) => cartSession.id != sessionId
+        );
+
+        const newSessionsContext = {
+          ...sessionsContext,
+          cartSessions: {
+            data: newCartSessions,
+            fetch: "no",
+          },
+          cartItemNumber: {
+            data: sessionsContext.cartItemNumber.data - 1,
+            fetch: "yes",
+          },
+        };
+
+        setSessionsContext(newSessionsContext);
+
         showToast("success", "Cart session deleted", 5);
+
         setRefreshCounter(refreshCounter + 1);
       } else {
         showToast(

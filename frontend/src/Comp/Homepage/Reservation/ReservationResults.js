@@ -2,13 +2,17 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { saveToCart, showToast } from "../../../utils";
 import useCsrfToken from "../../../Hooks/CSRFToken/useCsrfToken";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { SessionsContext } from "../Homepage";
 
 export default function ReservationResults({ reservationResults }) {
   const [isShowSchedules, setIsShowSchedules] = useState(false);
   const [schedules, setSchedules] = useState([]);
   const csrfToken = useCsrfToken();
-
-  console.log("reservationResults: ", reservationResults);
+  const navigate = useNavigate();
+  const { sessionsContext } = useContext(SessionsContext);
+  const { setSessionsContext } = useContext(SessionsContext);
 
   useEffect(() => {
     if (!reservationResults || Object.keys(reservationResults).length === 0) {
@@ -34,7 +38,7 @@ export default function ReservationResults({ reservationResults }) {
     <div className="reservation-results">
       {isShowSchedules &&
         schedules.map((schedule, index) => (
-          <div className="reservation-option fs-5">
+          <div key={index} className="reservation-option fs-5">
             <p className="reservation-option-datetime">
               {reservationResults.dateTime + " "}
               {schedule} UTC-5
@@ -110,10 +114,25 @@ export default function ReservationResults({ reservationResults }) {
         csrfToken
       );
       if (response.status === "success") {
-        window.location.href = "cart";
+        const newSessionsContext = {
+          ...sessionsContext,
+          cartSessions: {
+            data: sessionsContext.cartSessions.data,
+            fetch: "yes",
+          },
+          cartItemNumber: {
+            data: sessionsContext.cartItemNumber.data + 1,
+            fetch: "yes",
+          },
+        };
+
+        setSessionsContext(newSessionsContext);
+
+        navigate("/cart");
       }
     } catch (err) {
       showToast("failure", "Failed to add to cart", 5);
+      console.error("The following error occurred: ", err);
     }
   }
 }

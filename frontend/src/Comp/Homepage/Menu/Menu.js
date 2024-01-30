@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
+import CartNumber from "./CartNumber";
 
 export default function Menu({ cartItemsQuantity }) {
   return (
@@ -34,8 +35,7 @@ export default function Menu({ cartItemsQuantity }) {
           </NavLink>
         </div>
         <NavLink className="student-cart-balance" to="cart">
-          <span className="cart">Cart</span>
-          <span className="student-cart-count">{cartItemsQuantity}</span>
+          <CartNumber></CartNumber>
         </NavLink>
       </div>
     </div>
