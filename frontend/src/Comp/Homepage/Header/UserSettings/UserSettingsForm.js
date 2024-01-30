@@ -54,14 +54,14 @@ export default function UserSettingsForm() {
 
         <label className="fs-5">Phone number</label>
         <input
-          type="numeric"
+          type="number"
           name="phone_number"
           value={phoneNumber ? phoneNumber : ""}
           className="form-control"
           maxLength="20"
           required=""
           id="id_phone_number"
-          onChange={(event) => setPhoneNumber(event.target.value)}
+          onChange={handlePhoneNumber}
         ></input>
 
         <label className="fs-5">Street address</label>
@@ -169,5 +169,13 @@ export default function UserSettingsForm() {
     } else {
       showToast("failure", "Unable to update user settings", 5);
     }
+  }
+  function handlePhoneNumber(event) {
+    const validNumericInput = /^-?\d*\.?\d*$/.test(event.target.value);
+
+    if (!validNumericInput) {
+      return;
+    }
+    setPhoneNumber(event.target.value);
   }
 }

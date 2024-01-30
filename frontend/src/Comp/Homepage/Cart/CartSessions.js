@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import EmptyCartSvg from "../../../img/cart-empty.svg";
 import {
   fetchCartSessions,
@@ -8,11 +8,11 @@ import {
 import { SessionsContext } from "../Homepage";
 
 export default function CartSessions() {
-  // const [cartSessions, setCartSessions] = useState([]);
   const [cartTotal, setCartTotal] = useState(0);
   const [refreshCounter, setRefreshCounter] = useState(0);
   const { sessionsContext } = useContext(SessionsContext);
   const { setSessionsContext } = useContext(SessionsContext);
+  const toastInterval = useRef(null);
 
   useEffect(() => {
     calculateCartTotal();
@@ -122,6 +122,8 @@ export default function CartSessions() {
       const response = await deleteCartSession(sessionId);
       const json = await response.json();
       if (json.status === "success") {
+        clearInterval(toastInterval.current);
+
         const cartSessionsOnly = sessionsContext.cartSessions.data;
         const newCartSessions = cartSessionsOnly.filter(
           (cartSession) => cartSession.id != sessionId
@@ -141,7 +143,7 @@ export default function CartSessions() {
 
         setSessionsContext(newSessionsContext);
 
-        showToast("success", "Cart session deleted", 5);
+        toastInterval.current = showToast("success", "Cart session deleted", 5);
 
         setRefreshCounter(refreshCounter + 1);
       } else {

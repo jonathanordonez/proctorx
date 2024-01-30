@@ -142,6 +142,7 @@ export const showToast = (status, message, seconds) => {
         toastElement.hidden = true;
       }
     }, 1000);
+    return interval;
   }
 };
 
