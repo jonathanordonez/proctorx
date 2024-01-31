@@ -35,6 +35,8 @@ export default function Orders() {
     })();
   }, []);
 
+  console.log("this ", sessionsContext.orders.data);
+
   return (
     <div className="order-container">
       {sessionsContext.orders.data.length > 0 &&

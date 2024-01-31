@@ -5,7 +5,7 @@ import LoginForm from "./LoginForm";
 import Homepage from "../Homepage/Homepage";
 import { isUserAuthenticatedInBackend } from "../../utils";
 import Loading from "../Loading/Loading";
-import Toast from "../Toast/Toast";
+import ToastLanding from "../Toast/ToastLanding";
 
 export const UserDetailsContext = createContext({});
 
@@ -43,7 +43,7 @@ export default function Login({ setComponentRendered }) {
               <img alt="ProctorX Logo" src={proctorXlogo}></img>
             </div>
             <div className="form-container">
-              <Toast />
+              <ToastLanding></ToastLanding>
               <h2>Sign In</h2>
               <LoginForm setIsAuthenticated={setIsAuthenticated} />
               <hr />

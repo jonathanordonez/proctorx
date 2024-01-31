@@ -1,9 +1,8 @@
 import React from "react";
 import RegisterForm from "./RegisterForm";
 import proctorXlogo from "../../img/proctorX.svg";
-import { Link } from "react-router-dom";
-import Toast from "../Toast/Toast";
 import "../../css/styles-landing.css";
+import ToastLanding from "../Toast/ToastLanding";
 
 export default function Register({ setComponentRendered }) {
   return (
@@ -14,7 +13,7 @@ export default function Register({ setComponentRendered }) {
         </div>
 
         <div className="form-container">
-          <Toast />
+          <ToastLanding></ToastLanding>
           <h2>Register</h2>
           <RegisterForm />
           <hr />
@@ -33,7 +32,7 @@ export default function Register({ setComponentRendered }) {
         </div>
 
         <div className="login-footer">
-          <h5>@2022 Pro Inc.</h5>
+          <h5>@2024 ProctorX Inc.</h5>
         </div>
       </main>
     </div>

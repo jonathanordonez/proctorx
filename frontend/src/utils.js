@@ -116,7 +116,7 @@ export const getCookie = (cookieName) => {
 export const showToast = (status, message, seconds) => {
   const toastElement = document.getElementsByClassName("message-container")[0];
   toastElement.hidden = false;
-  toastElement.className = `message-container message-${status}`;
+  toastElement.classList.add(`message-${status}`);
   const toastText = document.getElementsByClassName("message-text")[0];
   if (!seconds) {
     toastText.textContent = message;

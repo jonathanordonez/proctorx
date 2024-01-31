@@ -1,11 +1,11 @@
 import React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { payCartSession } from "../../../utils";
 import { showToast } from "../../../utils";
 import { SessionsContext } from "../Homepage";
 import { Link } from "react-router-dom";
 
-export default function CartCreditCardForm({ isCartEmpty }) {
+export default function CartCreditCardForm() {
   const [cardName, setCardName] = useState("John Smith");
   const [cvv, setCvv] = useState("123");
   const [cardNumber, setCardNumber] = useState("4539 7889 2500 4444");
@@ -16,7 +16,7 @@ export default function CartCreditCardForm({ isCartEmpty }) {
 
   return (
     <>
-      {!isCartEmpty ? (
+      {sessionsContext.cartSessions.data.length == 0 ? (
         <div className="cart-empy-make-reservation">
           <Link className="fs-4" to="/reservation">
             Make a new reservation

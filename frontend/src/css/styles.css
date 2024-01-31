@@ -806,7 +806,7 @@ label[for="year"] {
     grid-template-columns: 30% 40% 30%;
   }
 
-  .message-container {
+  .message-container:not(.toast-landing) {
     position: absolute;
     width: 50%;
     justify-self: center;
