@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from .forms import StudentForm
 from .models import Student
@@ -9,6 +10,9 @@ from django.middleware.csrf import get_token
 import datetime
 import json
 import pytz
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+import os
 
 def is_user_authenticated(request):
     if request.user.is_authenticated:
@@ -235,5 +239,35 @@ def upcoming_sessions(request):
             return JsonResponse({'status':'success', 'upcoming_sessions':[] })
     except Exception as e:
         return JsonResponse({'status':'failure', 'message':'An error occurred while fetching upcoming sessions'})
+
+@csrf_exempt
+def send_email(request):
+    data = json.loads((request.body.decode('ascii')))
+    print('this ', data)
+    message = Mail(
+        from_email = 'jo@jonathanordonez.com',
+        to_emails = 'jonathan_oliver05@hotmail.com',
+        subject = 'New email from Portfolio',
+        plain_text_content = f'Data received: data["message"]' + f' from email {data["email"]}',
+        html_content = f'''
+        <h2>A new message was received in your Portfolio</h2>
+        <p>Email from: {data["email"]}</p>
+        <p>Message content:{data["message"]}</p>
+        '''
+                )
     
+    try: 
+        sg = SendGridAPIClient(os.environ['SENDGRID_API_KEY'])
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+        if(response.status_code >=200 and response.status_code <300 ):
+            return JsonResponse({'status':'success'})
+        else:
+            return JsonResponse({'status':'failure','description':f'Failed to send email. Status code is {response.status_code}'})
+    except Exception as e:
+        print(e.message)
+        return JsonResponse({'status':'failure','description':e.message})
+
     

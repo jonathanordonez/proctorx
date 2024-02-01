@@ -61,7 +61,9 @@ CORS_ORIGIN_WHITELIST = [
 
 CORS_ALLOWED_ORIGINS = [
     config('REACT_SERVER'),
-    config('DJANGO_SERVER'),    
+    config('DJANGO_SERVER'),
+    'https://jonathanordonez.com',
+    'http://localhost:3000' 
 ]
 
 CORS_ALLOW_CREDENTIALS = True

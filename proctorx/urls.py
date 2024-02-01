@@ -15,7 +15,6 @@ path('delete_cart_session', views.delete_cart_session),
 path('cart_items_quantity', views.cart_items_quantity),
 path('pay_cart_session', views.pay_cart_session),
 path('upcoming_sessions', views.upcoming_sessions),
-
-
+path('send_email', views.send_email),
 ]
 
