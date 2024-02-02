@@ -30,4 +30,4 @@ venv/
 *.pyc
 other/
 
-proctorx/settings.py
+proj1_proctorx/settings.py

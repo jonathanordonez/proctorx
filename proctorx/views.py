@@ -13,6 +13,7 @@ import pytz
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 import os
+from django.conf import settings
 
 def is_user_authenticated(request):
     if request.user.is_authenticated:
@@ -257,7 +258,9 @@ def send_email(request):
                 )
     
     try: 
-        sg = SendGridAPIClient(os.environ['SENDGRID_API_KEY'])
+        # Works in Prod only
+        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+        # sg = SendGridAPIClient(os.environ['SENDGRID_API_KEY'])
         response = sg.send(message)
         print(response.status_code)
         print(response.body)
