@@ -1,4 +1,5 @@
 This project mimics the functionality from ProctorU.com, a site for scheduling online exams with proctors.
+Currently hosted in proctorx.jonathanordonez.com
 
 The webiste uses React and Django:
 > See the frontend folder for the React files.
